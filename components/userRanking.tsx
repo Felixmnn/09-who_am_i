@@ -4,7 +4,7 @@ import React from "react";
 import { Text, View } from "react-native";
 
 //EXP: This page is responsible for displaying the user ranking and the user stats
-//TSK: The UI should be polished
+//TSK: EASY The UI should be polished
 
 const UserRanking = () => {
   const { users } = useGlobalContext();

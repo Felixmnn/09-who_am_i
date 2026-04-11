@@ -3,8 +3,8 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 //EXP: This component is responsible for displaying the users
-//TSK: The UI should be polished
-//TSK: There should be a way to edit the users to edit a user the method setUsers should be used
+//TSK: EASY The UI should be polished
+//TSK: MEDIUM There should be a way to edit the users to edit a user the method setUsers should be used
 
 const DisplayUsers = ({
   users,
