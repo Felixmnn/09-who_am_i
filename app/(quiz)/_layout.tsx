@@ -36,6 +36,15 @@ export default function _layout() {
           }}
         />
         <Tabs.Screen
+          name="custom"
+          options={{
+            title: "Custom",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="cogs" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="users"
           options={{
             title: "Users",
