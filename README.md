@@ -14,7 +14,7 @@
    npx expo start
    ```
 
-## Learn more
+## Documentation
 
 3. Explainations
 
@@ -22,7 +22,7 @@
    //EXP: ...
    ```
 
-4. Taskst
+4. Tasks
 
    ```bash
    //TSK: ...
