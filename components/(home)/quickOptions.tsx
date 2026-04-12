@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 const QuickOptions = () => {
   return (
     <View>
-      <Text>Quick Options</Text>
+      <Text className="text-white">Quick Options</Text>
     </View>
   );
 };

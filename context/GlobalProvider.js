@@ -107,7 +107,7 @@ const GlobalProvider = ({ children }) => {
   const [currentGame, setCurrentGame] = useState(null);
 
   //EXP: Blacklisted Names won't be used in the game
-  const [blacklistedNames, setBlacklistedNames] = useState({
+  const [blackList, setBlackList] = useState({
     history: [],
     politics: [],
     sports: [],
@@ -127,8 +127,8 @@ const GlobalProvider = ({ children }) => {
         setLastGameResults,
         currentGame,
         setCurrentGame,
-        blacklistedNames,
-        setBlacklistedNames,
+        blackList,
+        setBlackList,
       }}
     >
       {children}
