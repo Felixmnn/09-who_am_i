@@ -5,6 +5,7 @@ const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
+  //EXP: Users is an array of user objects with their points and preferences
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -27,15 +28,19 @@ const GlobalProvider = ({ children }) => {
       science: "LOW",
     },
   ]);
+
+  //EXP: Custom Names are names that extend the default list
   const [customNames, setCustomNames] = useState({
     history: [
       {
+        id: "6",
         name: "Stalin",
         difficulty: "LOW",
       },
     ],
     politics: [
       {
+        id: "1",
         name: "Putin",
         difficulty: "LOW",
       },
@@ -43,6 +48,7 @@ const GlobalProvider = ({ children }) => {
     sports: [],
     media: [
       {
+        id: "7",
         name: "Lutz Fanderhorst",
         difficulty: "HIGH",
       },
@@ -50,6 +56,8 @@ const GlobalProvider = ({ children }) => {
     science: [],
     custom: [],
   });
+
+  //EXP: Last Game Results is an array of game results
   const [lastGameResults, setLastGameResults] = useState([
     {
       dateTime: "2024-06-01T12:00:00Z",
@@ -61,6 +69,7 @@ const GlobalProvider = ({ children }) => {
           questions: [
             {
               category: "history",
+              id: "6",
               name: "Stalin",
               difficulty: "LOW",
               correct: true,
@@ -73,6 +82,7 @@ const GlobalProvider = ({ children }) => {
           questions: [
             {
               category: "media",
+              id: "7",
               name: "Lutz Fanderhorst",
               difficulty: "HIGH",
               correct: false,
@@ -92,6 +102,8 @@ const GlobalProvider = ({ children }) => {
       ],
     },
   ]);
+
+  //EXP: Current Game is the game that is currently being played
   const [currentGame, setCurrentGame] = useState(null);
 
   return (

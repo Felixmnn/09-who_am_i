@@ -10,6 +10,7 @@ export type users = {
 };
 
 export type name = {
+  id: string;
   name: string;
   difficulty: string;
 };
