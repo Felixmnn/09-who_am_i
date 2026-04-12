@@ -6,7 +6,8 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const StartGame = () => {
-  const { currentGame, users, customNames } = useGlobalContext();
+  const { currentGame, users, customNames, setCurrentGame } =
+    useGlobalContext();
   const [expanded, setExpanded] = React.useState(false);
   const [tmpCurrentGame, setTmpCurrentGame] = React.useState<{
     dateTime: Date;
@@ -209,6 +210,7 @@ const StartGame = () => {
                     ...tmpCurrentGame,
                     dateTime: new Date(),
                   });
+                  setCurrentGame(tmpCurrentGame);
                   router.push("/(game)/play");
                 }}
               >
