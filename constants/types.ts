@@ -1,4 +1,5 @@
 export type users = {
+  id: number;
   name: string;
   points: number;
   history: string;
@@ -6,4 +7,9 @@ export type users = {
   sports: string;
   media: string;
   science: string;
+};
+
+export type name = {
+  name: string;
+  difficulty: string;
 };
