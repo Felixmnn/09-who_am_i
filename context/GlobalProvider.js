@@ -116,6 +116,8 @@ const GlobalProvider = ({ children }) => {
     custom: [],
   });
 
+  const [gamePaused, setGamePaused] = useState(false);
+
   return (
     <GlobalContext.Provider
       value={{

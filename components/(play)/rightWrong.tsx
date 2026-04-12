@@ -25,10 +25,10 @@ const RightWrong = () => {
   }
 
   return (
-    <View className="mt-3 w-full flex-row gap-2">
+    <View className="mt-3 flex-1 w-full flex-row gap-2">
       <TouchableOpacity
         onPress={() => playSound({ right: true })}
-        className="flex-1 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-4 py-3"
+        className="flex-1 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-4 py-3"
       >
         <Text className="text-center font-semibold text-emerald-200">
           Correct
@@ -36,7 +36,7 @@ const RightWrong = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => playSound({ right: false })}
-        className="flex-1 rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-3"
+        className="flex-1 items-center justify-center rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-3"
       >
         <Text className="text-center font-semibold text-rose-200">Wrong</Text>
       </TouchableOpacity>
