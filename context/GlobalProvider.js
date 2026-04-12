@@ -19,7 +19,7 @@ const GlobalProvider = ({ children }) => {
     },
     {
       id: 2,
-      name: "Pamveer",
+      name: "Parmveer",
       points: 200,
       history: "HIGH",
       politics: "MEDIUM",

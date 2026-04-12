@@ -14,3 +14,29 @@ export type name = {
   name: string;
   difficulty: string;
 };
+
+export type question = {
+  category: string;
+  id: string;
+  name: string;
+  difficulty: string;
+  correct: boolean;
+};
+
+export type round = {
+  rid: number;
+  participant: number;
+  questions: question[];
+};
+
+export type participantResult = {
+  participantId: number;
+  pointsEarned: number;
+};
+
+export type gameResult = {
+  dateTime: string;
+  participants: number[];
+  rounds: round[];
+  gameResults: participantResult[];
+};
