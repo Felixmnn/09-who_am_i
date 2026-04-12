@@ -106,6 +106,16 @@ const GlobalProvider = ({ children }) => {
   //EXP: Current Game is the game that is currently being played
   const [currentGame, setCurrentGame] = useState(null);
 
+  //EXP: Blacklisted Names won't be used in the game
+  const [blacklistedNames, setBlacklistedNames] = useState({
+    history: [],
+    politics: [],
+    sports: [],
+    media: [],
+    science: [],
+    custom: [],
+  });
+
   return (
     <GlobalContext.Provider
       value={{
@@ -117,6 +127,8 @@ const GlobalProvider = ({ children }) => {
         setLastGameResults,
         currentGame,
         setCurrentGame,
+        blacklistedNames,
+        setBlacklistedNames,
       }}
     >
       {children}
