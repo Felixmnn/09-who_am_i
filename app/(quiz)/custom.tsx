@@ -6,7 +6,7 @@ import { ScrollView } from "react-native";
 //EXP: This page is responsible for displaying the custom characters and concepts
 const Custom = () => {
   return (
-    <ScrollView className="flex-1 bg-slate-950 items-center justify-start p-2">
+    <ScrollView className="flex-1 bg-slate-950 items-center justify-start py-2 ">
       <CustomNames />
       <BlackList />
     </ScrollView>

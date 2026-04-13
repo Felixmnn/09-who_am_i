@@ -8,11 +8,9 @@ const Home = () => {
   return (
     <ScrollView
       className="flex-1 bg-slate-950"
-      contentContainerClassName="px-4 pb-28 pt-8"
+      contentContainerClassName="px-4 pb-28 "
     >
-      <View className="mb-2  ">
-        <Text className="text-3xl font-bold text-slate-50">Home</Text>
-      </View>
+      <Text className="text-2xl font-extrabold text-slate-100 py-2">Home</Text>
 
       <View className="gap-2">
         <StartGame />

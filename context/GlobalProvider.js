@@ -1,33 +1,91 @@
-import React, { createContext, useContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const GlobalContext = createContext();
+const USERS_STORAGE_KEY = "@whoami_users";
+const DEFAULT_USERS = [
+  {
+    id: 1,
+    name: "Felix",
+    points: 100,
+    history: "LOW",
+    politics: "HIGH",
+    sports: "MEDIUM",
+    media: "LOW",
+    science: "MEDIUM",
+  },
+  {
+    id: 2,
+    name: "Parmveer",
+    points: 200,
+    history: "HIGH",
+    politics: "MEDIUM",
+    sports: "LOW",
+    media: "HIGH",
+    science: "LOW",
+  },
+];
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
   //EXP: Users is an array of user objects with their points and preferences
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "Felix",
-      points: 100,
-      history: "LOW",
-      politics: "HIGH",
-      sports: "MEDIUM",
-      media: "LOW",
-      science: "MEDIUM",
-    },
-    {
-      id: 2,
-      name: "Parmveer",
-      points: 200,
-      history: "HIGH",
-      politics: "MEDIUM",
-      sports: "LOW",
-      media: "HIGH",
-      science: "LOW",
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [isUsersHydrated, setIsUsersHydrated] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUsers = async () => {
+      try {
+        const storedUsers = await AsyncStorage.getItem(USERS_STORAGE_KEY);
+        if (!storedUsers) {
+          if (mounted) {
+            setUsers(DEFAULT_USERS);
+          }
+          return;
+        }
+
+        const parsedUsers = JSON.parse(storedUsers);
+        if (Array.isArray(parsedUsers) && mounted) {
+          setUsers(parsedUsers);
+        } else if (mounted) {
+          setUsers(DEFAULT_USERS);
+        }
+      } catch (error) {
+        console.warn("Could not load users from storage", error);
+        if (mounted) {
+          setUsers(DEFAULT_USERS);
+        }
+      } finally {
+        if (mounted) {
+          setIsUsersHydrated(true);
+        }
+      }
+    };
+
+    loadUsers();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isUsersHydrated) {
+      return;
+    }
+
+    const persistUsers = async () => {
+      try {
+        await AsyncStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+      } catch (error) {
+        console.warn("Could not persist users to storage", error);
+      }
+    };
+
+    persistUsers();
+  }, [users, isUsersHydrated]);
 
   //EXP: Custom Names are names that extend the default list
   const [customNames, setCustomNames] = useState({
@@ -49,7 +107,7 @@ const GlobalProvider = ({ children }) => {
     media: [
       {
         id: "7",
-        name: "Lutz Fanderhorst",
+        name: "Lutz van Derhorst",
         difficulty: "HIGH",
       },
     ],
@@ -83,7 +141,7 @@ const GlobalProvider = ({ children }) => {
             {
               category: "media",
               id: "7",
-              name: "Lutz Fanderhorst",
+              name: "Lutz van Derhorst",
               difficulty: "HIGH",
               correct: false,
             },
@@ -123,6 +181,7 @@ const GlobalProvider = ({ children }) => {
       value={{
         users,
         setUsers,
+        isUsersHydrated,
         customNames,
         setCustomNames,
         lastGameResults,
