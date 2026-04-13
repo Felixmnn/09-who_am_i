@@ -49,7 +49,7 @@ const GlobalProvider = ({ children }) => {
     media: [
       {
         id: "7",
-        name: "Lutz Fanderhorst",
+        name: "Lutz van Derhorst",
         difficulty: "HIGH",
       },
     ],
@@ -83,7 +83,7 @@ const GlobalProvider = ({ children }) => {
             {
               category: "media",
               id: "7",
-              name: "Lutz Fanderhorst",
+              name: "Lutz van Derhorst",
               difficulty: "HIGH",
               correct: false,
             },
