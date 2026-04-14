@@ -16,8 +16,16 @@ import scienceNames from "../../assets/names/science.json";
 import sportsNames from "../../assets/names/sports.json";
 
 const Play = () => {
-  const { currentGame, setCurrentGame, gamePaused, blacklist, setBlacklist } =
-    useGlobalContext();
+  const {
+    currentGame,
+    setCurrentGame,
+    gamePaused,
+    setGamePaused,
+    blacklist,
+    setBlacklist,
+    muted,
+    setMuted,
+  } = useGlobalContext();
   const [selectedUser, setSelectedUser] = React.useState(0);
   const [remainingSeconds, setRemainingSeconds] = React.useState(
     currentGame ? currentGame.roundDuration : 0,
@@ -176,21 +184,47 @@ const Play = () => {
             totalTime={currentGame.roundDuration}
           />
         </View>
-        <TouchableOpacity
-          onPress={() => router.push("/home")}
-          className="ml-3  rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-4 items-center justify-center"
-        >
-          <FontAwesome name="home" size={24} color="gold" />
-        </TouchableOpacity>
+        <View className="">
+          <View className="flex-row mb-1">
+            <TouchableOpacity className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center">
+              <FontAwesome name="stop" size={24} color="gray" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push("/home")}
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+            >
+              <FontAwesome name="home" size={24} color="gray" />
+            </TouchableOpacity>
+          </View>
+          <View className="flex-row">
+            <TouchableOpacity
+              onPress={() => setGamePaused((prev: boolean) => !prev)}
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+            >
+              <FontAwesome
+                name={gamePaused ? "play" : "pause"}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setMuted((prev: boolean) => !prev)}
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+            >
+              <FontAwesome
+                name={muted ? "volume-off" : "volume-up"}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
       <View className="mt-4 flex-1">
         <View className="flex-row">
           <View className="flex-1">
             <DisplayName name={names[0].name} kategory={names[0].difficulty} />
           </View>
-          <TouchableOpacity className="ml-3  rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-4 items-center justify-center">
-            <FontAwesome name="list" size={24} color="gold" />
-          </TouchableOpacity>
         </View>
         <View className="mt-4 flex-1">
           <RightWrong

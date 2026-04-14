@@ -33,6 +33,7 @@ const GlobalProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [isUsersHydrated, setIsUsersHydrated] = useState(false);
 
+  const [muted, setMuted] = useState(false);
   useEffect(() => {
     let mounted = true;
 
@@ -180,6 +181,10 @@ const GlobalProvider = ({ children }) => {
         setCurrentGame,
         blackList,
         setBlackList,
+        muted,
+        setMuted,
+        gamePaused,
+        setGamePaused,
       }}
     >
       {children}
