@@ -120,32 +120,22 @@ const GlobalProvider = ({ children }) => {
     {
       dateTime: "2024-06-01T12:00:00Z",
       participants: [1, 2],
-      rounds: [
+      answers: [
         {
-          rid: 1,
-          particpant: 1,
-          questions: [
-            {
-              category: "history",
-              id: "6",
-              name: "Stalin",
-              difficulty: "LOW",
-              correct: true,
-            },
-          ],
+          category: "history",
+          id: "6",
+          name: "Stalin",
+          difficulty: "LOW",
+          correct: true,
+          byParticipant: 1,
         },
         {
-          rid: 2,
-          particpant: 2,
-          questions: [
-            {
-              category: "media",
-              id: "7",
-              name: "Lutz van Derhorst",
-              difficulty: "HIGH",
-              correct: false,
-            },
-          ],
+          category: "politics",
+          id: "1",
+          name: "Putin",
+          difficulty: "LOW",
+          correct: false,
+          byParticipant: 2,
         },
       ],
       gameResults: [

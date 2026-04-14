@@ -1,4 +1,4 @@
-import { users } from "@/constants/types";
+import { currentGame, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -9,19 +9,12 @@ const StartGame = () => {
   const { currentGame, users, customNames, setCurrentGame } =
     useGlobalContext();
   const [expanded, setExpanded] = React.useState(false);
-  const [tmpCurrentGame, setTmpCurrentGame] = React.useState<{
-    dateTime: Date;
-    participants: number[];
-    kategorys: string[];
-    roundDuration: number;
-    rounds: any[];
-    gameResults: any[];
-  }>({
+  const [tmpCurrentGame, setTmpCurrentGame] = React.useState<currentGame>({
     dateTime: new Date(),
     participants: [],
     kategorys: [],
     roundDuration: 60,
-    rounds: [],
+    answers: [],
     gameResults: [],
   });
   const kategorys = customNames ? Object.keys(customNames) : [];
@@ -206,11 +199,22 @@ const StartGame = () => {
                     );
                     return;
                   }
+                  const gameResults = tmpCurrentGame.participants.map(
+                    (participantId) => ({
+                      participantId,
+                      pointsEarned: 0,
+                    }),
+                  );
                   setTmpCurrentGame({
                     ...tmpCurrentGame,
+                    gameResults: gameResults,
                     dateTime: new Date(),
                   });
-                  setCurrentGame(tmpCurrentGame);
+                  setCurrentGame({
+                    ...tmpCurrentGame,
+                    gameResults: gameResults,
+                    dateTime: new Date(),
+                  });
                   router.push("/(game)/play");
                 }}
               >

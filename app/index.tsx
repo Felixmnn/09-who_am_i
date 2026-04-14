@@ -4,7 +4,7 @@ export default function Index() {
   return (
     <View className="flex-1 bg-gray-900 items-center justify-center">
       <TouchableOpacity
-        onPress={() => router.push("/(quiz)/users")}
+        onPress={() => router.push("/(quiz)/home")}
         className="bg-blue-500 px-4 py-2 rounded"
       >
         <Text className="text-white text-2xl">Go to quiz</Text>

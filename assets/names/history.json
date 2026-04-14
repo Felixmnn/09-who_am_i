@@ -1,1 +1,14 @@
-[]
+[
+  { "id": "h1", "name": "Napoleon Bonaparte", "difficulty": "EASY" },
+  { "id": "h2", "name": "Cleopatra", "difficulty": "EASY" },
+  { "id": "h3", "name": "Adolf Hitler", "difficulty": "EASY" },
+  { "id": "h4", "name": "Julius Caesar", "difficulty": "EASY" },
+  { "id": "h5", "name": "Alexander the Great", "difficulty": "MEDIUM" },
+  { "id": "h6", "name": "Genghis Khan", "difficulty": "MEDIUM" },
+  { "id": "h7", "name": "Karl Marx", "difficulty": "MEDIUM" },
+  { "id": "h8", "name": "Martin Luther King", "difficulty": "MEDIUM" },
+  { "id": "h9", "name": "Robespierre", "difficulty": "HIGH" },
+  { "id": "h10", "name": "Saladin", "difficulty": "HIGH" },
+  { "id": "h11", "name": "Vlad the Impaler", "difficulty": "HIGH" },
+  { "id": "h12", "name": "Tamerlan", "difficulty": "HIGH" }
+]
