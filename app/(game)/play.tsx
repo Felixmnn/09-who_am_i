@@ -5,9 +5,14 @@ import { currentGame, gameResultPlayer } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React, { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import histroyNames from "../../assets/names/history.json";
 import mediaNames from "../../assets/names/media.json";
@@ -25,7 +30,15 @@ const Play = () => {
     setBlacklist,
     muted,
     setMuted,
+    lastGameResults,
+    setLastGameResults,
   } = useGlobalContext();
+
+  if (!currentGame || !currentGame.gameResults) {
+    return <Redirect href="/(quiz)/home" />;
+  }
+  const { width } = useWindowDimensions();
+
   const [selectedUser, setSelectedUser] = React.useState(0);
   const [remainingSeconds, setRemainingSeconds] = React.useState(
     currentGame ? currentGame.roundDuration : 0,
@@ -33,6 +46,7 @@ const Play = () => {
 
   function getNamesForGame() {
     const selectedNames = [];
+    if (!currentGame) return [];
     //TSK: Später anpassen sodass nach schwierigkeit gefiltert wird sowie nach Blacklist und Custom Names
     for (let i = 0; i < currentGame.kategorys.length; i++) {
       const category = currentGame.kategorys[i];
@@ -115,6 +129,7 @@ const Play = () => {
   //Dieser Use Effect zählt die verbleibende Zeit herunter, wenn das Spiel nicht pausiert ist
   //Wird 0 erreicht, wird der nächste Teilnehmer ausgewählt und die Zeit zurückgesetzt
   useEffect(() => {
+    if (!currentGame) return;
     if (!gamePaused) {
       const timer = setInterval(() => {
         setRemainingSeconds((prev: any) => {
@@ -140,6 +155,20 @@ const Play = () => {
       ? getUserFromId(currentGame.participants[selectedUser])?.name
       : "No user selected";
 
+  function stopGame() {
+    const gameResults = {
+      dateTime: currentGame
+        ? currentGame.dateTime.toISOString()
+        : new Date().toISOString(),
+      participants: currentGame ? currentGame.participants : [],
+      answers: currentGame ? currentGame.answers : [],
+      gameResults: currentGame ? currentGame.gameResults : [],
+    };
+    setLastGameResults((prev: any) => [...prev, gameResults]);
+    setCurrentGame(null);
+    router.push("/home");
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-slate-950 px-4 py-3">
       <View className="flex-row">
@@ -148,9 +177,9 @@ const Play = () => {
             <View className="flex-row items-center justify-center">
               <View className=" w-[50px] h-[50px] rounded-full border border-slate-800 bg-slate-900/80 mr-2 items-center justify-center">
                 <Text className="text-lg font-semibold text-slate-100">
-                  {currentGame.gameResults
-                    .filter((result: gameResultPlayer) =>
-                      currentGame.participants[selectedUser]
+                  {currentGame?.gameResults
+                    ?.filter((result: gameResultPlayer) =>
+                      currentGame.participants?.[selectedUser]
                         ? result.participantId ===
                           currentGame.participants[selectedUser]
                         : false,
@@ -159,7 +188,7 @@ const Play = () => {
                       (total: number, result: gameResultPlayer) =>
                         total + result.pointsEarned,
                       0,
-                    )}
+                    ) ?? 0}
                 </Text>
               </View>
               <View>
@@ -171,12 +200,15 @@ const Play = () => {
                 </Text>
               </View>
             </View>
-            <View className="rounded-2xl border border-slate-700 bg-slate-950 px-3 py-2">
-              <Text className="text-xs text-slate-400">Time Left</Text>
-              <Text className="text-lg font-bold text-emerald-300">
-                {remainingSeconds}s
-              </Text>
-            </View>
+
+            {width > 400 && (
+              <View className="rounded-2xl border border-slate-700 bg-slate-950 px-3 py-2">
+                <Text className="text-xs text-slate-400">Time Left</Text>
+                <Text className="text-lg font-bold text-emerald-300">
+                  {remainingSeconds}s
+                </Text>
+              </View>
+            )}
           </View>
 
           <TimeBar
@@ -186,7 +218,10 @@ const Play = () => {
         </View>
         <View className="">
           <View className="flex-row mb-1">
-            <TouchableOpacity className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center">
+            <TouchableOpacity
+              onPress={stopGame}
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+            >
               <FontAwesome name="stop" size={24} color="gray" />
             </TouchableOpacity>
             <TouchableOpacity
