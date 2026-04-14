@@ -1,7 +1,7 @@
 import DisplayName from "@/components/(play)/displayName";
 import RightWrong from "@/components/(play)/rightWrong";
 import TimeBar from "@/components/(play)/timeBar";
-import { currentGame, gameResultPlayer } from "@/constants/types";
+import { currentGame, gameResultPlayer, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
@@ -32,6 +32,8 @@ const Play = () => {
     setMuted,
     lastGameResults,
     setLastGameResults,
+    users,
+    setUsers,
   } = useGlobalContext();
 
   if (!currentGame || !currentGame.gameResults) {
@@ -164,6 +166,20 @@ const Play = () => {
       answers: currentGame ? currentGame.answers : [],
       gameResults: currentGame ? currentGame.gameResults : [],
     };
+    setUsers((prevUsers: users[]) =>
+      prevUsers.map((user) => {
+        if (currentGame.participants.includes(user.id)) {
+          const participantResult = gameResults.gameResults.find(
+            (result: gameResultPlayer) => result.participantId === user.id,
+          );
+          return {
+            ...user,
+            points: user.points + (participantResult?.pointsEarned || 0),
+          };
+        }
+        return user;
+      }),
+    );
     setLastGameResults((prev: any) => [...prev, gameResults]);
     setCurrentGame(null);
     router.push("/home");
