@@ -24,7 +24,7 @@ const QuickOptions = () => {
         {quickOptions.map((option) => (
           <TouchableOpacity
             key={option.label}
-            className="items-center justify-center mx-2 rounded-lg bg-slate-800 px-3 py-2 h-[80px] w-[100px]"
+            className="items-center justify-center mx-2 rounded-lg bg-slate-800 px-3 py-2 h-[80px] flex-1"
             onPress={() => router.push(option.route)}
           >
             <FontAwesome name={option.icon} size={16} color="white" />

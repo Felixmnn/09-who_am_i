@@ -6,6 +6,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import React, { useEffect } from "react";
 import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Play = () => {
   const { currentGame, gamePaused } = useGlobalContext();
@@ -45,27 +46,55 @@ const Play = () => {
     }
   }, [gamePaused, currentGame]);
 
+  const activePlayerName =
+    currentGame?.participants[selectedUser] !== undefined
+      ? getUserFromId(currentGame.participants[selectedUser])?.name
+      : "No user selected";
+
   return (
-    <View className="flex-1 bg-gray-900 items-center justify-start p-2">
-      <TimeBar
-        remainingTime={remainingSeconds}
-        totalTime={currentGame.roundDuration}
-      />
-      <Text className="text-white text-lg mb-2">
-        It's your turn,{" "}
-        {currentGame?.participants[selectedUser] !== undefined
-          ? getUserFromId(currentGame.participants[selectedUser])?.name
-          : "No user selected"}
-      </Text>
-      <DisplayName name={names[0].name} kategory={names[0].kategory} />
-      <RightWrong />
-      <Score
-        progress={[
-          { username: "Felix", score: 10 },
-          { username: "Parmveer", score: 20 },
-        ]}
-      />
-    </View>
+    <SafeAreaView className="flex-1 bg-slate-950 px-4 py-3">
+      <View className="rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-4">
+        <View className="mb-3 flex-row items-center justify-between">
+          <View>
+            <Text className="text-xs uppercase tracking-[2px] text-slate-400">
+              Active Round
+            </Text>
+            <Text className="mt-1 text-2xl font-bold text-slate-50">
+              {activePlayerName}
+            </Text>
+          </View>
+          <View className="rounded-2xl border border-slate-700 bg-slate-950 px-3 py-2">
+            <Text className="text-xs text-slate-400">Time Left</Text>
+            <Text className="text-lg font-bold text-emerald-300">
+              {remainingSeconds}s
+            </Text>
+          </View>
+        </View>
+
+        <TimeBar
+          remainingTime={remainingSeconds}
+          totalTime={currentGame.roundDuration}
+        />
+      </View>
+
+      <View className="mt-4 flex-1">
+        <View className="">
+          <DisplayName name={names[0].name} kategory={names[0].kategory} />
+        </View>
+        <View className="mt-4 flex-1">
+          <RightWrong />
+        </View>
+
+        <View className="mt-4 flex-1">
+          <Score
+            progress={[
+              { username: "Felix", score: 10 },
+              { username: "Parmveer", score: 20 },
+            ]}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -25,21 +25,29 @@ const RightWrong = () => {
   }
 
   return (
-    <View className="mt-3 flex-1 w-full flex-row gap-2">
-      <TouchableOpacity
-        onPress={() => playSound({ right: true })}
-        className="flex-1 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-4 py-3"
-      >
-        <Text className="text-center font-semibold text-emerald-200">
-          Correct
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => playSound({ right: false })}
-        className="flex-1 items-center justify-center rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-3"
-      >
-        <Text className="text-center font-semibold text-rose-200">Wrong</Text>
-      </TouchableOpacity>
+    <View className="flex-1  w-full rounded-2xl border border-slate-800 bg-slate-900/70 p-3">
+      <Text className="mb-3 text-center text-xs uppercase tracking-[2px] text-slate-500">
+        Round Decision
+      </Text>
+
+      <View className="flex-row gap-2 flex-1">
+        <TouchableOpacity
+          onPress={() => playSound({ right: true })}
+          className="flex-1 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-2.5"
+        >
+          <Text className="text-center text-sm font-semibold text-emerald-200">
+            Correct
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => playSound({ right: false })}
+          className="flex-1 items-center justify-center rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-2.5"
+        >
+          <Text className="text-center text-sm font-semibold text-rose-200">
+            Wrong
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

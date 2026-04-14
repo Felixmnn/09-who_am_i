@@ -1,5 +1,6 @@
 import { gameResult } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { getUserFromId } from "@/scripts/game";
 import React from "react";
 import { Text, View } from "react-native";
 
@@ -17,7 +18,8 @@ const ListOldGames = () => {
               Game from: {new Date(result.dateTime).toLocaleString()}
             </Text>
             <Text className="mt-1 text-sm text-slate-300">
-              Winner - {result.gameResults[0].participantId} with{" "}
+              Winner -{" "}
+              {getUserFromId(result.gameResults[0].participantId)?.name} with{" "}
               {result.gameResults[0].pointsEarned} points
             </Text>
           </View>
