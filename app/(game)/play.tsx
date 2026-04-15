@@ -166,6 +166,7 @@ const Play = () => {
     currentGame?.participants[selectedUser] !== undefined
       ? getUserFromId(currentGame.participants[selectedUser])?.name
       : "No user selected";
+  const hasNames = names.length > 0;
 
   function stopGame() {
     try {
@@ -288,16 +289,29 @@ const Play = () => {
       <View className="mt-4 flex-1">
         <View className="flex-row">
           <View className="flex-1">
-            <DisplayName name={names[0].name} kategory={names[0].difficulty} />
+            {hasNames ? (
+              <DisplayName
+                name={names[0].name}
+                kategory={names[0].difficulty}
+              />
+            ) : (
+              <View className="min-h-[220px] items-center justify-center rounded-3xl border border-slate-800 bg-slate-900/80 px-6">
+                <Text className="text-center text-2xl font-bold text-slate-100">
+                  Keine Namen mehr vorhanden
+                </Text>
+              </View>
+            )}
           </View>
         </View>
-        <View className="mt-4 flex-1">
-          <RightWrong
-            removeFirstName={removeFirstName}
-            rightAnswer={rightAnswer}
-            wrongAnswer={wrongAnswer}
-          />
-        </View>
+        {hasNames && (
+          <View className="mt-4 flex-1">
+            <RightWrong
+              removeFirstName={removeFirstName}
+              rightAnswer={rightAnswer}
+              wrongAnswer={wrongAnswer}
+            />
+          </View>
+        )}
         {/*}
         <View className="mt-4 flex-1">
           <Score progress={currentGame.gameResults} />
