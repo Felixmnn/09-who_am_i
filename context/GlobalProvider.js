@@ -2,14 +2,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const GlobalContext = createContext();
-const USERS_STORAGE_KEY = "@whoami_users";
-const MUTED_STORAGE_KEY = "@whoami_muted";
-const BLACKLIST_STORAGE_KEY = "@whoami_blacklist";
-const LAST_GAME_RESULTS_STORAGE_KEY = "@whoami_lastGameResults";
-const CUSTOM_NAMES_STORAGE_KEY = "@whoami_customNames";
-const CURRENT_GAME_STORAGE_KEY = "@whoami_currentGame";
-const GAME_PAUSED_STORAGE_KEY = "@whoami_gamePaused";
-const DEFAULT_USERS = [
+export const USERS_STORAGE_KEY = "@whoami_users";
+export const MUTED_STORAGE_KEY = "@whoami_muted";
+export const BLACKLIST_STORAGE_KEY = "@whoami_blacklist";
+export const LAST_GAME_RESULTS_STORAGE_KEY = "@whoami_lastGameResults";
+export const CUSTOM_NAMES_STORAGE_KEY = "@whoami_customNames";
+export const CURRENT_GAME_STORAGE_KEY = "@whoami_currentGame";
+export const GAME_PAUSED_STORAGE_KEY = "@whoami_gamePaused";
+export const ALREADY_GUESSED_NAMES_STORAGE_KEY = "@whoami_alreadyGuessedNames";
+
+export const createDefaultUsers = () => [
   {
     id: 1,
     name: "Felix",
@@ -32,11 +34,81 @@ const DEFAULT_USERS = [
   },
 ];
 
+export const createDefaultCustomNames = () => ({
+  history: [
+    {
+      id: "6",
+      name: "Stalin",
+      difficulty: "LOW",
+    },
+  ],
+  politics: [
+    {
+      id: "1",
+      name: "Putin",
+      difficulty: "LOW",
+    },
+  ],
+  sports: [],
+  media: [
+    {
+      id: "7",
+      name: "Lutz van Derhorst",
+      difficulty: "HIGH",
+    },
+  ],
+  science: [],
+  custom: [],
+});
+
+export const createDefaultLastGameResults = () => [
+  {
+    dateTime: "2024-06-01T12:00:00Z",
+    participants: [1, 2],
+    answers: [
+      {
+        category: "history",
+        id: "6",
+        name: "Stalin",
+        difficulty: "LOW",
+        correct: true,
+        byParticipant: 1,
+      },
+      {
+        category: "politics",
+        id: "1",
+        name: "Putin",
+        difficulty: "LOW",
+        correct: false,
+        byParticipant: 2,
+      },
+    ],
+    gameResults: [
+      {
+        participantId: 1,
+        pointsEarned: 10,
+      },
+      {
+        participantId: 2,
+        pointsEarned: 0,
+      },
+    ],
+  },
+];
+
+export const createDefaultBlackList = () => [
+  {
+    id: "6",
+    name: "Stalin",
+    difficulty: "LOW",
+  },
+];
+
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
   //EXP: Users is an array of user objects with their points and preferences
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(createDefaultUsers());
   const [isUsersHydrated, setIsUsersHydrated] = useState(false);
   const [isSettingsHydrated, setIsSettingsHydrated] = useState(false);
 
@@ -49,7 +121,7 @@ const GlobalProvider = ({ children }) => {
         const storedUsers = await AsyncStorage.getItem(USERS_STORAGE_KEY);
         if (!storedUsers) {
           if (mounted) {
-            setUsers(DEFAULT_USERS);
+            setUsers(createDefaultUsers());
           }
           return;
         }
@@ -58,12 +130,12 @@ const GlobalProvider = ({ children }) => {
         if (Array.isArray(parsedUsers) && mounted) {
           setUsers(parsedUsers);
         } else if (mounted) {
-          setUsers(DEFAULT_USERS);
+          setUsers(createDefaultUsers());
         }
       } catch (error) {
         console.warn("Could not load users from storage", error);
         if (mounted) {
-          setUsers(DEFAULT_USERS);
+          setUsers(createDefaultUsers());
         }
       } finally {
         if (mounted) {
@@ -96,84 +168,21 @@ const GlobalProvider = ({ children }) => {
   }, [users, isUsersHydrated]);
 
   //EXP: Custom Names are names that extend the default list
-  const [customNames, setCustomNames] = useState({
-    history: [
-      {
-        id: "6",
-        name: "Stalin",
-        difficulty: "LOW",
-      },
-    ],
-    politics: [
-      {
-        id: "1",
-        name: "Putin",
-        difficulty: "LOW",
-      },
-    ],
-    sports: [],
-    media: [
-      {
-        id: "7",
-        name: "Lutz van Derhorst",
-        difficulty: "HIGH",
-      },
-    ],
-    science: [],
-    custom: [],
-  });
+  const [customNames, setCustomNames] = useState(createDefaultCustomNames());
 
   //EXP: Last Game Results is an array of game results
-  const [lastGameResults, setLastGameResults] = useState([
-    {
-      dateTime: "2024-06-01T12:00:00Z",
-      participants: [1, 2],
-      answers: [
-        {
-          category: "history",
-          id: "6",
-          name: "Stalin",
-          difficulty: "LOW",
-          correct: true,
-          byParticipant: 1,
-        },
-        {
-          category: "politics",
-          id: "1",
-          name: "Putin",
-          difficulty: "LOW",
-          correct: false,
-          byParticipant: 2,
-        },
-      ],
-      gameResults: [
-        {
-          participantId: 1,
-          pointsEarned: 10,
-        },
-        {
-          participantId: 2,
-          pointsEarned: 0,
-        },
-      ],
-    },
-  ]);
+  const [lastGameResults, setLastGameResults] = useState(
+    createDefaultLastGameResults(),
+  );
 
   //EXP: Current Game is the game that is currently being played
   const [currentGame, setCurrentGame] = useState(null);
 
   //EXP: Blacklisted Names won't be used in the game
-  const [blackList, setBlackList] = useState([
-    {
-      id: "6",
-      name: "Stalin",
-      difficulty: "LOW",
-    },
-  ]);
+  const [blackList, setBlackList] = useState(createDefaultBlackList());
 
   const [gamePaused, setGamePaused] = useState(false);
   const [alreadyGuessedNames, setAlreadyGuessedNames] = useState([]);
-  const ALREADY_GUESSED_NAMES_STORAGE_KEY = "@whoami_alreadyGuessedNames";
   useEffect(() => {
     if (!isSettingsHydrated) {
       return;

@@ -1,4 +1,6 @@
+import AGB from "@/components/(custom)/agb";
 import ManageNames from "@/components/(custom)/manageNames";
+import ResetApp from "@/components/(custom)/resetApp";
 import React from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,6 +16,8 @@ const Custom = () => {
           <CustomNames />
           <BlackList />
           */}
+          <AGB />
+          <ResetApp />
         </View>
       </ScrollView>
     </SafeAreaView>

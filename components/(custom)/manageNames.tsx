@@ -98,7 +98,7 @@ const ManageNames = () => {
   };
 
   return (
-    <View className="mb-4  rounded-3xl border border-slate-800 bg-slate-900/90 p-4 ">
+    <View className="mb-4  rounded-xl border border-slate-800 bg-slate-900/90 p-4 ">
       <TouchableOpacity
         className="flex-row items-center justify-between w-full"
         onPress={() => setExpanded((prev) => !prev)}
