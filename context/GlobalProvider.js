@@ -172,6 +172,19 @@ const GlobalProvider = ({ children }) => {
   ]);
 
   const [gamePaused, setGamePaused] = useState(false);
+  const [alreadyGuessedNames, setAlreadyGuessedNames] = useState([]);
+  const ALREADY_GUESSED_NAMES_STORAGE_KEY = "@whoami_alreadyGuessedNames";
+  useEffect(() => {
+    if (!isSettingsHydrated) {
+      return;
+    }
+    AsyncStorage.setItem(
+      ALREADY_GUESSED_NAMES_STORAGE_KEY,
+      JSON.stringify(alreadyGuessedNames),
+    ).catch((error) => {
+      console.warn("Could not persist already guessed names to storage", error);
+    });
+  }, [alreadyGuessedNames, isSettingsHydrated]);
 
   useEffect(() => {
     if (!isSettingsHydrated) {
@@ -256,6 +269,7 @@ const GlobalProvider = ({ children }) => {
         storedCustomNames,
         storedCurrentGame,
         storedGamePaused,
+        alreadyGuessedNames,
       ] = await Promise.all([
         AsyncStorage.getItem(MUTED_STORAGE_KEY),
         AsyncStorage.getItem(BLACKLIST_STORAGE_KEY),
@@ -263,6 +277,7 @@ const GlobalProvider = ({ children }) => {
         AsyncStorage.getItem(CUSTOM_NAMES_STORAGE_KEY),
         AsyncStorage.getItem(CURRENT_GAME_STORAGE_KEY),
         AsyncStorage.getItem(GAME_PAUSED_STORAGE_KEY),
+        AsyncStorage.getItem(ALREADY_GUESSED_NAMES_STORAGE_KEY),
       ]);
 
       if (storedMuted !== null) {
@@ -314,6 +329,13 @@ const GlobalProvider = ({ children }) => {
           setGamePaused(parsedGamePaused);
         }
       }
+
+      if (alreadyGuessedNames !== null) {
+        const parsedAlreadyGuessedNames = JSON.parse(alreadyGuessedNames);
+        if (Array.isArray(parsedAlreadyGuessedNames)) {
+          setAlreadyGuessedNames(parsedAlreadyGuessedNames);
+        }
+      }
     } catch (error) {
       console.warn("Could not initialize settings from storage", error);
     } finally {
@@ -344,6 +366,8 @@ const GlobalProvider = ({ children }) => {
         setMuted,
         gamePaused,
         setGamePaused,
+        alreadyGuessedNames,
+        setAlreadyGuessedNames,
       }}
     >
       {children}
