@@ -11,7 +11,7 @@ type QuickOption = {
 
 const QuickOptions = () => {
   const quickOptions: QuickOption[] = [
-    { label: "View stats", route: "/(quiz)/data", icon: "circle" },
+    { label: "View stats", route: "/(quiz)/data", icon: "trophy" },
     { label: "Add names", route: "/(quiz)/settings", icon: "user-plus" },
     { label: "Add users", route: "/(quiz)/users", icon: "users" },
   ];

@@ -26,6 +26,7 @@ export default function _layout() {
             ),
           }}
         />
+        {/*
         <Tabs.Screen
           name="data"
           options={{
@@ -35,6 +36,7 @@ export default function _layout() {
             ),
           }}
         />
+        */}
         <Tabs.Screen
           name="users"
           options={{
