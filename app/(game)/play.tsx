@@ -50,7 +50,6 @@ const Play = () => {
   function getNamesForGame() {
     let selectedNames = [];
     if (!currentGame) return [];
-    //TSK: Später anpassen sodass nach schwierigkeit gefiltert wird sowie nach Blacklist und Custom Names
     for (let i = 0; i < currentGame.kategorys.length; i++) {
       const category = currentGame.kategorys[i];
       switch (category) {
