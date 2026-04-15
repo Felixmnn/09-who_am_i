@@ -3,6 +3,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 const GlobalContext = createContext();
 const USERS_STORAGE_KEY = "@whoami_users";
+const MUTED_STORAGE_KEY = "@whoami_muted";
+const BLACKLIST_STORAGE_KEY = "@whoami_blacklist";
+const LAST_GAME_RESULTS_STORAGE_KEY = "@whoami_lastGameResults";
+const CUSTOM_NAMES_STORAGE_KEY = "@whoami_customNames";
+const CURRENT_GAME_STORAGE_KEY = "@whoami_currentGame";
+const GAME_PAUSED_STORAGE_KEY = "@whoami_gamePaused";
 const DEFAULT_USERS = [
   {
     id: 1,
@@ -32,6 +38,7 @@ const GlobalProvider = ({ children }) => {
   //EXP: Users is an array of user objects with their points and preferences
   const [users, setUsers] = useState([]);
   const [isUsersHydrated, setIsUsersHydrated] = useState(false);
+  const [isSettingsHydrated, setIsSettingsHydrated] = useState(false);
 
   const [muted, setMuted] = useState(false);
   useEffect(() => {
@@ -167,12 +174,168 @@ const GlobalProvider = ({ children }) => {
 
   const [gamePaused, setGamePaused] = useState(false);
 
+  useEffect(() => {
+    if (!isSettingsHydrated) {
+      return;
+    }
+
+    AsyncStorage.setItem(
+      CURRENT_GAME_STORAGE_KEY,
+      JSON.stringify(currentGame),
+    ).catch((error) => {
+      console.warn("Could not persist current game to storage", error);
+    });
+
+    AsyncStorage.setItem(
+      GAME_PAUSED_STORAGE_KEY,
+      JSON.stringify(gamePaused),
+    ).catch((error) => {
+      console.warn("Could not persist game paused state to storage", error);
+    });
+  }, [currentGame, gamePaused, isSettingsHydrated]);
+
+  useEffect(() => {
+    if (!isSettingsHydrated) {
+      return;
+    }
+
+    AsyncStorage.setItem(MUTED_STORAGE_KEY, JSON.stringify(muted)).catch(
+      (error) => {
+        console.warn("Could not persist muted state to storage", error);
+      },
+    );
+  }, [muted, isSettingsHydrated]);
+
+  useEffect(() => {
+    if (!isSettingsHydrated) {
+      return;
+    }
+
+    AsyncStorage.setItem(
+      BLACKLIST_STORAGE_KEY,
+      JSON.stringify(blackList),
+    ).catch((error) => {
+      console.warn("Could not persist blacklist to storage", error);
+    });
+  }, [blackList, isSettingsHydrated]);
+
+  useEffect(() => {
+    if (!isSettingsHydrated) {
+      return;
+    }
+
+    AsyncStorage.setItem(
+      LAST_GAME_RESULTS_STORAGE_KEY,
+      JSON.stringify(lastGameResults),
+    ).catch((error) => {
+      console.warn("Could not persist last game results to storage", error);
+    });
+  }, [lastGameResults, isSettingsHydrated]);
+
+  useEffect(() => {
+    if (!isSettingsHydrated) {
+      return;
+    }
+
+    AsyncStorage.setItem(
+      CUSTOM_NAMES_STORAGE_KEY,
+      JSON.stringify(customNames),
+    ).catch((error) => {
+      console.warn("Could not persist custom names to storage", error);
+    });
+  }, [customNames, isSettingsHydrated]);
+
+  /**
+   * This function gets called when the app starts and it initalizes all Functions
+   */
+  async function initializeSettings() {
+    try {
+      const [
+        storedMuted,
+        storedBlackList,
+        storedLastGameResults,
+        storedCustomNames,
+        storedCurrentGame,
+        storedGamePaused,
+      ] = await Promise.all([
+        AsyncStorage.getItem(MUTED_STORAGE_KEY),
+        AsyncStorage.getItem(BLACKLIST_STORAGE_KEY),
+        AsyncStorage.getItem(LAST_GAME_RESULTS_STORAGE_KEY),
+        AsyncStorage.getItem(CUSTOM_NAMES_STORAGE_KEY),
+        AsyncStorage.getItem(CURRENT_GAME_STORAGE_KEY),
+        AsyncStorage.getItem(GAME_PAUSED_STORAGE_KEY),
+      ]);
+
+      if (storedMuted !== null) {
+        const parsedMuted = JSON.parse(storedMuted);
+        if (typeof parsedMuted === "boolean") {
+          setMuted(parsedMuted);
+        }
+      }
+
+      if (storedBlackList !== null) {
+        const parsedBlackList = JSON.parse(storedBlackList);
+        if (
+          parsedBlackList &&
+          typeof parsedBlackList === "object" &&
+          !Array.isArray(parsedBlackList)
+        ) {
+          setBlackList(parsedBlackList);
+        }
+      }
+
+      if (storedLastGameResults !== null) {
+        const parsedLastGameResults = JSON.parse(storedLastGameResults);
+        if (Array.isArray(parsedLastGameResults)) {
+          setLastGameResults(parsedLastGameResults);
+        }
+      }
+
+      if (storedCustomNames !== null) {
+        const parsedCustomNames = JSON.parse(storedCustomNames);
+        if (
+          parsedCustomNames &&
+          typeof parsedCustomNames === "object" &&
+          !Array.isArray(parsedCustomNames)
+        ) {
+          setCustomNames(parsedCustomNames);
+        }
+      }
+
+      if (storedCurrentGame !== null) {
+        const parsedCurrentGame = JSON.parse(storedCurrentGame);
+        if (
+          parsedCurrentGame === null ||
+          typeof parsedCurrentGame === "object"
+        ) {
+          setCurrentGame(parsedCurrentGame);
+        }
+      }
+
+      if (storedGamePaused !== null) {
+        const parsedGamePaused = JSON.parse(storedGamePaused);
+        if (typeof parsedGamePaused === "boolean") {
+          setGamePaused(parsedGamePaused);
+        }
+      }
+    } catch (error) {
+      console.warn("Could not initialize settings from storage", error);
+    } finally {
+      setIsSettingsHydrated(true);
+    }
+  }
+
+  useEffect(() => {
+    initializeSettings();
+  }, []);
+
   return (
     <GlobalContext.Provider
       value={{
         users,
         setUsers,
         isUsersHydrated,
+        isSettingsHydrated,
         customNames,
         setCustomNames,
         lastGameResults,

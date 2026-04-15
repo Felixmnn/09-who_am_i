@@ -1,14 +1,21 @@
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { router } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { useEffect } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+
 export default function Index() {
+  const { isUsersHydrated, isSettingsHydrated } = useGlobalContext();
+
+  useEffect(() => {
+    if (isUsersHydrated && isSettingsHydrated) {
+      router.replace("/(quiz)/home");
+    }
+  }, [isUsersHydrated, isSettingsHydrated]);
+
   return (
     <View className="flex-1 bg-gray-900 items-center justify-center">
-      <TouchableOpacity
-        onPress={() => router.push("/(quiz)/home")}
-        className="bg-blue-500 px-4 py-2 rounded"
-      >
-        <Text className="text-white text-2xl">Go to quiz</Text>
-      </TouchableOpacity>
+      <ActivityIndicator size="large" color="#3b82f6" />
+      <Text className="text-white text-lg mt-4">Lade deine Daten...</Text>
     </View>
   );
 }
