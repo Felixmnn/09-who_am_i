@@ -1,7 +1,7 @@
 import DisplayName from "@/components/(play)/displayName";
 import RightWrong from "@/components/(play)/rightWrong";
 import TimeBar from "@/components/(play)/timeBar";
-import { currentGame, gameResultPlayer, users } from "@/constants/types";
+import { currentGame, gameResultPlayer, name, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
@@ -26,8 +26,8 @@ const Play = () => {
     setCurrentGame,
     gamePaused,
     setGamePaused,
-    blacklist,
-    setBlacklist,
+    blackList,
+    setBlackList,
     muted,
     setMuted,
     lastGameResults,
@@ -82,6 +82,15 @@ const Play = () => {
           break;
       }
     }
+    if (blackList && blackList.length > 0) {
+      selectedNames = selectedNames.filter(
+        (name) =>
+          !blackList.some(
+            (blacklisted: name) => blacklisted.name === name.name,
+          ),
+      );
+    }
+
     return selectedNames;
   }
 

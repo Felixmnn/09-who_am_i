@@ -35,10 +35,9 @@ const ManageNames = () => {
     const keys = new Set<string>([
       ...DEFAULT_CATEGORIES,
       ...Object.keys(customNames ?? {}),
-      ...Object.keys(blackList ?? {}),
     ]);
     return Array.from(keys);
-  }, [blackList, customNames]);
+  }, [customNames]);
 
   React.useEffect(() => {
     if (!categories.includes(selectedCategory) && categories.length > 0) {
@@ -46,8 +45,10 @@ const ManageNames = () => {
     }
   }, [categories, selectedCategory]);
 
-  const activeData = target === "customNames" ? customNames : blackList;
-  const entries: NameItem[] = activeData?.[selectedCategory] ?? [];
+  const entries: NameItem[] =
+    target === "blackList"
+      ? (blackList ?? [])
+      : (customNames?.[selectedCategory] ?? []);
 
   const addName = () => {
     const trimmed = nameValue.trim();
@@ -75,10 +76,7 @@ const ManageNames = () => {
         [selectedCategory]: [...(prev?.[selectedCategory] ?? []), newEntry],
       }));
     } else {
-      setBlackList((prev: Record<string, NameItem[]>) => ({
-        ...prev,
-        [selectedCategory]: [...(prev?.[selectedCategory] ?? []), newEntry],
-      }));
+      setBlackList((prev: NameItem[]) => [...(prev ?? []), newEntry]);
     }
 
     setNameValue("");
@@ -93,12 +91,9 @@ const ManageNames = () => {
         ),
       }));
     } else {
-      setBlackList((prev: Record<string, NameItem[]>) => ({
-        ...prev,
-        [selectedCategory]: (prev?.[selectedCategory] ?? []).filter(
-          (entry) => entry.id !== id,
-        ),
-      }));
+      setBlackList((prev: NameItem[]) =>
+        (prev ?? []).filter((entry) => entry.id !== id),
+      );
     }
   };
 
@@ -147,29 +142,29 @@ const ManageNames = () => {
               </Text>
             </TouchableOpacity>
           </View>
-
-          <Text className="mt-4 text-sm font-semibold text-slate-300">
-            Category
-          </Text>
-          <View className="mt-2 flex-row flex-wrap">
-            {categories.map((category) => (
-              <TouchableOpacity
-                key={category}
-                className={`mr-2 mt-2 rounded-lg border px-3 py-1.5 ${
-                  selectedCategory === category
-                    ? "border-emerald-400/40 bg-emerald-500/15"
-                    : "border-slate-700 bg-slate-800"
-                }`}
-                onPress={() => setSelectedCategory(category)}
-              >
-                <Text className="text-xs font-semibold uppercase text-slate-200">
-                  {category}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
           {target !== "blackList" && (
             <View>
+              <Text className="mt-4 text-sm font-semibold text-slate-300">
+                Category
+              </Text>
+              <View className="mt-2 flex-row flex-wrap">
+                {categories.map((category) => (
+                  <TouchableOpacity
+                    key={category}
+                    className={`mr-2 mt-2 rounded-lg border px-3 py-1.5 ${
+                      selectedCategory === category
+                        ? "border-emerald-400/40 bg-emerald-500/15"
+                        : "border-slate-700 bg-slate-800"
+                    }`}
+                    onPress={() => setSelectedCategory(category)}
+                  >
+                    <Text className="text-xs font-semibold uppercase text-slate-200">
+                      {category}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
               <Text className="mt-4 text-sm font-semibold text-slate-300">
                 Name
               </Text>

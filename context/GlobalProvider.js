@@ -163,20 +163,13 @@ const GlobalProvider = ({ children }) => {
   const [currentGame, setCurrentGame] = useState(null);
 
   //EXP: Blacklisted Names won't be used in the game
-  const [blackList, setBlackList] = useState({
-    history: [
-      {
-        id: "6",
-        name: "Stalin",
-        difficulty: "LOW",
-      },
-    ],
-    politics: [],
-    sports: [],
-    media: [],
-    science: [],
-    custom: [],
-  });
+  const [blackList, setBlackList] = useState([
+    {
+      id: "6",
+      name: "Stalin",
+      difficulty: "LOW",
+    },
+  ]);
 
   const [gamePaused, setGamePaused] = useState(false);
 
@@ -281,13 +274,10 @@ const GlobalProvider = ({ children }) => {
 
       if (storedBlackList !== null) {
         const parsedBlackList = JSON.parse(storedBlackList);
-        if (
-          parsedBlackList &&
-          typeof parsedBlackList === "object" &&
-          !Array.isArray(parsedBlackList)
-        ) {
+        if (Array.isArray(parsedBlackList)) {
           setBlackList(parsedBlackList);
         }
+        // Altes Format {history:[], ...} wird ignoriert und mit dem leeren Array-Default überschrieben
       }
 
       if (storedLastGameResults !== null) {
