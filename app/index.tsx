@@ -4,10 +4,14 @@ import { useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 export default function Index() {
-  const { isUsersHydrated, isSettingsHydrated } = useGlobalContext();
+  const { isUsersHydrated, isSettingsHydrated, users } = useGlobalContext();
 
   useEffect(() => {
     if (isUsersHydrated && isSettingsHydrated) {
+      if (users.length < 2) {
+        router.replace("/(onborading)/onboarding");
+        return;
+      }
       router.replace("/(quiz)/home");
     }
   }, [isUsersHydrated, isSettingsHydrated]);

@@ -3,10 +3,8 @@ import React from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 
 //EXP: This component is responsible for displaying the users
-//TSK: EASY The UI should be polished // DONE
-//TSK: MEDIUM There should be a way to edit the users to edit a user the method setUsers should be used --> test with calling userRanking.tsx to
-// ... to ensure global change
-
+//TSK: Users should be able to edit their Skill levels
+//TSK: User should be able to add new users
 const DisplayUsers = ({
   users,
   setUsers,
