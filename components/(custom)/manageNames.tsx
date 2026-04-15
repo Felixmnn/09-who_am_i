@@ -1,6 +1,7 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import RenderLevel from "../renderLevel";
 
 type ListTarget = "customNames" | "blackList";
 
@@ -97,6 +98,12 @@ const ManageNames = () => {
     }
   };
 
+  const colorByLevel: Record<string, string> = {
+    HIGH: "bg-rose-500/20 text-rose-200 border-rose-500/40",
+    MEDIUM: "bg-amber-500/20 text-amber-200 border-amber-500/40",
+    LOW: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
+  };
+
   return (
     <View className="mb-4  rounded-xl border border-slate-800 bg-slate-900/90 p-4 ">
       <TouchableOpacity
@@ -153,7 +160,7 @@ const ManageNames = () => {
                     key={category}
                     className={`mr-2 mt-2 rounded-lg border px-3 py-1.5 ${
                       selectedCategory === category
-                        ? "border-emerald-400/40 bg-emerald-500/15"
+                        ? "border-cyan-400/40 bg-cyan-500/15"
                         : "border-slate-700 bg-slate-800"
                     }`}
                     onPress={() => setSelectedCategory(category)}
@@ -185,7 +192,7 @@ const ManageNames = () => {
                     key={level}
                     className={`flex-1 rounded-lg border px-3 py-2 ${
                       difficulty === level
-                        ? "border-indigo-400/40 bg-indigo-500/15"
+                        ? `${colorByLevel[level]} border-${colorByLevel[level].split(" ")[2]}`
                         : "border-slate-700 bg-slate-800"
                     }`}
                     onPress={() => setDifficulty(level)}
@@ -198,10 +205,11 @@ const ManageNames = () => {
               </View>
 
               <TouchableOpacity
-                className="mt-4 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-3"
+                disabled={!nameValue.trim()}
+                className="mt-4 rounded-xl border border-cyan-400/40 bg-cyan-500/15 px-4 py-3"
                 onPress={addName}
               >
-                <Text className="text-center font-bold text-emerald-200">
+                <Text className="text-center font-bold text-slate-100">
                   Add Name
                 </Text>
               </TouchableOpacity>
@@ -221,13 +229,11 @@ const ManageNames = () => {
                   key={entry.id}
                   className="mt-2 flex-row items-center justify-between rounded-xl  bg-slate-950 px-3 py-2"
                 >
-                  <View>
-                    <Text className="text-sm font-semibold text-slate-100">
+                  <View className="flex-1 flex-row items-center ">
+                    <Text className="text-l font-bold text-slate-100 mr-2 mb-[2px]">
                       {entry.name}
                     </Text>
-                    <Text className="text-xs text-slate-400">
-                      {entry.difficulty}
-                    </Text>
+                    <RenderLevel label="Difficulty" value={entry.difficulty} />
                   </View>
 
                   <TouchableOpacity
