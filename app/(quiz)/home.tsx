@@ -17,7 +17,7 @@ const Home = () => {
       <View className="gap-2">
         <StartGame />
         <QuickOptions />
-        <ListOldGames games={lastGameResults.reverse()} />
+        <ListOldGames games={lastGameResults} />
       </View>
     </ScrollView>
   );

@@ -5,19 +5,80 @@ import { router } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
+const CATEGORY_META: Record<
+  string,
+  { icon: keyof typeof FontAwesome.glyphMap; label: string; accent: string }
+> = {
+  history: {
+    icon: "book",
+    label: "History",
+    accent: "text-amber-200",
+  },
+  politics: {
+    icon: "university",
+    label: "Politics",
+    accent: "text-sky-200",
+  },
+  sports: {
+    icon: "futbol-o",
+    label: "Sports",
+    accent: "text-emerald-200",
+  },
+  media: {
+    icon: "television",
+    label: "Media",
+    accent: "text-fuchsia-200",
+  },
+  science: {
+    icon: "flask",
+    label: "Science",
+    accent: "text-cyan-200",
+  },
+  custom: {
+    icon: "star",
+    label: "Custom",
+    accent: "text-rose-200",
+  },
+};
+
+const createInitialGameDraft = (
+  availableUsers: users[],
+  availableCategories: string[],
+): currentGame => ({
+  dateTime: new Date(),
+  participants: availableUsers.slice(0, 2).map((user) => user.id),
+  kategorys: availableCategories,
+  roundDuration: 60,
+  answers: [],
+  gameResults: [],
+});
+
 const StartGame = () => {
   const { currentGame, users, customNames, setCurrentGame } =
     useGlobalContext();
   const [expanded, setExpanded] = React.useState(false);
-  const [tmpCurrentGame, setTmpCurrentGame] = React.useState<currentGame>({
-    dateTime: new Date(),
-    participants: [],
-    kategorys: [],
-    roundDuration: 60,
-    answers: [],
-    gameResults: [],
-  });
   const kategorys = customNames ? Object.keys(customNames) : [];
+  const hasInitializedDefaults = React.useRef(false);
+  const [tmpCurrentGame, setTmpCurrentGame] = React.useState<currentGame>(() =>
+    createInitialGameDraft(users, kategorys),
+  );
+
+  React.useEffect(() => {
+    if (hasInitializedDefaults.current) {
+      return;
+    }
+
+    if (users.length === 0 && kategorys.length === 0) {
+      return;
+    }
+
+    setTmpCurrentGame((prev) => ({
+      ...prev,
+      participants: users.slice(0, 2).map((user: users) => user.id),
+      kategorys,
+    }));
+    hasInitializedDefaults.current = true;
+  }, [users, kategorys]);
 
   const toggleParticipant = (userId: number) => {
     setTmpCurrentGame((prev) => ({
@@ -36,6 +97,9 @@ const StartGame = () => {
         : [...prev.kategorys, kategory],
     }));
   };
+
+  const selectedParticipantsCount = tmpCurrentGame.participants.length;
+  const selectedCategoriesCount = tmpCurrentGame.kategorys.length;
 
   return (
     <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
@@ -66,21 +130,21 @@ const StartGame = () => {
                   Wähle Spieler, Kategorien und Rundenzeit.
                 </Text>
               </View>
-              <FontAwesome
-                name={expanded ? "chevron-up" : "chevron-down"}
-                size={16}
-                color="#cbd5e1"
-              />
             </View>
           </TouchableOpacity>
 
-          {expanded && (
-            <View className="mt-4 gap-4">
-              <View className="rounded-xl">
-                <Text className="mb-1 text-sm font-semibold uppercase tracking-wider text-slate-400">
-                  Participants
-                </Text>
-                <View className="flex-row flex-wrap">
+          {true && (
+            <View className="mt-3 gap-3">
+              <View className="">
+                <View className="mb-2 flex-row items-center justify-between">
+                  <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                    Participants
+                  </Text>
+                  <Text className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-200">
+                    {selectedParticipantsCount} selected
+                  </Text>
+                </View>
+                <View className="flex-row flex-wrap gap-2">
                   {users.map((user: users) => {
                     const isSelected = tmpCurrentGame.participants.includes(
                       user.id,
@@ -88,19 +152,115 @@ const StartGame = () => {
                     return (
                       <TouchableOpacity
                         key={user.id}
-                        className={`mr-2 mt-2 rounded-xl border px-2 py-1 ${
+                        className={`min-w-[140px] flex-1 rounded-xl border px-3 py-2.5 ${
                           isSelected
-                            ? "border-cyan-400/30 bg-cyan-500/15"
+                            ? "border-cyan-400/40 bg-cyan-500/15"
                             : "border-slate-700 bg-slate-900"
                         }`}
                         onPress={() => toggleParticipant(user.id)}
                       >
+                        <View className="flex-row items-center justify-between">
+                          <View className="flex-row items-center">
+                            <View
+                              className={`mr-2.5 h-8 w-8 items-center justify-center rounded-full ${
+                                isSelected ? "bg-cyan-500/20" : "bg-slate-800"
+                              }`}
+                            >
+                              <Text
+                                className={`text-xs font-bold ${
+                                  isSelected
+                                    ? "text-cyan-200"
+                                    : "text-slate-300"
+                                }`}
+                              >
+                                {user.name.slice(0, 1).toUpperCase()}
+                              </Text>
+                            </View>
+                            <View>
+                              <Text
+                                className={`text-sm font-semibold ${
+                                  isSelected
+                                    ? "text-slate-50"
+                                    : "text-slate-200"
+                                }`}
+                              >
+                                {user.name}
+                              </Text>
+                              <Text className="text-[11px] text-slate-500">
+                                {user.points} pts
+                              </Text>
+                            </View>
+                          </View>
+
+                          <FontAwesome
+                            name={isSelected ? "check-circle" : "circle-o"}
+                            size={16}
+                            color={isSelected ? "#67e8f9" : "#64748b"}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </View>
+
+              <View className="">
+                <View className="mb-2 flex-row items-center justify-between">
+                  <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                    Categories
+                  </Text>
+                  <Text className="rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-200">
+                    {selectedCategoriesCount} selected
+                  </Text>
+                </View>
+                <View className="flex-row flex-wrap gap-2">
+                  {kategorys.map((kategory) => {
+                    const isSelected =
+                      tmpCurrentGame.kategorys.includes(kategory);
+                    const meta = CATEGORY_META[kategory] ?? {
+                      icon: "tag",
+                      label: kategory,
+                      accent: "text-slate-200",
+                    };
+
+                    return (
+                      <TouchableOpacity
+                        key={kategory}
+                        className={`min-w-[125px] flex-1 rounded-xl border px-3 py-2.5 ${
+                          isSelected
+                            ? "border-cyan-400/40 bg-cyan-500/15"
+                            : "border-slate-700 bg-slate-900"
+                        }`}
+                        onPress={() => toggleKategory(kategory)}
+                      >
+                        <View className="flex-row items-start justify-between">
+                          <View
+                            className={`h-8 w-8 items-center justify-center rounded-lg ${
+                              isSelected ? "bg-cyan-500/20" : "bg-slate-800"
+                            }`}
+                          >
+                            <FontAwesome
+                              name={meta.icon}
+                              size={15}
+                              color={isSelected ? "#67e8f9" : "#cbd5e1"}
+                            />
+                          </View>
+                          <FontAwesome
+                            name={isSelected ? "check-circle" : "circle-o"}
+                            size={16}
+                            color={isSelected ? "#67e8f9" : "#64748b"}
+                          />
+                        </View>
+
                         <Text
-                          className={`text-sm font-semibold ${
-                            isSelected ? "text-emerald-200" : "text-gray-200"
+                          className={`mt-2 text-sm font-semibold ${
+                            isSelected ? "text-slate-50" : meta.accent
                           }`}
                         >
-                          {user.name}
+                          {meta.label}
+                        </Text>
+                        <Text className="mt-0.5 text-[11px] uppercase tracking-wide text-slate-500">
+                          {kategory}
                         </Text>
                       </TouchableOpacity>
                     );
@@ -108,45 +268,16 @@ const StartGame = () => {
                 </View>
               </View>
 
-              <View className="rounded-xl">
-                <Text className="mb-1 text-sm font-semibold uppercase tracking-wider text-slate-400">
-                  Categories
-                </Text>
-                <View className="flex-row flex-wrap">
-                  {kategorys.map((kategory) => (
-                    <TouchableOpacity
-                      key={kategory}
-                      className={`mr-2 mt-2 rounded-xl border px-2 py-1 ${
-                        tmpCurrentGame.kategorys.includes(kategory)
-                          ? "border-cyan-400/30 bg-cyan-500/15"
-                          : "border-slate-700 bg-slate-900"
-                      }`}
-                      onPress={() => toggleKategory(kategory)}
-                    >
-                      <Text
-                        className={`text-sm font-semibold ${
-                          tmpCurrentGame.kategorys.includes(kategory)
-                            ? "text-cyan-200"
-                            : "text-slate-300"
-                        }`}
-                      >
-                        {kategory}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-
-              <View className="rounded-xl">
-                <Text className="mb-1 text-sm font-semibold uppercase tracking-wider text-slate-400">
+              <View className="">
+                <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                   Round Duration
                 </Text>
-                <View className="flex-row items-center">
+                <View className="mt-2.5 flex-row items-center justify-between rounded-xl ">
                   <TouchableOpacity
-                    className={`rounded-xl px-4 py-2 ${
+                    className={`h-10 w-10 items-center justify-center rounded-lg ${
                       tmpCurrentGame.roundDuration <= 5
                         ? "bg-slate-800"
-                        : "bg-slate-700"
+                        : "border border-slate-700 bg-slate-800"
                     }`}
                     disabled={tmpCurrentGame.roundDuration <= 5}
                     onPress={() =>
@@ -156,13 +287,18 @@ const StartGame = () => {
                       })
                     }
                   >
-                    <Text className="text-lg font-bold text-slate-200">-</Text>
+                    <FontAwesome name="minus" size={14} color="#e2e8f0" />
                   </TouchableOpacity>
-                  <Text className="mx-3 min-w-[72px] text-center text-base font-semibold text-slate-100">
-                    {tmpCurrentGame.roundDuration}s
-                  </Text>
+
+                  <View className="items-center">
+                    <Text className="mt-0.5 text-2xl font-extrabold text-slate-50">
+                      {tmpCurrentGame.roundDuration}
+                      <Text className="text-base text-cyan-200">s</Text>
+                    </Text>
+                  </View>
+
                   <TouchableOpacity
-                    className="rounded-xl bg-slate-700 px-4 py-2"
+                    className="h-10 w-10 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/10"
                     onPress={() =>
                       setTmpCurrentGame({
                         ...tmpCurrentGame,
@@ -170,7 +306,7 @@ const StartGame = () => {
                       })
                     }
                   >
-                    <Text className="text-lg font-bold text-slate-200">+</Text>
+                    <FontAwesome name="plus" size={14} color="#67e8f9" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -180,7 +316,7 @@ const StartGame = () => {
                   tmpCurrentGame.participants.length < 2 ||
                   tmpCurrentGame.kategorys.length < 1
                 }
-                className={`rounded-xl border py-2
+                className={`rounded-xl border py-2.5
                     ${
                       tmpCurrentGame.participants.length < 2 ||
                       tmpCurrentGame.kategorys.length < 1
