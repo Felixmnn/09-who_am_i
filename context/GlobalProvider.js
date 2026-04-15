@@ -164,7 +164,13 @@ const GlobalProvider = ({ children }) => {
 
   //EXP: Blacklisted Names won't be used in the game
   const [blackList, setBlackList] = useState({
-    history: [],
+    history: [
+      {
+        id: "6",
+        name: "Stalin",
+        difficulty: "LOW",
+      },
+    ],
     politics: [],
     sports: [],
     media: [],

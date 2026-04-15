@@ -34,6 +34,7 @@ const Play = () => {
     setLastGameResults,
     users,
     setUsers,
+    customNames,
   } = useGlobalContext();
 
   if (!currentGame || !currentGame.gameResults) {
@@ -47,7 +48,7 @@ const Play = () => {
   );
 
   function getNamesForGame() {
-    const selectedNames = [];
+    let selectedNames = [];
     if (!currentGame) return [];
     //TSK: Später anpassen sodass nach schwierigkeit gefiltert wird sowie nach Blacklist und Custom Names
     for (let i = 0; i < currentGame.kategorys.length; i++) {
@@ -55,18 +56,27 @@ const Play = () => {
       switch (category) {
         case "history":
           selectedNames.push(...histroyNames);
+          selectedNames.push(...customNames.history);
+
           break;
         case "media":
           selectedNames.push(...mediaNames);
+          selectedNames.push(...customNames.media);
           break;
         case "politics":
           selectedNames.push(...politicsNames);
+          selectedNames.push(...customNames.politics);
           break;
         case "science":
           selectedNames.push(...scienceNames);
+          selectedNames.push(...customNames.science);
           break;
         case "sports":
           selectedNames.push(...sportsNames);
+          selectedNames.push(...customNames.sports);
+          break;
+        case "custom":
+          selectedNames.push(...customNames.custom);
           break;
         default:
           break;
@@ -158,29 +168,33 @@ const Play = () => {
       : "No user selected";
 
   function stopGame() {
-    const gameResults = {
-      dateTime: currentGame
-        ? currentGame.dateTime.toISOString()
-        : new Date().toISOString(),
-      participants: currentGame ? currentGame.participants : [],
-      answers: currentGame ? currentGame.answers : [],
-      gameResults: currentGame ? currentGame.gameResults : [],
-    };
-    setUsers((prevUsers: users[]) =>
-      prevUsers.map((user) => {
-        if (currentGame.participants.includes(user.id)) {
-          const participantResult = gameResults.gameResults.find(
-            (result: gameResultPlayer) => result.participantId === user.id,
-          );
-          return {
-            ...user,
-            points: user.points + (participantResult?.pointsEarned || 0),
-          };
-        }
-        return user;
-      }),
-    );
-    setLastGameResults((prev: any) => [...prev, gameResults]);
+    try {
+      const gameResults = {
+        dateTime: currentGame
+          ? currentGame.dateTime.toISOString()
+          : new Date().toISOString(),
+        participants: currentGame ? currentGame.participants : [],
+        answers: currentGame ? currentGame.answers : [],
+        gameResults: currentGame ? currentGame.gameResults : [],
+      };
+      setUsers((prevUsers: users[]) =>
+        prevUsers.map((user) => {
+          if (currentGame.participants.includes(user.id)) {
+            const participantResult = gameResults.gameResults.find(
+              (result: gameResultPlayer) => result.participantId === user.id,
+            );
+            return {
+              ...user,
+              points: user.points + (participantResult?.pointsEarned || 0),
+            };
+          }
+          return user;
+        }),
+      );
+      setLastGameResults((prev: any) => [...prev, gameResults]);
+    } catch (error) {
+      console.error("Error saving game results:", error);
+    }
     setCurrentGame(null);
     router.push("/home");
   }
