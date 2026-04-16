@@ -22,6 +22,7 @@ const DisplayUsers = ({
     MEDIUM: "bg-amber-500/20 text-amber-200 border-amber-500/40",
     LOW: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
   };
+  const historyOrder = ["LOW", "MEDIUM", "HIGH"];
 
   const startEditing = (user: users) => {
     setEditingUserId(user.id);
@@ -31,6 +32,26 @@ const DisplayUsers = ({
   const cancelEditing = () => {
     setEditingUserId(null);
     setDraftName("");
+  };
+
+  const cycleHistory = (currentHistory: string) => {
+    const currentIndex = historyOrder.indexOf(currentHistory.toUpperCase());
+    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % historyOrder.length;
+
+    return historyOrder[nextIndex];
+  };
+
+  const updateHistory = (userId: number) => {
+    setUsers((currentUsers) =>
+      currentUsers.map((user) =>
+        user.id === userId
+          ? {
+            ...user,
+            history: cycleHistory(user.history),
+          }
+          : user,
+      ),
+    );
   };
 
   const saveEditing = () => {
@@ -64,9 +85,8 @@ const DisplayUsers = ({
         {label}
       </Text>
       <Text
-        className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
-          colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-        }`}
+        className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
+          }`}
       >
         {value}
       </Text>
@@ -132,7 +152,16 @@ const DisplayUsers = ({
           </View>
 
           <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
-            {renderLevel("History", user.history)}
+            {editingUserId === user.id ? (
+              <Pressable
+                onPress={() => updateHistory(user.id)}
+                className="w-[48%]"
+              >
+                {renderLevel("History", user.history)}
+              </Pressable>
+            ) : (
+              renderLevel("History", user.history)
+            )}
             {renderLevel("Politics", user.politics)}
             {renderLevel("Sports", user.sports)}
             {renderLevel("Media", user.media)}
@@ -147,7 +176,7 @@ const DisplayUsers = ({
                   className="flex-1 rounded-xl bg-cyan-500 px-4 py-2.5"
                 >
                   <Text className="text-center text-sm font-semibold text-slate-950">
-                    Save
+                    Save changes
                   </Text>
                 </Pressable>
                 <Pressable
@@ -165,7 +194,7 @@ const DisplayUsers = ({
                 className="rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-2.5"
               >
                 <Text className="text-sm font-semibold text-cyan-200">
-                  Edit name
+                  Edit user
                 </Text>
               </Pressable>
             )}
