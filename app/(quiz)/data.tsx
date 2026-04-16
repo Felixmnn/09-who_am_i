@@ -1,4 +1,4 @@
-import UserRanking from "@/components/userRanking";
+import UserRanking from "@/components/data";
 import React from "react";
 import { Text, View } from "react-native";
 

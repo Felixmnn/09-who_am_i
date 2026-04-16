@@ -1,4 +1,4 @@
-import DisplayUsers from "@/components/displayUsers";
+import DisplayUsers from "@/components/users";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
 import { Text, View } from "react-native";

@@ -48,9 +48,9 @@ const DisplayUsers = ({
       currentUsers.map((user) =>
         user.id === editingUserId
           ? {
-              ...user,
-              name: nextName,
-            }
+            ...user,
+            name: nextName,
+          }
           : user,
       ),
     );
