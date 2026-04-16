@@ -1,4 +1,9 @@
-import { LEVEL_ORDER } from "@/constants/config";
+import {
+  formatCategoryLabel,
+  LEVEL_CATEGORIES,
+  LEVEL_ORDER,
+  LevelCategory,
+} from "@/constants/config";
 import { users } from "@/constants/types";
 import React from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -40,65 +45,13 @@ const DisplayUsers = ({
     return LEVEL_ORDER[nextIndex];
   };
 
-  const updateHistory = (userId: number) => {
+  const updateUserLevel = (userId: number, category: LevelCategory) => {
     setUsers((currentUsers) =>
       currentUsers.map((user) =>
         user.id === userId
           ? {
             ...user,
-            history: cycleLevel(user.history),
-          }
-          : user,
-      ),
-    );
-  };
-
-  const updatePolitics = (userId: number) => {
-    setUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === userId
-          ? {
-            ...user,
-            politics: cycleLevel(user.politics),
-          }
-          : user,
-      ),
-    );
-  };
-
-  const updateSports = (userId: number) => {
-    setUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === userId
-          ? {
-            ...user,
-            sports: cycleLevel(user.sports),
-          }
-          : user,
-      ),
-    );
-  };
-
-  const updateMedia = (userId: number) => {
-    setUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === userId
-          ? {
-            ...user,
-            media: cycleLevel(user.media),
-          }
-          : user,
-      ),
-    );
-  };
-
-  const updateScience = (userId: number) => {
-    setUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === userId
-          ? {
-            ...user,
-            science: cycleLevel(user.science),
+            [category]: cycleLevel(user[category]),
           }
           : user,
       ),
@@ -143,6 +96,7 @@ const DisplayUsers = ({
       </Text>
     </View>
   );
+
   // if no users are present show a message to add a user (still needs to be tested if working)
   if (!users.length) {
     return (
@@ -203,56 +157,28 @@ const DisplayUsers = ({
           </View>
 
           <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
-            {editingUserId === user.id ? (
-              <Pressable
-                onPress={() => updateHistory(user.id)}
-                className="w-[48%]"
-              >
-                {renderLevel("History", user.history)}
-              </Pressable>
-            ) : (
-              renderLevel("History", user.history)
-            )}
-            {editingUserId === user.id ? (
-              <Pressable
-                onPress={() => updatePolitics(user.id)}
-                className="w-[48%]"
-              >
-                {renderLevel("Politics", user.politics)}
-              </Pressable>
-            ) : (
-              renderLevel("Politics", user.politics)
-            )}
-            {editingUserId === user.id ? (
-              <Pressable
-                onPress={() => updateSports(user.id)}
-                className="w-[48%]"
-              >
-                {renderLevel("Sports", user.sports)}
-              </Pressable>
-            ) : (
-              renderLevel("Sports", user.sports)
-            )}
-            {editingUserId === user.id ? (
-              <Pressable
-                onPress={() => updateMedia(user.id)}
-                className="w-[48%]"
-              >
-                {renderLevel("Media", user.media)}
-              </Pressable>
-            ) : (
-              renderLevel("Media", user.media)
-            )}
-            {editingUserId === user.id ? (
-              <Pressable
-                onPress={() => updateScience(user.id)}
-                className="w-[48%]"
-              >
-                {renderLevel("Science", user.science)}
-              </Pressable>
-            ) : (
-              renderLevel("Science", user.science)
-            )}
+            {LEVEL_CATEGORIES.map((category) => {
+              const levelView = renderLevel(
+                formatCategoryLabel(category),
+                user[category],
+              );
+
+              if (editingUserId !== user.id) {
+                return (
+                  <React.Fragment key={category}>{levelView}</React.Fragment>
+                );
+              }
+
+              return (
+                <Pressable
+                  key={category}
+                  onPress={() => updateUserLevel(user.id, category)}
+                  className="w-[48%]"
+                >
+                  {levelView}
+                </Pressable>
+              );
+            })}
           </View>
 
           <View className="mt-4 flex-row gap-3">

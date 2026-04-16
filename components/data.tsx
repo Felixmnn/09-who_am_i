@@ -1,4 +1,4 @@
-import { LEVEL_CATEGORIES } from "@/constants/config";
+import { formatCategoryLabel, LEVEL_CATEGORIES } from "@/constants/config";
 import { users as User } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
@@ -89,7 +89,7 @@ const UserRanking = () => {
             <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
               {LEVEL_CATEGORIES.map((category) =>
                 renderLevel(
-                  category.charAt(0).toUpperCase() + category.slice(1),
+                  formatCategoryLabel(category),
                   user[category],
                 )
               )}
