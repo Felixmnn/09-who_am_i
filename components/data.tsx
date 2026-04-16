@@ -1,3 +1,4 @@
+import { LEVEL_CATEGORIES } from "@/constants/config";
 import { users as User } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
@@ -86,11 +87,12 @@ const UserRanking = () => {
             </View>
 
             <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
-              {renderLevel("History", user.history)}
-              {renderLevel("Politics", user.politics)}
-              {renderLevel("Sports", user.sports)}
-              {renderLevel("Media", user.media)}
-              {renderLevel("Science", user.science)}
+              {LEVEL_CATEGORIES.map((category) =>
+                renderLevel(
+                  category.charAt(0).toUpperCase() + category.slice(1),
+                  user[category],
+                )
+              )}
             </View>
           </View>
         );

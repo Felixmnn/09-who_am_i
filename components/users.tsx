@@ -1,3 +1,4 @@
+import { LEVEL_ORDER } from "@/constants/config";
 import { users } from "@/constants/types";
 import React from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -22,7 +23,6 @@ const DisplayUsers = ({
     MEDIUM: "bg-amber-500/20 text-amber-200 border-amber-500/40",
     LOW: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
   };
-  const historyOrder = ["LOW", "MEDIUM", "HIGH"];
 
   const startEditing = (user: users) => {
     setEditingUserId(user.id);
@@ -35,9 +35,9 @@ const DisplayUsers = ({
   };
 
   const cycleLevel = (currentLevel: string) => {
-    const currentIndex = historyOrder.indexOf(currentLevel.toUpperCase());
-    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % historyOrder.length;
-    return historyOrder[nextIndex];
+    const currentIndex = LEVEL_ORDER.indexOf(currentLevel.toUpperCase() as typeof LEVEL_ORDER[number]);
+    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % LEVEL_ORDER.length;
+    return LEVEL_ORDER[nextIndex];
   };
 
   const updateHistory = (userId: number) => {

@@ -1,3 +1,4 @@
+// User Kategorien bitte global von config.ts beziehen @felix
 export type users = {
   id: number;
   name: string;
