@@ -7,7 +7,7 @@ const BlackList = () => {
   const { blackList } = useGlobalContext();
 
   return (
-    <View className="w-full rounded-3xl p-4">
+    <View className="w-full rounded-3xl my-3 px-4">
       <Text className="text-2xl font-bold text-slate-100">Blacklist</Text>
       <RenderKategorys kategorysToRender={blackList} />
     </View>

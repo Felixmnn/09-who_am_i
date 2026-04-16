@@ -26,10 +26,13 @@ const UserRanking = () => {
 
   const renderLevel = (label: string, value: string) => (
     <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">{label}</Text>
+      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
+        {label}
+      </Text>
       <Text
-        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
+        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+          colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
+        }`}
       >
         {value}
       </Text>
@@ -39,25 +42,38 @@ const UserRanking = () => {
   if (!sortedUsers.length) {
     return (
       <View className="mt-3 w-full rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 p-4">
-        <Text className="text-center text-base font-semibold text-slate-100">No ranking data yet</Text>
+        <Text className="text-center text-base font-semibold text-slate-100">
+          No ranking data yet
+        </Text>
       </View>
     );
   }
 
   return (
-    <View className="w-full px-2">
+    <View className="w-full px-2 px-4">
+      <Text className="my-3 text-2xl font-extrabold text-slate-100">
+        Leader Board
+      </Text>
+
       {sortedUsers.map((user: User, index: number) => {
         const rank = index + 1;
 
         return (
-          <View key={user.id} className="mb-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4">
+          <View
+            key={user.id}
+            className="mb-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4"
+          >
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center">
                 <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20">
-                  <Text className="text-base font-bold text-cyan-200">{rankLabel(rank)}</Text>
+                  <Text className="text-base font-bold text-cyan-200">
+                    {rankLabel(rank)}
+                  </Text>
                 </View>
                 <View>
-                  <Text className="text-lg font-bold text-slate-100">{user.name}</Text>
+                  <Text className="text-lg font-bold text-slate-100">
+                    {user.name}
+                  </Text>
                   <Text className="text-xs text-slate-400">ID #{user.id}</Text>
                 </View>
               </View>
@@ -69,6 +85,7 @@ const UserRanking = () => {
               </View>
             </View>
 
+            {/*
             <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
               {renderLevel("History", user.history)}
               {renderLevel("Politics", user.politics)}
@@ -76,6 +93,7 @@ const UserRanking = () => {
               {renderLevel("Media", user.media)}
               {renderLevel("Science", user.science)}
             </View>
+            */}
           </View>
         );
       })}
