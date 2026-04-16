@@ -1,4 +1,4 @@
-import { formatCategoryLabel, LEVEL_CATEGORIES } from "@/constants/config";
+import { formatCategoryLabel, Level, LEVEL_CATEGORIES } from "@/constants/config";
 import { users as User } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
@@ -11,11 +11,10 @@ const UserRanking = () => {
   const { users } = useGlobalContext();
   const sortedUsers = [...users].sort((a, b) => b.points - a.points);
 
-  const colorByLevel: Record<string, string> = {
+  const colorByLevel: Record<Level, string> = {
     HIGH: "bg-rose-500/20 text-rose-200 border-rose-500/40",
     MEDIUM: "bg-amber-500/20 text-amber-200 border-amber-500/40",
     LOW: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
-    EASY: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
   };
 
   // Die Logik muss noch auf n user angepasst werden..
@@ -26,14 +25,13 @@ const UserRanking = () => {
     return `${rank}th`;
   };
 
-  const renderLevel = (label: string, value: string) => (
+  const renderLevel = (label: string, value: Level) => (
     <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
       <Text className="text-[11px] uppercase tracking-wide text-slate-400">
         {label}
       </Text>
       <Text
-        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
+        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value]}`}
       >
         {value}
       </Text>

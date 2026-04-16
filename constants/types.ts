@@ -1,13 +1,15 @@
+import type { Level } from "@/constants/config";
+
 // User Kategorien bitte global von config.ts beziehen @felix
 export type users = {
   id: number;
   name: string;
   points: number;
-  history: string;
-  politics: string;
-  sports: string;
-  media: string;
-  science: string;
+  history: Level;
+  politics: Level;
+  sports: Level;
+  media: Level;
+  science: Level;
 };
 
 export type name = {
