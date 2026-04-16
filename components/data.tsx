@@ -17,6 +17,7 @@ const UserRanking = () => {
     EASY: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
   };
 
+  // Die Logik muss noch auf n user angepasst werden..
   const rankLabel = (rank: number) => {
     if (rank === 1) return "1st";
     if (rank === 2) return "2nd";
@@ -24,66 +25,10 @@ const UserRanking = () => {
     return `${rank}th`;
   };
 
-  const renderHistoryLevel = (value: string) => (
+  const renderLevel = (label: string, value: string) => (
     <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
       <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        History
-      </Text>
-      <Text
-        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderPoliticsLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Politics
-      </Text>
-      <Text
-        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderSportsLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Sports
-      </Text>
-      <Text
-        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderMediaLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Media
-      </Text>
-      <Text
-        className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderScienceLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Science
+        {label}
       </Text>
       <Text
         className={`mt-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
@@ -141,11 +86,11 @@ const UserRanking = () => {
             </View>
 
             <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
-              {renderHistoryLevel(user.history)}
-              {renderPoliticsLevel(user.politics)}
-              {renderSportsLevel(user.sports)}
-              {renderMediaLevel(user.media)}
-              {renderScienceLevel(user.science)}
+              {renderLevel("History", user.history)}
+              {renderLevel("Politics", user.politics)}
+              {renderLevel("Sports", user.sports)}
+              {renderLevel("Media", user.media)}
+              {renderLevel("Science", user.science)}
             </View>
           </View>
         );

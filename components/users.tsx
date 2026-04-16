@@ -130,66 +130,10 @@ const DisplayUsers = ({
     cancelEditing();
   };
 
-  const renderHistoryLevel = (value: string) => (
+  const renderLevel = (label: string, value: string) => (
     <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2 flex-row items-center justify-between">
       <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        History
-      </Text>
-      <Text
-        className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderPoliticsLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2 flex-row items-center justify-between">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Politics
-      </Text>
-      <Text
-        className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderSportsLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2 flex-row items-center justify-between">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Sports
-      </Text>
-      <Text
-        className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderMediaLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2 flex-row items-center justify-between">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Media
-      </Text>
-      <Text
-        className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
-          }`}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-
-  const renderScienceLevel = (value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2 flex-row items-center justify-between">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
-        Science
+        {label}
       </Text>
       <Text
         className={` self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold ${colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"
@@ -264,50 +208,50 @@ const DisplayUsers = ({
                 onPress={() => updateHistory(user.id)}
                 className="w-[48%]"
               >
-                {renderHistoryLevel(user.history)}
+                {renderLevel("History", user.history)}
               </Pressable>
             ) : (
-              renderHistoryLevel(user.history)
+              renderLevel("History", user.history)
             )}
             {editingUserId === user.id ? (
               <Pressable
                 onPress={() => updatePolitics(user.id)}
                 className="w-[48%]"
               >
-                {renderPoliticsLevel(user.politics)}
+                {renderLevel("Politics", user.politics)}
               </Pressable>
             ) : (
-              renderPoliticsLevel(user.politics)
+              renderLevel("Politics", user.politics)
             )}
             {editingUserId === user.id ? (
               <Pressable
                 onPress={() => updateSports(user.id)}
                 className="w-[48%]"
               >
-                {renderSportsLevel(user.sports)}
+                {renderLevel("Sports", user.sports)}
               </Pressable>
             ) : (
-              renderSportsLevel(user.sports)
+              renderLevel("Sports", user.sports)
             )}
             {editingUserId === user.id ? (
               <Pressable
                 onPress={() => updateMedia(user.id)}
                 className="w-[48%]"
               >
-                {renderMediaLevel(user.media)}
+                {renderLevel("Media", user.media)}
               </Pressable>
             ) : (
-              renderMediaLevel(user.media)
+              renderLevel("Media", user.media)
             )}
             {editingUserId === user.id ? (
               <Pressable
                 onPress={() => updateScience(user.id)}
                 className="w-[48%]"
               >
-                {renderScienceLevel(user.science)}
+                {renderLevel("Science", user.science)}
               </Pressable>
             ) : (
-              renderScienceLevel(user.science)
+              renderLevel("Science", user.science)
             )}
           </View>
 
