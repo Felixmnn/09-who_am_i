@@ -1,12 +1,14 @@
+import type { Level } from "@/constants/config";
+
 export type users = {
   id: number;
   name: string;
   points: number;
-  history: string;
-  politics: string;
-  sports: string;
-  media: string;
-  science: string;
+  history: Level;
+  politics: Level;
+  sports: Level;
+  media: Level;
+  science: Level;
 };
 
 export type name = {

@@ -42,7 +42,8 @@ const DisplayUsers = ({
 
   const cycleLevel = (currentLevel: Level) => {
     const currentIndex = LEVEL_ORDER.indexOf(currentLevel);
-    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % LEVEL_ORDER.length;
+    const nextIndex =
+      currentIndex === -1 ? 0 : (currentIndex + 1) % LEVEL_ORDER.length;
     return LEVEL_ORDER[nextIndex];
   };
 
@@ -51,9 +52,9 @@ const DisplayUsers = ({
       currentUsers.map((user) =>
         user.id === userId
           ? {
-            ...user,
-            [category]: cycleLevel(user[category]),
-          }
+              ...user,
+              [category]: cycleLevel(user[category]),
+            }
           : user,
       ),
     );
@@ -74,14 +75,22 @@ const DisplayUsers = ({
       currentUsers.map((user) =>
         user.id === editingUserId
           ? {
-            ...user,
-            name: nextName,
-          }
+              ...user,
+              name: nextName,
+            }
           : user,
       ),
     );
 
     cancelEditing();
+  };
+
+  // Die Logik muss noch auf n user angepasst werden..
+  const rankLabel = (rank: number) => {
+    if (rank === 1) return "1st";
+    if (rank === 2) return "2nd";
+    if (rank === 3) return "3rd";
+    return `${rank}th`;
   };
 
   const renderLevel = (label: string, value: Level) => (
@@ -119,101 +128,103 @@ const DisplayUsers = ({
           {users.length} Total
         </Text>
       </View>
-      {users.map((user) => (
-        <View
-          key={user.id}
-          className="mb-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4"
-        >
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center">
-              <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20">
-                <Text className="text-base font-bold text-cyan-200">
-                  {user.name.slice(0, 1).toUpperCase()}
+      {users
+        .sort((a, b) => b.points - a.points)
+        .map((user, index) => (
+          <View
+            key={user.id}
+            className="mb-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4"
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center">
+                <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20">
+                  <Text className="text-base font-bold text-cyan-200">
+                    {rankLabel(index + 1)}
+                  </Text>
+                </View>
+                <View>
+                  {editingUserId === user.id ? (
+                    <TextInput
+                      value={draftName}
+                      onChangeText={setDraftName}
+                      placeholder="Player name"
+                      placeholderTextColor="#64748b"
+                      className="min-w-[160px] rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-base font-bold text-slate-50"
+                    />
+                  ) : (
+                    <Text className="text-lg font-bold text-slate-50">
+                      {user.name}
+                    </Text>
+                  )}
+                  <Text className="text-xs text-slate-400">ID #{user.id}</Text>
+                </View>
+              </View>
+
+              <View className="rounded-full border border-cyan-500/40 bg-cyan-500/15 px-3 py-1.5">
+                <Text className="text-xs font-semibold uppercase tracking-wide text-cyan-200">
+                  {user.points} pts
                 </Text>
               </View>
-              <View>
-                {editingUserId === user.id ? (
-                  <TextInput
-                    value={draftName}
-                    onChangeText={setDraftName}
-                    placeholder="Player name"
-                    placeholderTextColor="#64748b"
-                    className="min-w-[160px] rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-base font-bold text-slate-50"
-                  />
-                ) : (
-                  <Text className="text-lg font-bold text-slate-50">
-                    {user.name}
-                  </Text>
-                )}
-                <Text className="text-xs text-slate-400">ID #{user.id}</Text>
-              </View>
             </View>
 
-            <View className="rounded-full border border-cyan-500/40 bg-cyan-500/15 px-3 py-1.5">
-              <Text className="text-xs font-semibold uppercase tracking-wide text-cyan-200">
-                {user.points} pts
-              </Text>
-            </View>
-          </View>
-
-          <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
-            {LEVEL_CATEGORIES.map((category) => {
-              const levelView = renderLevel(
-                formatCategoryLabel(category),
-                user[category],
-              );
-
-              if (editingUserId !== user.id) {
-                return (
-                  <React.Fragment key={category}>{levelView}</React.Fragment>
+            <View className="mt-4 flex-row flex-wrap justify-between gap-y-2">
+              {LEVEL_CATEGORIES.map((category) => {
+                const levelView = renderLevel(
+                  formatCategoryLabel(category),
+                  user[category],
                 );
-              }
 
-              return (
-                <Pressable
-                  key={category}
-                  onPress={() => updateUserLevel(user.id, category)}
-                  className="w-[48%]"
-                >
-                  {levelView}
-                </Pressable>
-              );
-            })}
-          </View>
+                if (editingUserId !== user.id) {
+                  return (
+                    <React.Fragment key={category}>{levelView}</React.Fragment>
+                  );
+                }
 
-          <View className="mt-4 flex-row gap-3">
-            {editingUserId === user.id ? (
-              <>
+                return (
+                  <Pressable
+                    key={category}
+                    onPress={() => updateUserLevel(user.id, category)}
+                    className="w-[48%]"
+                  >
+                    {levelView}
+                  </Pressable>
+                );
+              })}
+            </View>
+
+            <View className="mt-4 flex-row gap-3">
+              {editingUserId === user.id ? (
+                <>
+                  <Pressable
+                    onPress={saveEditing}
+                    className="flex-1 rounded-xl bg-cyan-500 px-4 py-2.5"
+                  >
+                    <Text className="text-center text-sm font-semibold text-slate-950">
+                      Save changes
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={cancelEditing}
+                    className="flex-1 rounded-xl border border-slate-600 bg-slate-900 px-4 py-2.5"
+                  >
+                    <Text className="text-center text-sm font-semibold text-slate-200">
+                      Cancel
+                    </Text>
+                  </Pressable>
+                </>
+              ) : (
                 <Pressable
-                  onPress={saveEditing}
-                  className="flex-1 rounded-xl bg-cyan-500 px-4 py-2.5"
+                  onPress={() => startEditing(user)}
+                  className="rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-2.5"
                 >
-                  <Text className="text-center text-sm font-semibold text-slate-950">
-                    Save changes
+                  <Text className="text-sm font-semibold text-cyan-200">
+                    Edit user
                   </Text>
                 </Pressable>
-                <Pressable
-                  onPress={cancelEditing}
-                  className="flex-1 rounded-xl border border-slate-600 bg-slate-900 px-4 py-2.5"
-                >
-                  <Text className="text-center text-sm font-semibold text-slate-200">
-                    Cancel
-                  </Text>
-                </Pressable>
-              </>
-            ) : (
-              <Pressable
-                onPress={() => startEditing(user)}
-                className="rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-2.5"
-              >
-                <Text className="text-sm font-semibold text-cyan-200">
-                  Edit user
-                </Text>
-              </Pressable>
-            )}
+              )}
+            </View>
           </View>
-        </View>
-      ))}
+        ))}
     </View>
   );
 };
