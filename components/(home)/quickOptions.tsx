@@ -11,9 +11,8 @@ type QuickOption = {
 
 const QuickOptions = () => {
   const quickOptions: QuickOption[] = [
-    { label: "View stats", route: "/(quiz)/data", icon: "circle" },
-    { label: "Add names", route: "/(quiz)/custom", icon: "user-plus" },
-    { label: "Add users", route: "/(quiz)/users", icon: "users" },
+    { label: "View stats", route: "/(quiz)/users", icon: "trophy" },
+    { label: "Add users", route: "/(quiz)/settings", icon: "user-plus" },
   ];
   return (
     <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
@@ -24,7 +23,7 @@ const QuickOptions = () => {
         {quickOptions.map((option) => (
           <TouchableOpacity
             key={option.label}
-            className="items-center justify-center mx-2 rounded-lg bg-slate-800 px-3 py-2 h-[80px] w-[100px]"
+            className="items-center justify-center mx-2 rounded-lg bg-slate-800 px-3 py-2 h-[80px] flex-1"
             onPress={() => router.push(option.route)}
           >
             <FontAwesome name={option.icon} size={16} color="white" />

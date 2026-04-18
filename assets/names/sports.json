@@ -1,1 +1,14 @@
-[]
+[
+  { "id": "sp1", "name": "Lionel Messi", "difficulty": "EASY" },
+  { "id": "sp2", "name": "Cristiano Ronaldo", "difficulty": "EASY" },
+  { "id": "sp3", "name": "Michael Jordan", "difficulty": "EASY" },
+  { "id": "sp4", "name": "Usain Bolt", "difficulty": "EASY" },
+  { "id": "sp5", "name": "Roger Federer", "difficulty": "MEDIUM" },
+  { "id": "sp6", "name": "Serena Williams", "difficulty": "MEDIUM" },
+  { "id": "sp7", "name": "Lewis Hamilton", "difficulty": "MEDIUM" },
+  { "id": "sp8", "name": "LeBron James", "difficulty": "MEDIUM" },
+  { "id": "sp9", "name": "Nadia Comaneci", "difficulty": "HIGH" },
+  { "id": "sp10", "name": "Pele", "difficulty": "HIGH" },
+  { "id": "sp11", "name": "Franz Beckenbauer", "difficulty": "HIGH" },
+  { "id": "sp12", "name": "Jesse Owens", "difficulty": "HIGH" }
+]

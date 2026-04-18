@@ -65,7 +65,7 @@ const RenderKategorys = ({
                         {name.name}
                       </Text>
                       <Text className="mt-1 text-xs text-slate-400">
-                        Difficulty: {name.difficulty}
+                        Difficulty: {name?.difficulty}
                       </Text>
                     </View>
                   ),

@@ -1,1 +1,14 @@
-[]
+[
+  { "id": "p1", "name": "Vladimir Putin", "difficulty": "EASY" },
+  { "id": "p2", "name": "Angela Merkel", "difficulty": "EASY" },
+  { "id": "p3", "name": "Barack Obama", "difficulty": "EASY" },
+  { "id": "p4", "name": "Donald Trump", "difficulty": "EASY" },
+  { "id": "p5", "name": "Emmanuel Macron", "difficulty": "MEDIUM" },
+  { "id": "p6", "name": "Olaf Scholz", "difficulty": "MEDIUM" },
+  { "id": "p7", "name": "Xi Jinping", "difficulty": "MEDIUM" },
+  { "id": "p8", "name": "Recep Tayyip Erdogan", "difficulty": "MEDIUM" },
+  { "id": "p9", "name": "Javier Milei", "difficulty": "HIGH" },
+  { "id": "p10", "name": "Ursula von der Leyen", "difficulty": "HIGH" },
+  { "id": "p11", "name": "Luiz Inacio Lula da Silva", "difficulty": "HIGH" },
+  { "id": "p12", "name": "Aung San Suu Kyi", "difficulty": "HIGH" }
+]

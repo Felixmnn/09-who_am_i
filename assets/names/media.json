@@ -1,1 +1,14 @@
-[]
+[
+  { "id": "m1", "name": "Oprah Winfrey", "difficulty": "EASY" },
+  { "id": "m2", "name": "Kim Kardashian", "difficulty": "EASY" },
+  { "id": "m3", "name": "Elon Musk", "difficulty": "EASY" },
+  { "id": "m4", "name": "Taylor Swift", "difficulty": "EASY" },
+  { "id": "m5", "name": "Rihanna", "difficulty": "MEDIUM" },
+  { "id": "m6", "name": "Eminem", "difficulty": "MEDIUM" },
+  { "id": "m7", "name": "Arnold Schwarzenegger", "difficulty": "MEDIUM" },
+  { "id": "m8", "name": "David Bowie", "difficulty": "MEDIUM" },
+  { "id": "m9", "name": "Andy Warhol", "difficulty": "HIGH" },
+  { "id": "m10", "name": "Salvador Dali", "difficulty": "HIGH" },
+  { "id": "m11", "name": "Quentin Tarantino", "difficulty": "HIGH" },
+  { "id": "m12", "name": "Federico Fellini", "difficulty": "HIGH" }
+]

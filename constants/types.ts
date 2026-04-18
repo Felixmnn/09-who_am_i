@@ -1,6 +1,5 @@
 import type { Level } from "@/constants/config";
 
-// User Kategorien bitte global von config.ts beziehen @felix
 export type users = {
   id: number;
   name: string;
@@ -37,9 +36,31 @@ export type participantResult = {
   pointsEarned: number;
 };
 
+export type answer = {
+  questionId: string;
+  name: string;
+  difficulty: string;
+  correct: boolean;
+  byParticipant: number;
+};
+
 export type gameResult = {
   dateTime: string;
   participants: number[];
-  rounds: round[];
+  answers: answer[];
   gameResults: participantResult[];
+};
+
+export type gameResultPlayer = {
+  participantId: number;
+  pointsEarned: number;
+};
+
+export type currentGame = {
+  dateTime: Date;
+  participants: number[];
+  kategorys: string[];
+  roundDuration: number;
+  answers: answer[];
+  gameResults: gameResultPlayer[];
 };

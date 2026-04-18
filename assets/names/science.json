@@ -1,1 +1,14 @@
-[]
+[
+  { "id": "sc1", "name": "Albert Einstein", "difficulty": "EASY" },
+  { "id": "sc2", "name": "Isaac Newton", "difficulty": "EASY" },
+  { "id": "sc3", "name": "Stephen Hawking", "difficulty": "EASY" },
+  { "id": "sc4", "name": "Marie Curie", "difficulty": "EASY" },
+  { "id": "sc5", "name": "Charles Darwin", "difficulty": "MEDIUM" },
+  { "id": "sc6", "name": "Nikola Tesla", "difficulty": "MEDIUM" },
+  { "id": "sc7", "name": "Galileo Galilei", "difficulty": "MEDIUM" },
+  { "id": "sc8", "name": "Alan Turing", "difficulty": "MEDIUM" },
+  { "id": "sc9", "name": "Niels Bohr", "difficulty": "HIGH" },
+  { "id": "sc10", "name": "Max Planck", "difficulty": "HIGH" },
+  { "id": "sc11", "name": "Erwin Schroedinger", "difficulty": "HIGH" },
+  { "id": "sc12", "name": "Werner Heisenberg", "difficulty": "HIGH" }
+]

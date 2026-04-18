@@ -1,15 +1,28 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import RenderKategorys from "./renderKategorys";
 
 const BlackList = () => {
   const { blackList } = useGlobalContext();
+  const [expanded, setExpanded] = React.useState(true);
 
   return (
-    <View className="w-full rounded-3xl my-3 px-4">
-      <Text className="text-2xl font-bold text-slate-100">Blacklist</Text>
-      <RenderKategorys kategorysToRender={blackList} />
+    <View className="mb-4 w-full rounded-2xl border border-slate-800 bg-slate-900/90 p-4 mr-4">
+      <TouchableOpacity
+        className="flex-row items-center justify-between"
+        onPress={() => setExpanded((prev) => !prev)}
+      >
+        <Text className="text-2xl font-bold text-slate-100">Blacklist</Text>
+        <FontAwesome
+          name={expanded ? "chevron-up" : "chevron-down"}
+          size={16}
+          color="#94a3b8"
+        />
+      </TouchableOpacity>
+
+      {expanded && <RenderKategorys kategorysToRender={blackList} />}
     </View>
   );
 };
