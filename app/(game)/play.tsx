@@ -3,7 +3,7 @@ import RightWrong from "@/components/(play)/rightWrong";
 import TimeBar from "@/components/(play)/timeBar";
 import { currentGame, gameResultPlayer, name, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { algorithm } from "@/scripts/algorithm";
+import { getNextName } from "@/scripts/algorithm";
 import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
@@ -110,6 +110,15 @@ const Play = () => {
       );
     }
 
+    // Fisher-Yates shuffle
+    for (let i = selectedNames.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [selectedNames[i], selectedNames[j]] = [
+        selectedNames[j],
+        selectedNames[i],
+      ];
+    }
+
     return selectedNames;
   }
 
@@ -136,15 +145,8 @@ const Play = () => {
   }, [blackList]);
   const user = getUserFromId(currentGame.participants[selectedUser]) || null;
   useEffect(() => {
-    const name = algorithm({
-      names,
-      user,
-      setNextName,
-      alreadyGuessedNames: [],
-      currentGame,
-    });
-    setNextName(name);
-  }, [names, setNextName, user, currentGame]);
+    setNextName(getNextName({ names, user, alreadyGuessedNames }));
+  }, [names, user, alreadyGuessedNames, setNextName]);
 
   function rightAnswer() {
     setCurrentGame((prev: currentGame) => {
@@ -374,7 +376,7 @@ const Play = () => {
           </View>
         </View>
         <Text className="text-white" key={nextName?.name}>
-          {nextName?.name}
+          {nextName?.name} + {nextName?.difficulty}
         </Text>
         {hasNames && (
           <View className="mt-4 flex-1">
