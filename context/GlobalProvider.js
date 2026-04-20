@@ -183,6 +183,7 @@ const GlobalProvider = ({ children }) => {
 
   const [gamePaused, setGamePaused] = useState(false);
   const [alreadyGuessedNames, setAlreadyGuessedNames] = useState([]);
+
   useEffect(() => {
     if (!isSettingsHydrated) {
       return;
@@ -342,6 +343,10 @@ const GlobalProvider = ({ children }) => {
       if (alreadyGuessedNames !== null) {
         const parsedAlreadyGuessedNames = JSON.parse(alreadyGuessedNames);
         if (Array.isArray(parsedAlreadyGuessedNames)) {
+          console.log(
+            "Loaded already guessed names from storage:",
+            parsedAlreadyGuessedNames.length,
+          );
           setAlreadyGuessedNames(parsedAlreadyGuessedNames);
         }
       }

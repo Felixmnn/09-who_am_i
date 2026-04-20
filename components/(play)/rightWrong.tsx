@@ -8,12 +8,15 @@ const RightWrong = ({
   removeFirstName,
   rightAnswer,
   wrongAnswer,
+  selectedName,
 }: {
   removeFirstName: () => void;
   rightAnswer: () => void;
   wrongAnswer: () => void;
+  selectedName: any | null;
 }) => {
-  const { muted, gamePaused } = useGlobalContext();
+  const { muted, gamePaused, alreadyGuessedNames, setAlreadyGuessedNames } =
+    useGlobalContext();
   async function playSound({ right }: { right: boolean }) {
     try {
       if (right) {
@@ -33,6 +36,7 @@ const RightWrong = ({
         }
         wrongAnswer();
       }
+      setAlreadyGuessedNames([...alreadyGuessedNames, selectedName]); // Füge den ausgewählten Namen hinzu, um die Abhängigkeit zu triggern
       removeFirstName();
     } catch (e) {
       console.log("Error:", e);
