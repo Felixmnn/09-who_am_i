@@ -3,6 +3,7 @@ import RightWrong from "@/components/(play)/rightWrong";
 import TimeBar from "@/components/(play)/timeBar";
 import { currentGame, gameResultPlayer, name, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { algorithm } from "@/scripts/algorithm";
 import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
@@ -37,6 +38,9 @@ const Play = () => {
     users,
     setUsers,
     customNames,
+    nextName,
+    setNextName,
+    alreadyGuessedNames,
   } = useGlobalContext();
 
   if (!currentGame || !currentGame.gameResults) {
@@ -64,7 +68,7 @@ const Play = () => {
   );
 
   function getNamesForGame() {
-    let selectedNames = [];
+    let selectedNames: name[] = [];
     if (!currentGame) return [];
     for (let i = 0; i < currentGame.kategorys.length; i++) {
       const category = currentGame.kategorys[i];
@@ -112,8 +116,36 @@ const Play = () => {
   const [names, setNames] = React.useState(getNamesForGame());
 
   function removeFirstName() {
-    setNames((prevNames) => prevNames.slice(1));
+    const filteredNames = names.filter((name) => name.name !== nextName?.name);
+    setNames(filteredNames);
   }
+
+  useEffect(() => {
+    if (!blackList || blackList.length === 0) {
+      return;
+    }
+
+    setNames((prevNames) =>
+      prevNames.filter(
+        (currentName) =>
+          !blackList.some(
+            (blacklisted: name) => blacklisted.name === currentName.name,
+          ),
+      ),
+    );
+  }, [blackList]);
+  const user = getUserFromId(currentGame.participants[selectedUser]) || null;
+  useEffect(() => {
+    const name = algorithm({
+      names,
+      user,
+      setNextName,
+      alreadyGuessedNames: [],
+      currentGame,
+    });
+    setNextName(name);
+  }, [names, setNextName, user, currentGame]);
+
   function rightAnswer() {
     setCurrentGame((prev: currentGame) => {
       if (!prev) return prev;
@@ -318,7 +350,17 @@ const Play = () => {
                 name={names[0].name}
                 kategory={names[0].difficulty}
                 onAddToBlacklist={() => {
-                  setBlackList((prev: name[]) => [...(prev ?? []), names[0]]);
+                  setBlackList((prev: name[]) => {
+                    if (
+                      (prev ?? []).some(
+                        (blacklisted: name) =>
+                          blacklisted.name === names[0].name,
+                      )
+                    ) {
+                      return prev;
+                    }
+                    return [...(prev ?? []), names[0]];
+                  });
                   removeFirstName();
                 }}
               />
@@ -331,6 +373,9 @@ const Play = () => {
             )}
           </View>
         </View>
+        <Text className="text-white" key={nextName?.name}>
+          {nextName?.name}
+        </Text>
         {hasNames && (
           <View className="mt-4 flex-1">
             <RightWrong

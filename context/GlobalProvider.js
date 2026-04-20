@@ -183,6 +183,7 @@ const GlobalProvider = ({ children }) => {
 
   const [gamePaused, setGamePaused] = useState(false);
   const [alreadyGuessedNames, setAlreadyGuessedNames] = useState([]);
+  const [nextName, setNextName] = useState(null);
 
   useEffect(() => {
     if (!isSettingsHydrated) {
@@ -382,6 +383,8 @@ const GlobalProvider = ({ children }) => {
         setGamePaused,
         alreadyGuessedNames,
         setAlreadyGuessedNames,
+        nextName,
+        setNextName,
       }}
     >
       {children}
