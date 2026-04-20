@@ -124,9 +124,16 @@ const Play = () => {
 
   const [names, setNames] = React.useState(getNamesForGame());
 
+  const currentName = nextName;
+
   function removeFirstName() {
-    const filteredNames = names.filter((name) => name.name !== nextName?.name);
-    setNames(filteredNames);
+    if (!currentName) {
+      return;
+    }
+
+    setNames((prevNames) =>
+      prevNames.filter((existingName) => existingName.id !== currentName.id),
+    );
   }
 
   useEffect(() => {
@@ -149,14 +156,18 @@ const Play = () => {
   }, [names, user, alreadyGuessedNames, setNextName]);
 
   function rightAnswer() {
+    if (!currentName) {
+      return;
+    }
+
     setCurrentGame((prev: currentGame) => {
       if (!prev) return prev;
       const updatedAnswers = [
         ...prev.answers,
         {
-          questionId: names[0].id,
-          name: names[0].name,
-          difficulty: names[0].difficulty,
+          questionId: currentName.id,
+          name: currentName.name,
+          difficulty: currentName.difficulty,
           correct: true,
           byParticipant: currentGame.participants[selectedUser],
         },
@@ -178,14 +189,18 @@ const Play = () => {
     });
   }
   function wrongAnswer() {
+    if (!currentName) {
+      return;
+    }
+
     setCurrentGame((prev: currentGame) => {
       if (!prev) return prev;
       const updatedAnswers = [
         ...prev.answers,
         {
-          questionId: names[0].id,
-          name: names[0].name,
-          difficulty: names[0].difficulty,
+          questionId: currentName.id,
+          name: currentName.name,
+          difficulty: currentName.difficulty,
           correct: false,
           byParticipant: currentGame.participants[selectedUser],
         },
@@ -224,7 +239,7 @@ const Play = () => {
     currentGame?.participants[selectedUser] !== undefined
       ? getUserFromId(currentGame.participants[selectedUser])?.name
       : "No user selected";
-  const hasNames = names.length > 0;
+  const hasNames = names.length > 0 && !!currentName;
 
   function stopGame() {
     try {
@@ -349,19 +364,19 @@ const Play = () => {
           <View className="flex-1">
             {hasNames ? (
               <DisplayName
-                name={names[0].name}
-                kategory={names[0].difficulty}
+                name={currentName.name}
+                kategory={currentName.difficulty}
                 onAddToBlacklist={() => {
                   setBlackList((prev: name[]) => {
                     if (
                       (prev ?? []).some(
                         (blacklisted: name) =>
-                          blacklisted.name === names[0].name,
+                          blacklisted.name === currentName.name,
                       )
                     ) {
                       return prev;
                     }
-                    return [...(prev ?? []), names[0]];
+                    return [...(prev ?? []), currentName];
                   });
                   removeFirstName();
                 }}
@@ -375,16 +390,13 @@ const Play = () => {
             )}
           </View>
         </View>
-        <Text className="text-white" key={nextName?.name}>
-          {nextName?.name} + {nextName?.difficulty}
-        </Text>
         {hasNames && (
           <View className="mt-4 flex-1">
             <RightWrong
               removeFirstName={removeFirstName}
               rightAnswer={rightAnswer}
               wrongAnswer={wrongAnswer}
-              selectedName={names[0]}
+              selectedName={currentName}
             />
           </View>
         )}
