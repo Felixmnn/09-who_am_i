@@ -6,8 +6,10 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
+import * as ScreenOrientation from "expo-screen-orientation";
 import React, { useEffect } from "react";
 import {
+  Platform,
   Text,
   TouchableOpacity,
   useWindowDimensions,
@@ -40,6 +42,20 @@ const Play = () => {
   if (!currentGame || !currentGame.gameResults) {
     return <Redirect href="/(quiz)/home" />;
   }
+
+  useEffect(() => {
+    if (Platform.OS === "web") return; // Landscape lock ist auf Web nicht relevant
+    // Landscape lock aktivieren
+    ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT,
+    );
+
+    return () => {
+      // Optional: wieder entsperren beim Verlassen
+      ScreenOrientation.unlockAsync();
+    };
+  }, []);
+
   const { width } = useWindowDimensions();
 
   const [selectedUser, setSelectedUser] = React.useState(0);
@@ -301,6 +317,10 @@ const Play = () => {
               <DisplayName
                 name={names[0].name}
                 kategory={names[0].difficulty}
+                onAddToBlacklist={() => {
+                  setBlackList((prev: name[]) => [...(prev ?? []), names[0]]);
+                  removeFirstName();
+                }}
               />
             ) : (
               <View className="min-h-[220px] items-center justify-center rounded-3xl border border-slate-800 bg-slate-900/80 px-6">
@@ -317,6 +337,7 @@ const Play = () => {
               removeFirstName={removeFirstName}
               rightAnswer={rightAnswer}
               wrongAnswer={wrongAnswer}
+              selectedName={names[0]}
             />
           </View>
         )}
