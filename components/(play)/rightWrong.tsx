@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
+import { name } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Audio } from "expo-av";
 
@@ -13,7 +14,7 @@ const RightWrong = ({
   removeFirstName: () => void;
   rightAnswer: () => void;
   wrongAnswer: () => void;
-  selectedName: any | null;
+  selectedName: name | null;
 }) => {
   const { muted, gamePaused, alreadyGuessedNames, setAlreadyGuessedNames } =
     useGlobalContext();
@@ -36,7 +37,11 @@ const RightWrong = ({
         }
         wrongAnswer();
       }
-      setAlreadyGuessedNames([...alreadyGuessedNames, selectedName]); // Füge den ausgewählten Namen hinzu, um die Abhängigkeit zu triggern
+
+      if (selectedName) {
+        setAlreadyGuessedNames([...alreadyGuessedNames, selectedName]);
+      }
+
       removeFirstName();
     } catch (e) {
       console.log("Error:", e);

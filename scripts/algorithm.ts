@@ -79,8 +79,8 @@ function scoreNameForUser(
 
 /**
  * Returns the best next name for the given user from the available list.
- * Skips names[0] (the currently shown name) and picks from names[1..].
- * Falls back to names[1] if no user is provided.
+ * Picks from all available names.
+ * Falls back to names[0] if no user is provided.
  */
 export function getNextName({
   names,
@@ -91,8 +91,7 @@ export function getNextName({
   user: users | null;
   alreadyGuessedNames: name[];
 }): name | null {
-  // Need at least two names (index 0 is currently displayed)
-  const candidates = names.slice(1);
+  const candidates = names;
   if (candidates.length === 0) return null;
 
   if (!user) return candidates[0];
