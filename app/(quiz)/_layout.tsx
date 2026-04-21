@@ -1,8 +1,21 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import React from "react";
+import * as ScreenOrientation from "expo-screen-orientation";
+import React, { useEffect } from "react";
+import { Platform } from "react-native";
 
 export default function _layout() {
+  useEffect(() => {
+    if (Platform.OS === "web") return; // Landscape lock ist auf Web nicht relevant
+    // Landscape lock aktivieren
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
+
+    return () => {
+      //
+      ScreenOrientation.unlockAsync();
+    };
+  }, []);
+
   return (
     <>
       <Tabs
