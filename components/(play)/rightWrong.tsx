@@ -23,20 +23,21 @@ const RightWrong = ({
   const { muted, gamePaused, alreadyGuessedNames, setAlreadyGuessedNames } =
     useGlobalContext();
 
-  // Keep the latest values to avoid stale closure issues (e.g. sensor callbacks).
+  // Keep latest state without extra effects to avoid callback churn.
   const mutedRef = React.useRef(muted);
   const gamePausedRef = React.useRef(gamePaused);
+  const handlingInputRef = React.useRef(false);
 
-  React.useEffect(() => {
-    mutedRef.current = muted;
-  }, [muted]);
-
-  React.useEffect(() => {
-    gamePausedRef.current = gamePaused;
-  }, [gamePaused]);
+  mutedRef.current = muted;
+  gamePausedRef.current = gamePaused;
 
   async function playSound({ right }: { right: boolean }) {
+    if (handlingInputRef.current) {
+      return;
+    }
+
     try {
+      handlingInputRef.current = true;
       const isMuted = mutedRef.current;
       const isPaused = gamePausedRef.current;
 
@@ -69,6 +70,11 @@ const RightWrong = ({
       removeFirstName();
     } catch (e) {
       console.log("Error:", e);
+    } finally {
+      // Small cooldown prevents repeated sensor-trigger bursts.
+      setTimeout(() => {
+        handlingInputRef.current = false;
+      }, 220);
     }
   }
 
