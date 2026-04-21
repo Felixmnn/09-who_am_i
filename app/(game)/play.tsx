@@ -1,4 +1,6 @@
 import DisplayName from "@/components/(play)/displayName";
+import type { FlashOverlayHandle } from "@/components/(play)/flashOverlay";
+import FlashOverlay from "@/components/(play)/flashOverlay";
 import RightWrong from "@/components/(play)/rightWrong";
 import TimeBar from "@/components/(play)/timeBar";
 import { currentGame, gameResultPlayer, name, users } from "@/constants/types";
@@ -8,7 +10,7 @@ import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Platform,
   Text,
@@ -272,9 +274,12 @@ const Play = () => {
     setCurrentGame(null);
     router.push("/home");
   }
+  const flashRef = useRef<FlashOverlayHandle | null>(null);
 
   return (
     <SafeAreaView className="flex-1 bg-slate-950 px-4 py-3">
+      <FlashOverlay ref={flashRef} />
+
       <View className="flex-row">
         <View className="flex-1 rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-4">
           <View className="mb-3 flex-row items-center justify-between">
@@ -397,6 +402,7 @@ const Play = () => {
               rightAnswer={rightAnswer}
               wrongAnswer={wrongAnswer}
               selectedName={currentName}
+              flashRef={flashRef}
             />
           </View>
         )}

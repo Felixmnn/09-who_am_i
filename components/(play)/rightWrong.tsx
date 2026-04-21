@@ -1,20 +1,24 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 
 import { name } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Audio } from "expo-av";
+import type { FlashOverlayHandle } from "./flashOverlay";
+import TiltHandler from "./motionDetection";
 
 const RightWrong = ({
   removeFirstName,
   rightAnswer,
   wrongAnswer,
   selectedName,
+  flashRef,
 }: {
   removeFirstName: () => void;
   rightAnswer: () => void;
   wrongAnswer: () => void;
   selectedName: name | null;
+  flashRef: React.RefObject<FlashOverlayHandle | null>;
 }) => {
   const { muted, gamePaused, alreadyGuessedNames, setAlreadyGuessedNames } =
     useGlobalContext();
@@ -25,6 +29,7 @@ const RightWrong = ({
           require("../../assets/sounds/correct.mp3"),
         );
         if (!muted && !gamePaused) {
+          flashRef.current?.open("right");
           await sound.playAsync();
         }
         rightAnswer();
@@ -33,6 +38,7 @@ const RightWrong = ({
           require("../../assets/sounds/wrong.mp3"),
         );
         if (!muted && !gamePaused) {
+          flashRef.current?.open("wrong");
           await sound.playAsync();
         }
         wrongAnswer();
@@ -51,6 +57,18 @@ const RightWrong = ({
   return (
     <View className="flex-1  w-full rounded-2xl border border-slate-800 bg-slate-900/70 p-3">
       <View className="flex-row gap-2 flex-1">
+        {Platform.OS != "web" && (
+          <TiltHandler
+            onForward={() => {
+              if (gamePaused) return;
+              playSound({ right: true });
+            }}
+            onBackward={() => {
+              if (gamePaused) return;
+              playSound({ right: false });
+            }}
+          />
+        )}
         <TouchableOpacity
           disabled={gamePaused}
           onPress={() => playSound({ right: true })}
