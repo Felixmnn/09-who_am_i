@@ -22,14 +22,31 @@ const RightWrong = ({
 }) => {
   const { muted, gamePaused, alreadyGuessedNames, setAlreadyGuessedNames } =
     useGlobalContext();
+
+  // Keep the latest values to avoid stale closure issues (e.g. sensor callbacks).
+  const mutedRef = React.useRef(muted);
+  const gamePausedRef = React.useRef(gamePaused);
+
+  React.useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
+
+  React.useEffect(() => {
+    gamePausedRef.current = gamePaused;
+  }, [gamePaused]);
+
   async function playSound({ right }: { right: boolean }) {
     try {
+      const isMuted = mutedRef.current;
+      const isPaused = gamePausedRef.current;
+
       if (right) {
         const { sound } = await Audio.Sound.createAsync(
           require("../../assets/sounds/correct.mp3"),
         );
-        if (!muted && !gamePaused) {
-          flashRef.current?.open("right");
+        flashRef.current?.open("right");
+
+        if (!isMuted && !isPaused) {
           await sound.playAsync();
         }
         rightAnswer();
@@ -37,15 +54,16 @@ const RightWrong = ({
         const { sound } = await Audio.Sound.createAsync(
           require("../../assets/sounds/wrong.mp3"),
         );
-        if (!muted && !gamePaused) {
-          flashRef.current?.open("wrong");
+        flashRef.current?.open("wrong");
+
+        if (!isMuted && !isPaused) {
           await sound.playAsync();
         }
         wrongAnswer();
       }
 
       if (selectedName) {
-        setAlreadyGuessedNames([...alreadyGuessedNames, selectedName]);
+        setAlreadyGuessedNames((prev: name[]) => [...prev, selectedName]);
       }
 
       removeFirstName();
