@@ -14,8 +14,8 @@ export const ALREADY_GUESSED_NAMES_STORAGE_KEY = "@whoami_alreadyGuessedNames";
 export const createDefaultUsers = () => [
   {
     id: 1,
-    name: "Felix",
-    points: 100,
+    name: "User1",
+    points: 0,
     history: "LOW",
     politics: "HIGH",
     sports: "MEDIUM",
@@ -24,8 +24,8 @@ export const createDefaultUsers = () => [
   },
   {
     id: 2,
-    name: "Parmveer",
-    points: 200,
+    name: "User2",
+    points: 0,
     history: "HIGH",
     politics: "MEDIUM",
     sports: "LOW",
@@ -35,28 +35,10 @@ export const createDefaultUsers = () => [
 ];
 
 export const createDefaultCustomNames = () => ({
-  history: [
-    {
-      id: "6",
-      name: "Stalin",
-      difficulty: "LOW",
-    },
-  ],
-  politics: [
-    {
-      id: "1",
-      name: "Putin",
-      difficulty: "LOW",
-    },
-  ],
+  history: [],
+  politics: [],
   sports: [],
-  media: [
-    {
-      id: "7",
-      name: "Lutz van Derhorst",
-      difficulty: "HIGH",
-    },
-  ],
+  media: [],
   science: [],
   custom: [],
 });
