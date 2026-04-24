@@ -10,5 +10,17 @@
   { "id": "sc9", "name": "Niels Bohr", "difficulty": "HIGH" },
   { "id": "sc10", "name": "Max Planck", "difficulty": "HIGH" },
   { "id": "sc11", "name": "Erwin Schroedinger", "difficulty": "HIGH" },
-  { "id": "sc12", "name": "Werner Heisenberg", "difficulty": "HIGH" }
+  { "id": "sc12", "name": "Werner Heisenberg", "difficulty": "HIGH" },
+  { "id": "sc13", "name": "Rosalind Franklin", "difficulty": "EASY" },
+  { "id": "sc14", "name": "Carl Sagan", "difficulty": "EASY" },
+  { "id": "sc15", "name": "Jane Goodall", "difficulty": "EASY" },
+  { "id": "sc16", "name": "Louis Pasteur", "difficulty": "EASY" },
+  { "id": "sc17", "name": "Gregor Mendel", "difficulty": "MEDIUM" },
+  { "id": "sc18", "name": "Richard Feynman", "difficulty": "MEDIUM" },
+  { "id": "sc19", "name": "Dmitri Mendeleev", "difficulty": "MEDIUM" },
+  { "id": "sc20", "name": "Ada Lovelace", "difficulty": "MEDIUM" },
+  { "id": "sc21", "name": "Srinivasa Ramanujan", "difficulty": "HIGH" },
+  { "id": "sc22", "name": "Lise Meitner", "difficulty": "HIGH" },
+  { "id": "sc23", "name": "Emmy Noether", "difficulty": "HIGH" },
+  { "id": "sc24", "name": "Subrahmanyan Chandrasekhar", "difficulty": "HIGH" }
 ]

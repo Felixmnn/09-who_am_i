@@ -10,5 +10,17 @@
   { "id": "m9", "name": "Andy Warhol", "difficulty": "HIGH" },
   { "id": "m10", "name": "Salvador Dali", "difficulty": "HIGH" },
   { "id": "m11", "name": "Quentin Tarantino", "difficulty": "HIGH" },
-  { "id": "m12", "name": "Federico Fellini", "difficulty": "HIGH" }
+  { "id": "m12", "name": "Federico Fellini", "difficulty": "HIGH" },
+  { "id": "m13", "name": "Beyonce", "difficulty": "EASY" },
+  { "id": "m14", "name": "Cristiano Ronaldo", "difficulty": "EASY" },
+  { "id": "m15", "name": "Lionel Messi", "difficulty": "EASY" },
+  { "id": "m16", "name": "Leonardo DiCaprio", "difficulty": "EASY" },
+  { "id": "m17", "name": "Adele", "difficulty": "MEDIUM" },
+  { "id": "m18", "name": "Drake", "difficulty": "MEDIUM" },
+  { "id": "m19", "name": "Zendaya", "difficulty": "MEDIUM" },
+  { "id": "m20", "name": "Pedro Pascal", "difficulty": "MEDIUM" },
+  { "id": "m21", "name": "Tilda Swinton", "difficulty": "HIGH" },
+  { "id": "m22", "name": "Hayao Miyazaki", "difficulty": "HIGH" },
+  { "id": "m23", "name": "Bela Tarr", "difficulty": "HIGH" },
+  { "id": "m24", "name": "Ingmar Bergman", "difficulty": "HIGH" }
 ]

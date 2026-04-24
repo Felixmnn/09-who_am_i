@@ -10,5 +10,17 @@
   { "id": "p9", "name": "Javier Milei", "difficulty": "HIGH" },
   { "id": "p10", "name": "Ursula von der Leyen", "difficulty": "HIGH" },
   { "id": "p11", "name": "Luiz Inacio Lula da Silva", "difficulty": "HIGH" },
-  { "id": "p12", "name": "Aung San Suu Kyi", "difficulty": "HIGH" }
+  { "id": "p12", "name": "Aung San Suu Kyi", "difficulty": "HIGH" },
+  { "id": "p13", "name": "Justin Trudeau", "difficulty": "EASY" },
+  { "id": "p14", "name": "Joe Biden", "difficulty": "EASY" },
+  { "id": "p15", "name": "Narendra Modi", "difficulty": "EASY" },
+  { "id": "p16", "name": "Kamala Harris", "difficulty": "EASY" },
+  { "id": "p17", "name": "Giorgia Meloni", "difficulty": "MEDIUM" },
+  { "id": "p18", "name": "Pedro Sanchez", "difficulty": "MEDIUM" },
+  { "id": "p19", "name": "Keir Starmer", "difficulty": "MEDIUM" },
+  { "id": "p20", "name": "Volodymyr Zelenskyy", "difficulty": "MEDIUM" },
+  { "id": "p21", "name": "Michele Bachelet", "difficulty": "HIGH" },
+  { "id": "p22", "name": "Kofi Annan", "difficulty": "HIGH" },
+  { "id": "p23", "name": "Mahmoud Abbas", "difficulty": "HIGH" },
+  { "id": "p24", "name": "Yasser Arafat", "difficulty": "HIGH" }
 ]

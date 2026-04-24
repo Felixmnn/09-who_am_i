@@ -10,5 +10,17 @@
   { "id": "sp9", "name": "Nadia Comaneci", "difficulty": "HIGH" },
   { "id": "sp10", "name": "Pele", "difficulty": "HIGH" },
   { "id": "sp11", "name": "Franz Beckenbauer", "difficulty": "HIGH" },
-  { "id": "sp12", "name": "Jesse Owens", "difficulty": "HIGH" }
+  { "id": "sp12", "name": "Jesse Owens", "difficulty": "HIGH" },
+  { "id": "sp13", "name": "Kylian Mbappe", "difficulty": "EASY" },
+  { "id": "sp14", "name": "Novak Djokovic", "difficulty": "EASY" },
+  { "id": "sp15", "name": "Rafael Nadal", "difficulty": "EASY" },
+  { "id": "sp16", "name": "Stephen Curry", "difficulty": "EASY" },
+  { "id": "sp17", "name": "Megan Rapinoe", "difficulty": "MEDIUM" },
+  { "id": "sp18", "name": "Simone Biles", "difficulty": "MEDIUM" },
+  { "id": "sp19", "name": "Katie Ledecky", "difficulty": "MEDIUM" },
+  { "id": "sp20", "name": "Max Verstappen", "difficulty": "MEDIUM" },
+  { "id": "sp21", "name": "Hicham El Guerrouj", "difficulty": "HIGH" },
+  { "id": "sp22", "name": "Abebe Bikila", "difficulty": "HIGH" },
+  { "id": "sp23", "name": "Valentino Rossi", "difficulty": "HIGH" },
+  { "id": "sp24", "name": "Marta", "difficulty": "HIGH" }
 ]

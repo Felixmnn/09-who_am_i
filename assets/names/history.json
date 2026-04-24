@@ -10,5 +10,17 @@
   { "id": "h9", "name": "Robespierre", "difficulty": "HIGH" },
   { "id": "h10", "name": "Saladin", "difficulty": "HIGH" },
   { "id": "h11", "name": "Vlad the Impaler", "difficulty": "HIGH" },
-  { "id": "h12", "name": "Tamerlan", "difficulty": "HIGH" }
+  { "id": "h12", "name": "Tamerlan", "difficulty": "HIGH" },
+  { "id": "h13", "name": "George Washington", "difficulty": "EASY" },
+  { "id": "h14", "name": "Leonardo da Vinci", "difficulty": "EASY" },
+  { "id": "h15", "name": "Winston Churchill", "difficulty": "EASY" },
+  { "id": "h16", "name": "Mahatma Gandhi", "difficulty": "EASY" },
+  { "id": "h17", "name": "Otto von Bismarck", "difficulty": "MEDIUM" },
+  { "id": "h18", "name": "Sun Tzu", "difficulty": "MEDIUM" },
+  { "id": "h19", "name": "Augustus", "difficulty": "MEDIUM" },
+  { "id": "h20", "name": "Catherine the Great", "difficulty": "MEDIUM" },
+  { "id": "h21", "name": "Suleiman the Magnificent", "difficulty": "HIGH" },
+  { "id": "h22", "name": "Tokugawa Ieyasu", "difficulty": "HIGH" },
+  { "id": "h23", "name": "Hannibal Barca", "difficulty": "HIGH" },
+  { "id": "h24", "name": "Mansa Musa", "difficulty": "HIGH" }
 ]
