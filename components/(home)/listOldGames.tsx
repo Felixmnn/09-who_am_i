@@ -1,4 +1,4 @@
-import { gameResult } from "@/constants/types";
+import { gameResult, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import React from "react";
@@ -9,10 +9,7 @@ const INITIAL_VISIBLE_GAMES = 10;
 type GameItemProps = {
   result: gameResult;
   matchNumber: number;
-  users: {
-    id: number;
-    name: string;
-  }[];
+  users: users[];
 };
 
 const GameItem = ({ result, matchNumber, users }: GameItemProps) => {
