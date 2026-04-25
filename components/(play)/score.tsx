@@ -1,4 +1,5 @@
 import { gameResultPlayer } from "@/constants/types";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -8,6 +9,8 @@ import { ScrollView, Text, View } from "react-native";
  * Allows the participants to finish the game
  */
 const Score = ({ progress }: { progress: gameResultPlayer[] }) => {
+  const { users } = useGlobalContext();
+
   return (
     <View className=" rounded-2xl border border-slate-800 bg-slate-900/85 px-5 py-5">
       <View className="h-[40px]">
@@ -24,7 +27,8 @@ const Score = ({ progress }: { progress: gameResultPlayer[] }) => {
                   </Text>
                 </View>
                 <Text className="text-base font-semibold text-slate-100 mr-2">
-                  {getUserFromId(p.participantId)?.name}
+                  {getUserFromId(p.participantId, users)?.name}
+                  {/* Grund: Die Namensauflösung erfolgt jetzt immer über die aktuelle globale User-Liste, damit auch nach User-Änderungen die Anzeige korrekt bleibt. */}
                 </Text>
               </View>
               <Text className="text-base font-bold text-emerald-300">

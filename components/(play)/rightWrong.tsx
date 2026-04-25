@@ -14,7 +14,7 @@ const RightWrong = ({
   selectedName,
   flashRef,
 }: {
-  removeFirstName: () => void;
+  removeFirstName: (nameId: string | null | undefined) => void;
   rightAnswer: () => void;
   wrongAnswer: () => void;
   selectedName: name | null;
@@ -67,7 +67,7 @@ const RightWrong = ({
         setAlreadyGuessedNames((prev: name[]) => [...prev, selectedName]);
       }
 
-      removeFirstName();
+      removeFirstName(selectedName?.id); // Grund: Es wird jetzt die ID des Namens verwendet, um gezielt das richtige Element zu entfernen und Mehrdeutigkeiten zu vermeiden.
     } catch (e) {
       console.log("Error:", e);
     } finally {

@@ -1,4 +1,5 @@
 import { gameResult } from "@/constants/types";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
 import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
@@ -8,9 +9,13 @@ const INITIAL_VISIBLE_GAMES = 10;
 type GameItemProps = {
   result: gameResult;
   matchNumber: number;
+  users: {
+    id: number;
+    name: string;
+  }[];
 };
 
-const GameItem = ({ result, matchNumber }: GameItemProps) => {
+const GameItem = ({ result, matchNumber, users }: GameItemProps) => {
   const sortedResults = [...result.gameResults].sort(
     (left, right) => right.pointsEarned - left.pointsEarned,
   );
@@ -22,9 +27,10 @@ const GameItem = ({ result, matchNumber }: GameItemProps) => {
         Game from: {new Date(result.dateTime).toLocaleString()}
       </Text>
       <Text className="mt-1 text-sm text-slate-300">
-        Winner - {getUserFromId(winner?.participantId)?.name ?? "Unknown"} with{" "}
+        Winner - {getUserFromId(winner?.participantId, users)?.name ?? "Unknown"} with{" "}
         {winner?.pointsEarned ?? 0} points
       </Text>
+      {/* Grund: getUserFromId bekommt jetzt users als Parameter, damit die Funktion unabhängig vom globalen Kontext ist und immer die aktuelle User-Liste verwendet. */}
       <Text className="mt-1 text-xs text-slate-500">Match #{matchNumber}</Text>
     </View>
   );
@@ -64,6 +70,7 @@ type ListOldGamesProps = {
 };
 
 const ListOldGames = ({ games }: ListOldGamesProps) => {
+  const { users } = useGlobalContext();
   const [expanded, setExpanded] = React.useState(false);
 
   const sortedGames = React.useMemo(
@@ -91,7 +98,11 @@ const ListOldGames = ({ games }: ListOldGamesProps) => {
         data={visibleGames}
         keyExtractor={(item, index) => `${item.dateTime}-${index}`}
         renderItem={({ item, index }) => (
-          <GameItem result={item} matchNumber={sortedGames.length - index} />
+          <GameItem
+            result={item}
+            matchNumber={sortedGames.length - index}
+            users={users}
+          />
         )}
         ListEmptyComponent={EmptyState}
         ListFooterComponent={

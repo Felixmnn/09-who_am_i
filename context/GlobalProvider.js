@@ -10,8 +10,9 @@ export const CUSTOM_NAMES_STORAGE_KEY = "@whoami_customNames";
 export const CURRENT_GAME_STORAGE_KEY = "@whoami_currentGame";
 export const GAME_PAUSED_STORAGE_KEY = "@whoami_gamePaused";
 export const ALREADY_GUESSED_NAMES_STORAGE_KEY = "@whoami_alreadyGuessedNames";
+export const PROTECTED_USER_IDS = [1, 2];
 
-export const createDefaultUsers = () => [
+const DEFAULT_USERS = [
   {
     id: 1,
     name: "User1",
@@ -33,6 +34,27 @@ export const createDefaultUsers = () => [
     science: "LOW",
   },
 ];
+
+export const createDefaultUsers = () => DEFAULT_USERS.map((user) => ({ ...user }));
+
+const ensureProtectedDefaultUsers = (storedUsers) => {
+  if (!Array.isArray(storedUsers)) {
+    return createDefaultUsers();
+  }
+
+  const userById = new Map(storedUsers.map((user) => [user.id, user]));
+  const mergedDefaults = DEFAULT_USERS.map((defaultUser) => {
+    const existing = userById.get(defaultUser.id);
+    return existing ? existing : { ...defaultUser };
+  });
+
+  const additionalUsers = storedUsers.filter(
+    (user) => !PROTECTED_USER_IDS.includes(user.id),
+  );
+
+  return [...mergedDefaults, ...additionalUsers];
+  // Grund: Stellt sicher, dass die Default-User immer vorhanden und unverändert sind, auch wenn sie aus dem Storage fehlen oder verändert wurden.
+};
 
 export const createDefaultCustomNames = () => ({
   history: [],
@@ -110,7 +132,7 @@ const GlobalProvider = ({ children }) => {
 
         const parsedUsers = JSON.parse(storedUsers);
         if (Array.isArray(parsedUsers) && mounted) {
-          setUsers(parsedUsers);
+          setUsers(ensureProtectedDefaultUsers(parsedUsers));
         } else if (mounted) {
           setUsers(createDefaultUsers());
         }
@@ -165,7 +187,41 @@ const GlobalProvider = ({ children }) => {
 
   const [gamePaused, setGamePaused] = useState(false);
   const [alreadyGuessedNames, setAlreadyGuessedNames] = useState([]);
-  const [nextName, setNextName] = useState(null);
+
+  useEffect(() => {
+    setCurrentGame((prevGame) => {
+      if (!prevGame) {
+        return prevGame;
+      }
+
+      const validUserIds = new Set(users.map((user) => user.id));
+      const validParticipants = prevGame.participants.filter((participantId) =>
+        validUserIds.has(participantId),
+      );
+
+      if (validParticipants.length === prevGame.participants.length) {
+        return prevGame;
+      }
+
+      if (validParticipants.length === 0) {
+        setGamePaused(false);
+        return null;
+        // Grund: Wenn nach User-Änderungen keine gültigen Teilnehmer mehr übrig sind, wird das laufende Spiel beendet.
+      }
+
+      return {
+        ...prevGame,
+        participants: validParticipants,
+        answers: prevGame.answers.filter((answer) =>
+          validUserIds.has(answer.byParticipant),
+        ),
+        gameResults: prevGame.gameResults.filter((result) =>
+          validUserIds.has(result.participantId),
+        ),
+      };
+      // Grund: Entfernt alle ungültigen Teilnehmer und deren Daten aus dem aktuellen Spiel.
+    });
+  }, [users]);
 
   useEffect(() => {
     if (!isSettingsHydrated) {
@@ -365,8 +421,6 @@ const GlobalProvider = ({ children }) => {
         setGamePaused,
         alreadyGuessedNames,
         setAlreadyGuessedNames,
-        nextName,
-        setNextName,
       }}
     >
       {children}

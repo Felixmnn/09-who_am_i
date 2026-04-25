@@ -1,7 +1,7 @@
 import DisplayUsers from "@/components/users";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 //EXP: This page is responsible for displaying the users
 const Users = () => {
@@ -16,9 +16,16 @@ const Users = () => {
   }
 
   return (
-    <View className="flex-1 bg-slate-950 items-center justify-start">
-      <DisplayUsers users={users} setUsers={setUsers} />
-    </View>
+    // Grund: ScrollView statt View, damit die User-Liste bei vielen Einträgen scrollbar bleibt und die Tastatur das Layout nicht zerstört.
+    <ScrollView
+      className="flex-1 bg-slate-950"
+      contentContainerStyle={{ paddingBottom: 24 }}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View className="items-center justify-start">
+        <DisplayUsers users={users} setUsers={setUsers} />
+      </View>
+    </ScrollView>
   );
 };
 

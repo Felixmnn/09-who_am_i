@@ -6,7 +6,6 @@ import TimeBar from "@/components/(play)/timeBar";
 import { currentGame, gameResultPlayer, name, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getNextName } from "@/scripts/algorithm";
-import { getUserFromId } from "@/scripts/game";
 import { FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -25,6 +24,65 @@ import politicsNames from "../../assets/names/politics.json";
 import scienceNames from "../../assets/names/science.json";
 import sportsNames from "../../assets/names/sports.json";
 
+type CustomNamesMap = Record<string, name[]>;
+
+function shuffleNames<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function getNamesForGame(
+  currentGame: currentGame | null,
+  customNames: CustomNamesMap,
+  blackList: name[] | null,
+): name[] {
+  if (!currentGame) {
+    return [];
+  }
+
+  const selectedNames: name[] = [];
+
+  for (const category of currentGame.kategorys) {
+    switch (category) {
+      case "history":
+        selectedNames.push(...histroyNames, ...customNames.history);
+        break;
+      case "media":
+        selectedNames.push(...mediaNames, ...customNames.media);
+        break;
+      case "politics":
+        selectedNames.push(...politicsNames, ...customNames.politics);
+        break;
+      case "science":
+        selectedNames.push(...scienceNames, ...customNames.science);
+        break;
+      case "sports":
+        selectedNames.push(...sportsNames, ...customNames.sports);
+        break;
+      case "custom":
+        selectedNames.push(...customNames.custom);
+        break;
+      default:
+        break;
+    }
+  }
+
+  const filteredNames = blackList?.length
+    ? selectedNames.filter(
+      (currentName) =>
+        !blackList.some(
+          (blacklisted: name) => blacklisted.name === currentName.name,
+        ),
+    )
+    : selectedNames;
+
+  return shuffleNames(filteredNames);
+}
+
 const Play = () => {
   const {
     currentGame,
@@ -40,14 +98,28 @@ const Play = () => {
     users,
     setUsers,
     customNames,
-    nextName,
-    setNextName,
     alreadyGuessedNames,
   } = useGlobalContext();
 
-  if (!currentGame || !currentGame.gameResults) {
-    return <Redirect href="/(quiz)/home" />;
-  }
+  const hasValidParticipants = React.useMemo(() => {
+    if (!currentGame || !Array.isArray(currentGame.participants)) {
+      return false;
+    }
+
+    return currentGame.participants.some((participantId: number) =>
+      users.some((user: users) => user.id === participantId),
+    );
+  }, [currentGame, users]);
+
+  useEffect(() => {
+    if (currentGame && !hasValidParticipants) {
+      setGamePaused(false);
+      setCurrentGame(null);
+    }
+  }, [currentGame, hasValidParticipants, setCurrentGame, setGamePaused]);
+
+  const shouldRedirect =
+    !currentGame || !currentGame.gameResults || !hasValidParticipants;
 
   useEffect(() => {
     if (Platform.OS === "web") return; // Landscape lock ist auf Web nicht relevant
@@ -69,74 +141,45 @@ const Play = () => {
     currentGame ? currentGame.roundDuration : 0,
   );
 
-  function getNamesForGame() {
-    let selectedNames: name[] = [];
-    if (!currentGame) return [];
-    for (let i = 0; i < currentGame.kategorys.length; i++) {
-      const category = currentGame.kategorys[i];
-      switch (category) {
-        case "history":
-          selectedNames.push(...histroyNames);
-          selectedNames.push(...customNames.history);
+  const namesForGame = React.useMemo(
+    () => getNamesForGame(currentGame, customNames, blackList),
+    [currentGame, customNames, blackList],
+  );
 
-          break;
-        case "media":
-          selectedNames.push(...mediaNames);
-          selectedNames.push(...customNames.media);
-          break;
-        case "politics":
-          selectedNames.push(...politicsNames);
-          selectedNames.push(...customNames.politics);
-          break;
-        case "science":
-          selectedNames.push(...scienceNames);
-          selectedNames.push(...customNames.science);
-          break;
-        case "sports":
-          selectedNames.push(...sportsNames);
-          selectedNames.push(...customNames.sports);
-          break;
-        case "custom":
-          selectedNames.push(...customNames.custom);
-          break;
-        default:
-          break;
-      }
-    }
-    if (blackList && blackList.length > 0) {
-      selectedNames = selectedNames.filter(
-        (name) =>
-          !blackList.some(
-            (blacklisted: name) => blacklisted.name === name.name,
-          ),
-      );
+  const [names, setNames] = React.useState<name[]>(namesForGame);
+  const lastSelectedUserIdRef = React.useRef<number | null>(null);
+  const [currentName, setCurrentName] = React.useState<name | null>(null);
+
+  React.useEffect(() => {
+    setNames(namesForGame);
+  }, [namesForGame]);
+
+  useEffect(() => {
+    if (!currentGame) {
+      setSelectedUser(0);
+      setRemainingSeconds(0);
+      return;
     }
 
-    // Fisher-Yates shuffle
-    for (let i = selectedNames.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [selectedNames[i], selectedNames[j]] = [
-        selectedNames[j],
-        selectedNames[i],
-      ];
+    if (selectedUser >= currentGame.participants.length) {
+      setSelectedUser(0);
     }
 
-    return selectedNames;
-  }
+    setRemainingSeconds(currentGame.roundDuration);
+  }, [currentGame, selectedUser]);
 
-  const [names, setNames] = React.useState(getNamesForGame());
+  // Grund: currentName wird jetzt lokal verwaltet, damit die Anzeige stabil bleibt und nicht durch globale State-Änderungen springt.
 
-  const currentName = nextName;
-
-  function removeFirstName() {
-    if (!currentName) {
+  function removeNameById(nameId: string | null | undefined) {
+    if (!nameId) {
       return;
     }
 
     setNames((prevNames) =>
-      prevNames.filter((existingName) => existingName.id !== currentName.id),
+      prevNames.filter((existingName) => existingName.id !== nameId),
     );
   }
+  // Grund: Entfernt gezielt einen Namen anhand der ID, statt immer nur das erste Element zu löschen.
 
   useEffect(() => {
     if (!blackList || blackList.length === 0) {
@@ -152,10 +195,31 @@ const Play = () => {
       ),
     );
   }, [blackList]);
-  const user = getUserFromId(currentGame.participants[selectedUser]) || null;
+  const userId = currentGame?.participants?.[selectedUser];
+  const user =
+    userId !== undefined
+      ? users.find((candidate: users) => candidate.id === userId) || null
+      : null;
+  // Grund: Nutzer werden jetzt direkt aus dem aktuellen users-Array gesucht, nicht mehr über eine Hilfsfunktion mit globalem Kontext.
+
   useEffect(() => {
-    setNextName(getNextName({ names, user, alreadyGuessedNames }));
-  }, [names, user, alreadyGuessedNames, setNextName]);
+    const selectedUserChanged = lastSelectedUserIdRef.current !== userId;
+
+    setCurrentName((prevName: name | null) => {
+      const hasCurrentName =
+        !!prevName && names.some((candidate) => candidate.id === prevName.id);
+
+      // Keep the displayed name stable during countdown ticks.
+      if (!selectedUserChanged && hasCurrentName) {
+        return prevName;
+      }
+
+      return getNextName({ names, user, alreadyGuessedNames });
+    });
+
+    lastSelectedUserIdRef.current = userId ?? null;
+  }, [names, user, userId, alreadyGuessedNames]);
+  // Grund: Sorgt dafür, dass der Name nur wechselt, wenn sich der Nutzer ändert oder ein Name entfernt wurde.
 
   function rightAnswer() {
     if (!currentName) {
@@ -239,7 +303,10 @@ const Play = () => {
 
   const activePlayerName =
     currentGame?.participants[selectedUser] !== undefined
-      ? getUserFromId(currentGame.participants[selectedUser])?.name
+      ? users.find(
+        (candidate: users) =>
+          candidate.id === currentGame.participants[selectedUser],
+      )?.name
       : "No user selected";
   const hasNames = names.length > 0 && !!currentName;
 
@@ -276,6 +343,10 @@ const Play = () => {
   }
   const flashRef = useRef<FlashOverlayHandle | null>(null);
 
+  if (shouldRedirect) {
+    return <Redirect href="/(quiz)/home" />;
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-slate-950 px-4 py-3">
       <FlashOverlay ref={flashRef} />
@@ -290,7 +361,7 @@ const Play = () => {
                     ?.filter((result: gameResultPlayer) =>
                       currentGame.participants?.[selectedUser]
                         ? result.participantId ===
-                          currentGame.participants[selectedUser]
+                        currentGame.participants[selectedUser]
                         : false,
                     )
                     .reduce(
@@ -383,7 +454,7 @@ const Play = () => {
                     }
                     return [...(prev ?? []), currentName];
                   });
-                  removeFirstName();
+                  removeNameById(currentName.id);
                 }}
               />
             ) : (
@@ -398,7 +469,7 @@ const Play = () => {
         {hasNames && (
           <View className="mt-4 flex-1">
             <RightWrong
-              removeFirstName={removeFirstName}
+              removeFirstName={removeNameById}
               rightAnswer={rightAnswer}
               wrongAnswer={wrongAnswer}
               selectedName={currentName}

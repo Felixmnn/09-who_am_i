@@ -152,37 +152,33 @@ const StartGame = () => {
                     return (
                       <TouchableOpacity
                         key={user.id}
-                        className={`min-w-[140px] flex-1 rounded-xl border px-3 py-2.5 ${
-                          isSelected
+                        className={`min-w-[140px] flex-1 rounded-xl border px-3 py-2.5 ${isSelected
                             ? "border-cyan-400/40 bg-cyan-500/15"
                             : "border-slate-700 bg-slate-900"
-                        }`}
+                          }`}
                         onPress={() => toggleParticipant(user.id)}
                       >
                         <View className="flex-row items-center justify-between">
                           <View className="flex-row items-center">
                             <View
-                              className={`mr-2.5 h-8 w-8 items-center justify-center rounded-full ${
-                                isSelected ? "bg-cyan-500/20" : "bg-slate-800"
-                              }`}
+                              className={`mr-2.5 h-8 w-8 items-center justify-center rounded-full ${isSelected ? "bg-cyan-500/20" : "bg-slate-800"
+                                }`}
                             >
                               <Text
-                                className={`text-xs font-bold ${
-                                  isSelected
+                                className={`text-xs font-bold ${isSelected
                                     ? "text-cyan-200"
                                     : "text-slate-300"
-                                }`}
+                                  }`}
                               >
                                 {user.name.slice(0, 1).toUpperCase()}
                               </Text>
                             </View>
                             <View>
                               <Text
-                                className={`text-sm font-semibold ${
-                                  isSelected
+                                className={`text-sm font-semibold ${isSelected
                                     ? "text-slate-50"
                                     : "text-slate-200"
-                                }`}
+                                  }`}
                               >
                                 {user.name}
                               </Text>
@@ -226,18 +222,16 @@ const StartGame = () => {
                     return (
                       <TouchableOpacity
                         key={kategory}
-                        className={`min-w-[125px] flex-1 rounded-xl border px-3 py-2.5 ${
-                          isSelected
+                        className={`min-w-[125px] flex-1 rounded-xl border px-3 py-2.5 ${isSelected
                             ? "border-cyan-400/40 bg-cyan-500/15"
                             : "border-slate-700 bg-slate-900"
-                        }`}
+                          }`}
                         onPress={() => toggleKategory(kategory)}
                       >
                         <View className="flex-row items-start justify-between">
                           <View
-                            className={`h-8 w-8 items-center justify-center rounded-lg ${
-                              isSelected ? "bg-cyan-500/20" : "bg-slate-800"
-                            }`}
+                            className={`h-8 w-8 items-center justify-center rounded-lg ${isSelected ? "bg-cyan-500/20" : "bg-slate-800"
+                              }`}
                           >
                             <FontAwesome
                               name={meta.icon}
@@ -253,9 +247,8 @@ const StartGame = () => {
                         </View>
 
                         <Text
-                          className={`mt-2 text-sm font-semibold ${
-                            isSelected ? "text-slate-50" : meta.accent
-                          }`}
+                          className={`mt-2 text-sm font-semibold ${isSelected ? "text-slate-50" : meta.accent
+                            }`}
                         >
                           {meta.label}
                         </Text>
@@ -274,11 +267,10 @@ const StartGame = () => {
                 </Text>
                 <View className="mt-2.5 flex-row items-center justify-between rounded-xl ">
                   <TouchableOpacity
-                    className={`h-10 w-10 items-center justify-center rounded-lg ${
-                      tmpCurrentGame.roundDuration <= 5
+                    className={`h-10 w-10 items-center justify-center rounded-lg ${tmpCurrentGame.roundDuration <= 5
                         ? "bg-slate-800"
                         : "border border-slate-700 bg-slate-800"
-                    }`}
+                      }`}
                     disabled={tmpCurrentGame.roundDuration <= 5}
                     onPress={() =>
                       setTmpCurrentGame({
@@ -317,12 +309,11 @@ const StartGame = () => {
                   tmpCurrentGame.kategorys.length < 1
                 }
                 className={`rounded-xl border py-2.5
-                    ${
-                      tmpCurrentGame.participants.length < 2 ||
-                      tmpCurrentGame.kategorys.length < 1
-                        ? "border-rose-400/30 bg-rose-500/10 cursor-not-allowed"
-                        : "border-emerald-400/30 bg-emerald-500/15"
-                    }
+                    ${tmpCurrentGame.participants.length < 2 ||
+                    tmpCurrentGame.kategorys.length < 1
+                    ? "border-rose-400/30 bg-rose-500/10 cursor-not-allowed"
+                    : "border-emerald-400/30 bg-emerald-500/15"
+                  }
                   `}
                 onPress={() => {
                   // Validate that there are at least 2 participants and 1 kategory
