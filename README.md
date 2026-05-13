@@ -1,50 +1,50 @@
 # WAI - Who Am I
 
-WAI ist eine Quiz-Party-App auf Basis von Expo und React Native.
-Spieler raten Namen aus verschiedenen Kategorien, sammeln Punkte und koennen eigene Inhalte verwalten.
+WAI is a quiz party app built with Expo and React Native.
+Players guess names from different categories, collect points, and can manage their own content.
 
-## Hauptfeatures
+## Main Features
 
-- Mehrspieler-Quiz mit wechselnden aktiven Spielern pro Runde
-- Punktesystem mit Speicherung der Spieler-Punkte
-- Kategorien fuer Namen:
+- Multiplayer quiz with rotating active players each round
+- Scoring system with saved player points
+- Name categories:
   - History
   - Media
   - Politics
   - Science
   - Sports
   - Custom
-- Eigene Namen verwalten (Custom Names)
-- Blacklist fuer unerwuenschte Namen
-- Spielsteuerung waehrend der Runde:
-  - Pause / Resume
-  - Sound stumm / aktiv
-  - Spiel beenden
-- Alte Spiele und Ergebnisse auf dem Home-Screen
-- Lokale Persistenz (Spieler, Einstellungen, Ergebnisse)
-- Grundgeruest fuer Mehrsprachigkeit (i18n locales vorhanden)
+- Manage custom names
+- Blacklist for unwanted names
+- In-game controls during a round:
+  - Pause / resume
+  - Sound mute / enabled
+  - End game
+- Previous games and results on the home screen
+- Local persistence (players, settings, results)
+- Foundation for multilingual support (i18n locales already included)
 
 ## Tech Stack
 
 - Expo + React Native
-- Expo Router (Datei-basiertes Routing)
+- Expo Router (file-based routing)
 - TypeScript
 - NativeWind / TailwindCSS
 - React Navigation Tabs
-- AsyncStorage (lokale Daten)
+- AsyncStorage (local data)
 
-## Projektstruktur (Kurzuebersicht)
+## Project Structure (Overview)
 
-- app/: Screens und Routen
-- components/: UI-Bausteine und Feature-Komponenten
-- context/: Globaler App-Status
-- scripts/: Spiel- und Auswahl-Logik
-- assets/names/: Namensdaten pro Kategorie
-- assets/images/languages/locales/: Sprachdateien
+- app/: Screens and routes
+- components/: UI building blocks and feature components
+- context/: Global app state
+- scripts/: Game and selection logic
+- assets/names/: Name data by category
+- assets/images/languages/locales/: Language files
 
 ## Screenshots
 
-Die folgenden Bilder sind direkt aus dem Ordner assets/screenshots eingebunden.
+The following images are embedded directly from the assets/screenshots folder.
 
 <table>
   <tr>
@@ -59,11 +59,11 @@ Die folgenden Bilder sind direkt aus dem Ordner assets/screenshots eingebunden.
   </tr>
   <tr>
     <td align="center">
-      <strong>Namen verwalten</strong><br />
+      <strong>Manage Names</strong><br />
       <img src="assets/screenshots/manageNames.png" alt="Manage Names Screen" width="180" />
     </td>
     <td align="center">
-      <strong>Punkte-Uebersicht</strong><br />
+      <strong>Score Overview</strong><br />
       <img src="assets/screenshots/pointOverview.png" alt="Point Overview Screen" width="180" />
     </td>
   </tr>
@@ -75,13 +75,13 @@ Die folgenden Bilder sind direkt aus dem Ordner assets/screenshots eingebunden.
   </tr>
 </table>
 
-## Lokale Entwicklung
+## Local Development
 
-### Voraussetzungen
+### Requirements
 
 - Node.js LTS
 - npm
-- Expo CLI (optional global, sonst via npx)
+- Expo CLI (optional globally, otherwise via npx)
 
 ### Installation
 
@@ -89,13 +89,13 @@ Die folgenden Bilder sind direkt aus dem Ordner assets/screenshots eingebunden.
 npm install
 ```
 
-### App starten
+### Start the App
 
 ```bash
 npm run start
 ```
 
-### Zielplattform direkt starten
+### Start a Target Platform Directly
 
 ```bash
 npm run android
@@ -109,24 +109,24 @@ npm run web
 npm run lint
 ```
 
-## Bundling und Build
+## Bundling and Build
 
-In diesem Projekt ist EAS Build bereits vorbereitet (siehe eas.json).
+EAS Build is already configured in this project (see eas.json).
 
-### 1) EAS CLI vorbereiten
+### 1) Set Up the EAS CLI
 
 ```bash
 npm install -g eas-cli
 eas login
 ```
 
-### 2) Build-Profile
+### 2) Build Profiles
 
-- development: Development Client, interne Verteilung, Android APK
-- preview: interne Verteilung, Android APK
-- production: Release-Build, Android AAB (App Bundle), iOS Device Build
+- development: development client, internal distribution, Android APK
+- preview: internal distribution, Android APK
+- production: release build, Android AAB (App Bundle), iOS device build
 
-### 3) Build ausfuehren
+### 3) Run a Build
 
 #### Android Preview (APK)
 
@@ -146,42 +146,42 @@ eas build --platform android --profile production
 eas build --platform ios --profile production
 ```
 
-### 4) Optional: App in Stores einreichen
+### 4) Optional: Submit the App to Stores
 
 ```bash
 eas submit --platform android --profile production
 eas submit --platform ios --profile production
 ```
 
-### 5) Lokales Web-Bundle (optional)
+### 5) Local Web Bundle (Optional)
 
 ```bash
 npx expo export --platform web
 ```
 
-## Routing Ueberblick
+## Routing Overview
 
 - app/index.tsx
-  - Leitet je nach Datenstatus weiter:
-    - zu Onboarding, wenn noch zu wenige Nutzer vorhanden sind
-    - sonst zur Home-Ansicht
+  - Redirects depending on the data state:
+    - to onboarding if there are not enough users yet
+    - otherwise to the home view
 - app/(quiz)/home.tsx
-  - Einstieg in Spielstart, Quick-Optionen und alte Spiele
+  - Entry point for starting a game, quick options, and previous games
 - app/(quiz)/users.tsx
-  - Nutzer anzeigen und verwalten
+  - Display and manage users
 - app/(quiz)/settings.tsx
-  - Custom-Namen, AGB, Reset
+  - Custom names, terms, reset
 - app/(game)/play.tsx
-  - Hauptspiel mit Timer, Punkte, Antworten und Steuerung
+  - Main game screen with timer, scoring, answers, and controls
 
-## Hinweise
+## Notes
 
 - Android package: com.felix08.wai
 - Expo project name/slug: WAI / wai
-- Fuer Production-Android wird ein AAB erstellt (Play Store geeignet).
+- Production Android builds generate an AAB (suitable for the Play Store).
 
-## Roadmap (optional)
+## Roadmap (Optional)
 
-- Onboarding-Flow weiter ausbauen (Spieleranlage direkt im Onboarding)
-- Mehr Sprachen aktiv in UI integrieren
-- Detailliertere Statistik- und Verlaufsauswertung
+- Expand the onboarding flow further (create players directly during onboarding)
+- Integrate more languages actively into the UI
+- Add more detailed statistics and history analysis
