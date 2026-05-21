@@ -5,25 +5,40 @@
 
 import { Platform } from "react-native";
 
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#fff";
+// Neue, mattere Farbpalette
+const tintColorLight = "#4b79c9";
+const tintColorDark = "#c79a52";
 
 export const Colors = {
   light: {
+    blueFrame: "#5d7fb8", // matter Blauton für Rahmen
     text: "#11181C",
     background: "#fff",
     tint: tintColorLight,
     icon: "#687076",
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
+    border: "#d7dce5", // weiches Grau-Blau für Border
+    optionBgSelected: "#e3e9f4", // mattes Blau-Grau für ausgewählt
+    optionBgUnselected: "#f1f3f7", // dezentes Off-White für nicht ausgewählt
+    optionBorderSelected: tintColorLight,
+    optionBorderUnselected: "#e5e7eb",
   },
   dark: {
-    text: "#ECEDEE",
-    background: "#151718",
+    blueFrame: "#5d7fb8", // matter Blauton für Rahmen
+    text: "#fff", // Immer weißer Text
+    background: "#152d5f", // matter, dunkler Blauton
+    componentBackground: "#1e3a8a", // etwas helleres, matteres Blau für Komponenten
+    componentBorder: "#3554a9", // matter Blauton für Komponenten-Rahmen
     tint: tintColorDark,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
+    icon: "#5d7fb8", // matter Sekundärton
+    tabIconDefault: "#5d7fb8",
     tabIconSelected: tintColorDark,
+    border: "#5d7fb8", // matter Rahmen
+    optionBgSelected: "#3f5f99", // gedämpftes Blau für ausgewählt
+    optionBgUnselected: "#294985", // dunkler, matter Ton für nicht ausgewählt
+    optionBorderSelected: "#5289c7", // matter Gold-Akzent
+    optionBorderUnselected: "#5d7fb8", // matter Blauton für nicht ausgewählt
   },
 };
 

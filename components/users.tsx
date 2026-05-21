@@ -5,6 +5,7 @@ import {
   LEVEL_ORDER,
   LevelCategory,
 } from "@/constants/config";
+import { Colors } from "@/constants/theme";
 import { currentGame, users } from "@/constants/types";
 import { PROTECTED_USER_IDS, useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
@@ -244,8 +245,21 @@ const DisplayUsers = ({
   };
 
   const renderLevel = (label: string, value: Level) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2 flex-row items-center justify-between">
-      <Text className="text-[11px] uppercase tracking-wide text-slate-400">
+    <View
+      style={{
+        width: "100%",
+        borderRadius: 12,
+
+        backgroundColor: Colors.dark.optionBgSelected,
+        borderColor: Colors.dark.optionBorderSelected,
+        borderWidth: 1,
+        padding: 12,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Text className="text-[11px] uppercase tracking-wide text-white">
         {label}
       </Text>
       <Text
@@ -265,7 +279,16 @@ const DisplayUsers = ({
         </Text>
       </View>
       {!users.length ? (
-        <View className="mb-3 rounded-2xl border border-dashed border-slate-600 bg-slate-900/40 p-5">
+        <View
+          style={{
+            marginBottom: 12,
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: Colors.dark.componentBorder,
+            backgroundColor: Colors.dark.componentBackground,
+            padding: 16,
+          }}
+        >
           <Text className="text-center text-lg font-semibold text-slate-100">
             Noch keine Spieler
           </Text>
@@ -279,7 +302,14 @@ const DisplayUsers = ({
         .map((user, index) => (
           <View
             key={user.id}
-            className="mb-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4"
+            style={{
+              marginBottom: 12,
+              borderRadius: 12,
+              borderWidth: 2,
+              borderColor: Colors.dark.componentBorder,
+              backgroundColor: Colors.dark.componentBackground,
+              padding: 16,
+            }}
           >
             {protectedUserIds.has(user.id) ? (
               <View className="mb-2 self-start rounded-full border border-violet-500/40 bg-violet-500/15 px-2.5 py-1">
@@ -288,24 +318,27 @@ const DisplayUsers = ({
                 </Text>
               </View>
             ) : null}
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center">
+            <View className="flex-row flex-wrap items-start justify-between gap-2">
+              <View className="flex-1 min-w-0 flex-row items-center">
                 <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20">
                   <Text className="text-base font-bold text-cyan-200">
                     {rankLabel(index + 1)}
                   </Text>
                 </View>
-                <View>
+                <View className="flex-1 min-w-0">
                   {editingUserId === user.id ? (
                     <TextInput
                       value={draftName}
                       onChangeText={setDraftName}
                       placeholder="Spielername"
                       placeholderTextColor="#64748b"
-                      className="min-w-[160px] rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-base font-bold text-slate-50"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-base font-bold text-slate-50"
                     />
                   ) : (
-                    <Text className="text-lg font-bold text-slate-50">
+                    <Text
+                      className="text-lg font-bold text-slate-50"
+                      numberOfLines={1}
+                    >
                       {user.name}
                     </Text>
                   )}
@@ -313,7 +346,7 @@ const DisplayUsers = ({
                 </View>
               </View>
 
-              <View className="rounded-full border border-cyan-500/40 bg-cyan-500/15 px-3 py-1.5">
+              <View className="rounded-full border border-cyan-500/40 bg-cyan-500/15 px-3 py-1.5 self-end">
                 <Text className="text-xs font-semibold uppercase tracking-wide text-cyan-200">
                   {user.points} pts
                 </Text>
@@ -326,18 +359,12 @@ const DisplayUsers = ({
                   formatCategoryLabel(category),
                   user[category],
                 );
-
-                if (editingUserId !== user.id) {
-                  return (
-                    <React.Fragment key={category}>{levelView}</React.Fragment>
-                  );
-                }
-
                 return (
                   <Pressable
                     key={category}
                     onPress={() => updateUserLevel(user.id, category)}
-                    className="w-[48%]"
+                    disabled={editingUserId !== user.id}
+                    style={{ width: "49%" }}
                   >
                     {levelView}
                   </Pressable>
@@ -345,12 +372,12 @@ const DisplayUsers = ({
               })}
             </View>
 
-            <View className="mt-4 flex-row gap-3">
+            <View className="mt-4 flex-row flex-wrap gap-3">
               {editingUserId === user.id ? (
                 <>
                   <Pressable
                     onPress={saveEditing}
-                    className="flex-1 rounded-xl bg-cyan-500 px-4 py-2.5"
+                    className="min-w-[150px] flex-1 rounded-xl bg-cyan-500 px-4 py-2.5"
                   >
                     <Text className="text-center text-sm font-semibold text-slate-950">
                       Änderungen speichern
@@ -358,7 +385,7 @@ const DisplayUsers = ({
                   </Pressable>
                   <Pressable
                     onPress={cancelEditing}
-                    className="flex-1 rounded-xl border border-slate-600 bg-slate-900 px-4 py-2.5"
+                    className="min-w-[150px] flex-1 rounded-xl border border-slate-600 bg-slate-900 px-4 py-2.5"
                   >
                     <Text className="text-center text-sm font-semibold text-slate-200">
                       Abbrechen
@@ -367,7 +394,7 @@ const DisplayUsers = ({
                   {protectedUserIds.has(user.id) ? (
                     <Pressable
                       onPress={() => confirmResetUserPoints(user)}
-                      className="flex-1 rounded-xl border border-amber-500/40 bg-amber-500/15 px-4 py-2.5"
+                      className="min-w-[150px] flex-1 rounded-xl border border-amber-500/40 bg-amber-500/15 px-4 py-2.5"
                     >
                       <Text className="text-center text-sm font-semibold text-amber-200">
                         Punkte zurücksetzen
@@ -377,7 +404,7 @@ const DisplayUsers = ({
                   {!protectedUserIds.has(user.id) ? (
                     <Pressable
                       onPress={() => confirmRemoveUser(user)}
-                      className="flex-1 rounded-xl border border-rose-500/40 bg-rose-500/15 px-4 py-2.5"
+                      className="min-w-[150px] flex-1 rounded-xl border border-rose-500/40 bg-rose-500/15 px-4 py-2.5"
                     >
                       <Text className="text-center text-sm font-semibold text-rose-200">
                         Entfernen
@@ -386,10 +413,10 @@ const DisplayUsers = ({
                   ) : null}
                 </>
               ) : (
-                <View className="flex-row gap-3">
+                <View className="flex-row flex-wrap gap-3">
                   <Pressable
                     onPress={() => startEditing(user)}
-                    className="rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-2.5"
+                    className="min-w-[150px] rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-2.5"
                   >
                     <Text className="text-sm font-semibold text-cyan-200">
                       Spieler bearbeiten
@@ -398,7 +425,7 @@ const DisplayUsers = ({
                   {!protectedUserIds.has(user.id) ? (
                     <Pressable
                       onPress={() => confirmRemoveUser(user)}
-                      className="rounded-xl border border-rose-500/40 bg-rose-500/15 px-4 py-2.5"
+                      className="min-w-[150px] rounded-xl border border-rose-500/40 bg-rose-500/15 px-4 py-2.5"
                     >
                       <Text className="text-sm font-semibold text-rose-200">
                         Entfernen
@@ -410,7 +437,16 @@ const DisplayUsers = ({
             </View>
           </View>
         ))}
-      <View className="my-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4">
+      <View
+        style={{
+          marginVertical: 12,
+          borderRadius: 12,
+          borderWidth: 2,
+          borderColor: Colors.dark.componentBorder,
+          backgroundColor: Colors.dark.componentBackground,
+          padding: 16,
+        }}
+      >
         <Text className="text-base font-semibold text-slate-100">
           Spieler hinzufügen
         </Text>

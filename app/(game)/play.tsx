@@ -3,6 +3,7 @@ import type { FlashOverlayHandle } from "@/components/(play)/flashOverlay";
 import FlashOverlay from "@/components/(play)/flashOverlay";
 import RightWrong from "@/components/(play)/rightWrong";
 import TimeBar from "@/components/(play)/timeBar";
+import { Colors } from "@/constants/theme";
 import { currentGame, gameResultPlayer, name, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getNextName } from "@/scripts/algorithm";
@@ -180,9 +181,17 @@ const Play = () => {
       return;
     }
 
-    setNames((prevNames) =>
-      prevNames.filter((existingName) => existingName.id !== nameId),
-    );
+    setNames((prevNames) => {
+      const nextNames = prevNames.filter(
+        (existingName) => existingName.id !== nameId,
+      );
+
+      setCurrentName(
+        getNextName({ names: nextNames, user, alreadyGuessedNames }),
+      );
+
+      return nextNames;
+    });
   }
   // Grund: Entfernt gezielt einen Namen anhand der ID, statt immer nur das erste Element zu löschen.
 
@@ -353,11 +362,21 @@ const Play = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-950 px-4 py-3">
+    <SafeAreaView
+      className="flex-1 bg-slate-950 px-4 py-3"
+      style={{ backgroundColor: Colors.dark.background }}
+    >
       <FlashOverlay ref={flashRef} />
 
       <View className="flex-row">
-        <View className="flex-1 rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-4">
+        <View
+          className="flex-1 rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-4"
+          style={{
+            backgroundColor: Colors.dark.componentBackground,
+            borderColor: Colors.dark.componentBorder,
+            borderWidth: 2,
+          }}
+        >
           <View className="mb-3 flex-row items-center justify-between">
             <View className="flex-row items-center justify-center">
               <View className=" w-[50px] h-[50px] rounded-full border border-slate-800 bg-slate-900/80 mr-2 items-center justify-center">
@@ -407,13 +426,27 @@ const Play = () => {
           <View className="flex-row mb-1">
             <TouchableOpacity
               onPress={stopGame}
-              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 items-center justify-center"
+              style={{
+                backgroundColor: Colors.dark.componentBackground,
+                borderColor: Colors.dark.componentBorder,
+                borderWidth: 2,
+                height: 50,
+                width: 50,
+              }}
             >
               <FontAwesome name="stop" size={24} color="gray" />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push("/home")}
-              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 items-center justify-center"
+              style={{
+                backgroundColor: Colors.dark.componentBackground,
+                borderColor: Colors.dark.componentBorder,
+                borderWidth: 2,
+                height: 50,
+                width: 50,
+              }}
             >
               <FontAwesome name="home" size={24} color="gray" />
             </TouchableOpacity>
@@ -421,7 +454,15 @@ const Play = () => {
           <View className="flex-row">
             <TouchableOpacity
               onPress={() => setGamePaused((prev: boolean) => !prev)}
-              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 items-center justify-center"
+              style={{
+                backgroundColor: Colors.dark.componentBackground,
+                borderColor: Colors.dark.componentBorder,
+                borderWidth: 2,
+                height: 50,
+                width: 50,
+                paddingLeft: gamePaused ? 5 : 0,
+              }}
             >
               <FontAwesome
                 name={gamePaused ? "play" : "pause"}
@@ -431,7 +472,14 @@ const Play = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setMuted((prev: boolean) => !prev)}
-              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 px-4 py-3 items-center justify-center"
+              className="ml-3  rounded-full border border-slate-800 bg-slate-900/80 items-center justify-center"
+              style={{
+                backgroundColor: Colors.dark.componentBackground,
+                borderColor: Colors.dark.componentBorder,
+                borderWidth: 2,
+                height: 50,
+                width: 50,
+              }}
             >
               <FontAwesome
                 name={muted ? "volume-off" : "volume-up"}

@@ -1,7 +1,9 @@
 import DisplayUsers from "@/components/users";
+import { Colors } from "@/constants/theme";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 //EXP: This page is responsible for displaying the users
 const Users = () => {
@@ -9,29 +11,45 @@ const Users = () => {
 
   if (!isUsersHydrated) {
     return (
-      <View className="flex-1 bg-slate-950 items-center justify-center">
-        <Text className="text-white text-xl">Spieler werden geladen...</Text>
-      </View>
+      <SafeAreaView
+        edges={["top", "left", "right"]}
+        style={{
+          flex: 1,
+          backgroundColor: Colors.dark.background,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={{ color: Colors.dark.text, fontSize: 20 }}>
+          Spieler werden geladen...
+        </Text>
+      </SafeAreaView>
     );
   }
 
   return (
     // Grund: ScrollView statt View, damit die User-Liste bei vielen Einträgen scrollbar bleibt und die Tastatur das Layout nicht zerstört.
-    <ScrollView
-      className="flex-1 bg-slate-950"
-      contentContainerStyle={{ paddingBottom: 24 }}
-      keyboardShouldPersistTaps="handled"
+    <SafeAreaView
+      edges={["top", "left", "right"]}
+      style={{ flex: 1, backgroundColor: Colors.dark.background }}
     >
-      <View
-        className="items-center justify-start"
-        style={{
-          maxWidth: 480,
-          alignSelf: "center",
-        }}
+      <ScrollView
+        style={{ flex: 1, backgroundColor: Colors.dark.background }}
+        contentContainerStyle={{ paddingBottom: 24 }}
+        keyboardShouldPersistTaps="handled"
       >
-        <DisplayUsers users={users} setUsers={setUsers} />
-      </View>
-    </ScrollView>
+        <View
+          style={{
+            maxWidth: 480,
+            width: "100%",
+            alignSelf: "center",
+          }}
+          className="items-center justify-start"
+        >
+          <DisplayUsers users={users} setUsers={setUsers} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

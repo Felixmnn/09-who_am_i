@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { currentGame, gameResultPlayer, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { FontAwesome } from "@expo/vector-icons";
@@ -142,7 +143,16 @@ const StartGame = () => {
   }
 
   return (
-    <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
+    <View
+      style={{
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       {currentGame !== null ? (
         <View className="gap-2">
           <TouchableOpacity
@@ -177,11 +187,10 @@ const StartGame = () => {
           >
             <View className="flex-row items-center justify-between">
               <View>
-                <Text className="text-lg font-semibold text-slate-100">
+                <Text
+                  style={{ fontSize: 18, fontWeight: "600", color: "#fff" }}
+                >
                   Neues Spiel starten
-                </Text>
-                <Text className="mt-1 text-xs text-slate-400">
-                  Wähle Spieler, Kategorien und Rundenzeit.
                 </Text>
               </View>
             </View>
@@ -191,14 +200,36 @@ const StartGame = () => {
             <View className="mt-3 gap-3">
               <View className="">
                 <View className="mb-2 flex-row items-center justify-between">
-                  <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      textTransform: "uppercase",
+                      letterSpacing: 1,
+                      color: "#fff",
+                    }}
+                  >
                     Spieler
                   </Text>
-                  <Text className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-200">
+                  <Text
+                    style={{
+                      borderRadius: 999,
+                      borderWidth: 1,
+                      borderColor: Colors.dark.tabIconDefault,
+                      backgroundColor: Colors.dark.icon,
+                      paddingHorizontal: 12,
+                      paddingVertical: 4,
+                      fontSize: 12,
+                      fontWeight: "600",
+                      color: "#fff",
+                    }}
+                  >
                     {selectedParticipantsCount} ausgewählt
                   </Text>
                 </View>
-                <View className="flex-row flex-wrap gap-2">
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
+                >
                   {users.map((user: users) => {
                     const isSelected = tmpCurrentGame.participants.includes(
                       user.id,
@@ -206,11 +237,21 @@ const StartGame = () => {
                     return (
                       <TouchableOpacity
                         key={user.id}
-                        className={`min-w-[140px] flex-1 rounded-xl border px-3 py-2.5 ${
-                          isSelected
-                            ? "border-cyan-400/40 bg-cyan-500/15"
-                            : "border-slate-700 bg-slate-900"
-                        }`}
+                        style={{
+                          minWidth: 140,
+                          flex: 1,
+                          borderRadius: 16,
+                          borderWidth: 1,
+                          borderColor: isSelected
+                            ? Colors.dark.optionBorderSelected
+                            : Colors.dark.optionBorderUnselected,
+                          backgroundColor: isSelected
+                            ? Colors.dark.optionBgSelected
+                            : Colors.dark.optionBgUnselected,
+                          paddingHorizontal: 12,
+                          paddingVertical: 10,
+                          marginBottom: 8,
+                        }}
                         onPress={() => toggleParticipant(user.id)}
                       >
                         <View className="flex-row items-center justify-between">
@@ -221,26 +262,27 @@ const StartGame = () => {
                               }`}
                             >
                               <Text
-                                className={`text-xs font-bold ${
-                                  isSelected
-                                    ? "text-cyan-200"
-                                    : "text-slate-300"
-                                }`}
+                                className={`text-xs font-bold `}
+                                style={{
+                                  color: isSelected
+                                    ? Colors.dark.tabIconSelected
+                                    : "text-slate-300",
+                                }}
                               >
                                 {user.name.slice(0, 1).toUpperCase()}
                               </Text>
                             </View>
                             <View>
                               <Text
-                                className={`text-sm font-semibold ${
-                                  isSelected
-                                    ? "text-slate-50"
-                                    : "text-slate-200"
-                                }`}
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: "600",
+                                  color: "#fff",
+                                }}
                               >
                                 {user.name}
                               </Text>
-                              <Text className="text-[11px] text-slate-500">
+                              <Text style={{ fontSize: 11, color: "#fff" }}>
                                 {user.points} Pkt
                               </Text>
                             </View>
@@ -249,7 +291,11 @@ const StartGame = () => {
                           <FontAwesome
                             name={isSelected ? "check-circle" : "circle-o"}
                             size={16}
-                            color={isSelected ? "#67e8f9" : "#64748b"}
+                            color={
+                              isSelected
+                                ? Colors.dark.tabIconSelected
+                                : Colors.dark.optionBorderUnselected
+                            }
                           />
                         </View>
                       </TouchableOpacity>
@@ -260,14 +306,36 @@ const StartGame = () => {
 
               <View className="">
                 <View className="mb-2 flex-row items-center justify-between">
-                  <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      textTransform: "uppercase",
+                      letterSpacing: 1,
+                      color: "#fff",
+                    }}
+                  >
                     Kategorien
                   </Text>
-                  <Text className="rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-200">
+                  <Text
+                    style={{
+                      borderRadius: 999,
+                      borderWidth: 1,
+                      borderColor: Colors.dark.tabIconDefault,
+                      backgroundColor: Colors.dark.icon,
+                      paddingHorizontal: 12,
+                      paddingVertical: 4,
+                      fontSize: 12,
+                      fontWeight: "600",
+                      color: "#fff",
+                    }}
+                  >
                     {selectedCategoriesCount} ausgewählt
                   </Text>
                 </View>
-                <View className="flex-row flex-wrap gap-2">
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
+                >
                   {kategorys.map((kategory) => {
                     const isSelected =
                       tmpCurrentGame.kategorys.includes(kategory);
@@ -276,15 +344,24 @@ const StartGame = () => {
                       label: kategory,
                       accent: "text-slate-200",
                     };
-
                     return (
                       <TouchableOpacity
                         key={kategory}
-                        className={`min-w-[125px] flex-1 rounded-xl border px-3 py-2.5 ${
-                          isSelected
-                            ? "border-cyan-400/40 bg-cyan-500/15"
-                            : "border-slate-700 bg-slate-900"
-                        }`}
+                        style={{
+                          minWidth: 125,
+                          flex: 1,
+                          borderRadius: 16,
+                          borderWidth: 1,
+                          borderColor: isSelected
+                            ? Colors.dark.optionBorderSelected
+                            : Colors.dark.optionBorderUnselected,
+                          backgroundColor: isSelected
+                            ? Colors.dark.optionBgSelected
+                            : Colors.dark.optionBgUnselected,
+                          paddingHorizontal: 12,
+                          paddingVertical: 10,
+                          marginBottom: 8,
+                        }}
                         onPress={() => toggleKategory(kategory)}
                       >
                         <View className="flex-row items-start justify-between">
@@ -296,13 +373,21 @@ const StartGame = () => {
                             <FontAwesome
                               name={meta.icon}
                               size={15}
-                              color={isSelected ? "#67e8f9" : "#cbd5e1"}
+                              color={
+                                isSelected
+                                  ? Colors.dark.tabIconSelected
+                                  : "#ffffff"
+                              }
                             />
                           </View>
                           <FontAwesome
                             name={isSelected ? "check-circle" : "circle-o"}
                             size={16}
-                            color={isSelected ? "#67e8f9" : "#64748b"}
+                            color={
+                              isSelected
+                                ? Colors.dark.tabIconSelected
+                                : Colors.dark.optionBorderUnselected
+                            }
                           />
                         </View>
 
@@ -312,9 +397,6 @@ const StartGame = () => {
                           }`}
                         >
                           {meta.label}
-                        </Text>
-                        <Text className="mt-0.5 text-[11px] uppercase tracking-wide text-slate-500">
-                          {kategory}
                         </Text>
                       </TouchableOpacity>
                     );
@@ -326,13 +408,26 @@ const StartGame = () => {
                 <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                   Rundendauer
                 </Text>
-                <View className="mt-2.5 flex-row items-center justify-between rounded-xl ">
+                <View
+                  style={{
+                    marginTop: 10,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderRadius: 16,
+                  }}
+                >
                   <TouchableOpacity
-                    className={`h-10 w-10 items-center justify-center rounded-lg ${
-                      tmpCurrentGame.roundDuration <= 5
-                        ? "bg-slate-800"
-                        : "border border-slate-700 bg-slate-800"
-                    }`}
+                    style={{
+                      height: 40,
+                      width: 40,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 12,
+                      backgroundColor: Colors.dark.optionBgUnselected,
+                      borderWidth: tmpCurrentGame.roundDuration > 5 ? 1 : 0,
+                      borderColor: Colors.dark.optionBorderUnselected,
+                    }}
                     disabled={tmpCurrentGame.roundDuration <= 5}
                     onPress={() =>
                       setTmpCurrentGame({
@@ -341,7 +436,7 @@ const StartGame = () => {
                       })
                     }
                   >
-                    <FontAwesome name="minus" size={14} color="#e2e8f0" />
+                    <FontAwesome name="minus" size={14} color="#ffffff" />
                   </TouchableOpacity>
 
                   <View className="items-center">
@@ -352,7 +447,16 @@ const StartGame = () => {
                   </View>
 
                   <TouchableOpacity
-                    className="h-10 w-10 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/10"
+                    style={{
+                      height: 40,
+                      width: 40,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 12,
+                      backgroundColor: Colors.dark.optionBgSelected,
+                      borderWidth: 1,
+                      borderColor: Colors.dark.optionBorderSelected,
+                    }}
                     onPress={() =>
                       setTmpCurrentGame({
                         ...tmpCurrentGame,
@@ -360,7 +464,11 @@ const StartGame = () => {
                       })
                     }
                   >
-                    <FontAwesome name="plus" size={14} color="#67e8f9" />
+                    <FontAwesome
+                      name="plus"
+                      size={14}
+                      color={Colors.dark.tabIconSelected}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -370,14 +478,22 @@ const StartGame = () => {
                   tmpCurrentGame.participants.length < 2 ||
                   tmpCurrentGame.kategorys.length < 1
                 }
-                className={`rounded-xl border py-2.5
-                    ${
-                      tmpCurrentGame.participants.length < 2 ||
-                      tmpCurrentGame.kategorys.length < 1
-                        ? "border-rose-400/30 bg-rose-500/10 cursor-not-allowed"
-                        : "border-emerald-400/30 bg-emerald-500/15"
-                    }
-                  `}
+                style={{
+                  borderRadius: 16,
+                  borderWidth: 1,
+                  borderColor:
+                    tmpCurrentGame.participants.length < 2 ||
+                    tmpCurrentGame.kategorys.length < 1
+                      ? Colors.dark.optionBorderUnselected
+                      : Colors.dark.optionBorderSelected,
+                  backgroundColor:
+                    tmpCurrentGame.participants.length < 2 ||
+                    tmpCurrentGame.kategorys.length < 1
+                      ? Colors.dark.optionBgUnselected
+                      : Colors.dark.optionBgSelected,
+                  paddingVertical: 10,
+                  marginTop: 12,
+                }}
                 onPress={() => {
                   // Validate that there are at least 2 participants and 1 kategory
                   if (

@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -141,7 +142,16 @@ const ManageNames = () => {
   const canAddName = nameValue.trim().length > 0;
 
   return (
-    <View className="mb-4  rounded-xl border border-slate-800 bg-slate-900/90 p-4 ">
+    <View
+      style={{
+        marginBottom: 16,
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <TouchableOpacity
         className="flex-row items-center justify-between w-full"
         onPress={() => setExpanded((prev) => !prev)}
@@ -240,6 +250,11 @@ const ManageNames = () => {
                 <View
                   key={entry.id}
                   className="mt-2 flex-row items-center justify-between rounded-xl  bg-slate-950 px-3 py-2"
+                  style={{
+                    backgroundColor: Colors.dark.optionBgSelected,
+                    borderColor: Colors.dark.optionBorderSelected,
+                    borderWidth: 1,
+                  }}
                 >
                   <View className="flex-1 flex-row items-center ">
                     <Text className="text-l font-bold text-slate-100 mr-2 mb-[2px]">

@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { router } from "expo-router";
 import { useEffect } from "react";
@@ -17,9 +18,18 @@ export default function Index() {
   }, [isUsersHydrated, isSettingsHydrated]);
 
   return (
-    <View className="flex-1 bg-gray-900 items-center justify-center">
-      <ActivityIndicator size="large" color="#3b82f6" />
-      <Text className="text-white text-lg mt-4">Lade deine Daten...</Text>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: Colors.dark.background,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <ActivityIndicator size="large" color={Colors.dark.icon} />
+      <Text style={{ color: Colors.dark.text, fontSize: 18, marginTop: 16 }}>
+        Lade deine Daten...
+      </Text>
     </View>
   );
 }

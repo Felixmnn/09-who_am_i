@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
 import { Text, View } from "react-native";
@@ -6,8 +7,17 @@ import { Text, View } from "react-native";
 const Onboarding = () => {
   const { users, setUsers } = useGlobalContext();
   return (
-    <View className="flex-1 items-center justify-center">
-      <Text>Erstelle 2 Spieler um fortzufahren</Text>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: Colors.dark.background,
+      }}
+    >
+      <Text style={{ color: Colors.dark.text, fontSize: 18 }}>
+        Erstelle 2 Spieler um fortzufahren
+      </Text>
     </View>
   );
 };

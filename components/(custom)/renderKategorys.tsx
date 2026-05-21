@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { name } from "@/constants/types";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
@@ -35,11 +36,15 @@ const RenderKategorys = ({
         return (
           <TouchableOpacity
             key={kategory}
-            className={`mt-2 rounded-xl border p-4 ${
-              expandedKategory === kategory
-                ? "w-full border-cyan-500/40 bg-slate-800"
-                : "w-[48%] border-slate-700 bg-slate-900"
-            }`}
+            style={{
+              marginTop: 8,
+              borderRadius: 12,
+              borderWidth: 2,
+              borderColor: Colors.dark.componentBorder,
+              backgroundColor: Colors.dark.componentBackground,
+              padding: 16,
+              width: expandedKategory === kategory ? "100%" : "48%",
+            }}
             onPress={() => {
               setExpandedKategory(
                 expandedKategory === kategory ? null : kategory,

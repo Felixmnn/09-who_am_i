@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
@@ -9,7 +10,18 @@ const CustomNames = () => {
   const [expanded, setExpanded] = React.useState(true);
 
   return (
-    <View className="mb-4 w-full rounded-2xl border border-slate-800 bg-slate-900/90 p-4 mr-4">
+    <View
+      style={{
+        marginBottom: 16,
+        marginRight: 16,
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <TouchableOpacity
         className="flex-row items-center justify-between"
         onPress={() => setExpanded((prev) => !prev)}

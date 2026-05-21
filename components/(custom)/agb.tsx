@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -45,7 +46,16 @@ const AGB = () => {
   const [expanded, setExpanded] = React.useState(false);
 
   return (
-    <View className="w-full rounded-xl border border-slate-800 bg-slate-900/90 p-4">
+    <View
+      style={{
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <TouchableOpacity
         className="flex-row items-center justify-between"
         onPress={() => setExpanded((prev) => !prev)}
@@ -69,7 +79,13 @@ const AGB = () => {
           {AGB_SECTIONS.map((section) => (
             <View
               key={section.title}
-              className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"
+              style={{
+                borderRadius: 12,
+                backgroundColor: Colors.dark.optionBgSelected,
+                borderColor: Colors.dark.optionBorderSelected,
+                borderWidth: 2,
+                padding: 16,
+              }}
             >
               <Text className="text-base font-bold text-slate-100">
                 {section.title}

@@ -8,7 +8,7 @@ const RenderLevel = ({ label, value }: { label: string; value: string }) => {
     LOW: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
   };
   return (
-    <View className="w-[48%] rounded-xl border  flex-row items-center justify-between">
+    <View className="w-[48%] rounded-xl   flex-row items-center justify-between">
       <Text
         className={` self-start rounded-full border px-1 py-[2px] text-[10px] font-semibold ${
           colorByLevel[value] ?? "bg-slate-700 text-slate-200 border-slate-600"

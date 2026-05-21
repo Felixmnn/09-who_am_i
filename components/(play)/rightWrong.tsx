@@ -1,6 +1,7 @@
 import React from "react";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
 
+import { Colors } from "@/constants/theme";
 import { name } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Audio } from "expo-av";
@@ -79,7 +80,17 @@ const RightWrong = ({
   }
 
   return (
-    <View className="flex-1  w-full rounded-2xl border border-slate-800 bg-slate-900/70 p-3">
+    <View
+      style={{
+        flex: 1,
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <View className="flex-row gap-2 flex-1">
         {Platform.OS != "web" && (
           <TiltHandler

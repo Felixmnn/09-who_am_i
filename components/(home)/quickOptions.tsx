@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import React from "react";
@@ -19,19 +20,52 @@ const QuickOptions = () => {
     },
   ];
   return (
-    <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-      <Text className="text-lg font-semibold text-slate-100">
+    <View
+      style={{
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
+      <Text style={{ fontSize: 18, fontWeight: "600", color: "#fff" }}>
         Schnellzugriff
       </Text>
-      <View className="flex-row mt-2">
+      <View style={{ flexDirection: "row", marginTop: 8 }}>
         {quickOptions.map((option) => (
           <TouchableOpacity
             key={option.label}
-            className="items-center justify-center mx-2 rounded-lg bg-slate-800 px-3 py-2 h-[80px] flex-1"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginHorizontal: 8,
+              borderRadius: 12,
+              backgroundColor: Colors.dark.optionBgSelected,
+              borderColor: Colors.dark.optionBorderSelected,
+              borderWidth: 1,
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              height: 80,
+              flex: 1,
+            }}
             onPress={() => router.push(option.route)}
           >
-            <FontAwesome name={option.icon} size={16} color="white" />
-            <Text className=" mt-1 text-sm font-medium text-slate-400">
+            <FontAwesome
+              name={option.icon}
+              size={16}
+              color={Colors.dark.tint}
+            />
+            <Text
+              style={{
+                marginTop: 4,
+                fontSize: 14,
+                fontWeight: "500",
+                color: "#fff",
+                textAlign: "center",
+              }}
+            >
               {option.label}
             </Text>
           </TouchableOpacity>

@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -16,7 +17,16 @@ const DisplayName = ({
   onAddToBlacklist?: () => void;
 }) => {
   return (
-    <View className="w-full rounded-xl border border-slate-800 bg-slate-900/85 px-6 py-6">
+    <View
+      style={{
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <View className="flex-row items-center rounded-3xl bg-cyan-500/8 px-5">
         <Text className="flex-1 text-center text-4xl font-black text-slate-50">
           {name}

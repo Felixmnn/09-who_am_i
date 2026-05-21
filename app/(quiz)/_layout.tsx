@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -22,11 +23,11 @@ export default function _layout() {
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "#f9fafb",
-          tabBarInactiveTintColor: "#6b7280",
+          tabBarActiveTintColor: Colors.dark.text,
+          tabBarInactiveTintColor: Colors.dark.icon,
           tabBarStyle: {
-            backgroundColor: "#111827",
-            borderTopColor: "#1f2937",
+            backgroundColor: Colors.dark.background,
+            borderTopColor: Colors.dark.border,
           },
         }}
       >

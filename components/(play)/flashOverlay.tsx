@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { Animated, Modal, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, View } from "react-native";
 
 export type FlashOverlayHandle = {
   open: (type: "right" | "wrong") => void;
@@ -12,7 +12,6 @@ const FlashOverlay = forwardRef<FlashOverlayHandle>((_, ref) => {
 
   useImperativeHandle(ref, () => ({
     open: (type: "right" | "wrong") => {
-      console.log("FlashOverlay opened with type:", type);
       const flashColor = type === "right" ? "green" : "red";
       setColor(flashColor);
       setVisible(true);
@@ -36,16 +35,25 @@ const FlashOverlay = forwardRef<FlashOverlayHandle>((_, ref) => {
     },
   }));
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Modal visible={visible} transparent animationType="none">
-      <View style={StyleSheet.absoluteFill}>
-        <Animated.View
-          pointerEvents="none"
-          style={[StyleSheet.absoluteFill, { backgroundColor: color, opacity }]}
-        />
-      </View>
-    </Modal>
+    <View pointerEvents="none" style={styles.overlayContainer}>
+      <Animated.View
+        style={[StyleSheet.absoluteFill, { backgroundColor: color, opacity }]}
+      />
+    </View>
   );
+});
+
+const styles = StyleSheet.create({
+  overlayContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 999,
+    elevation: 999,
+  },
 });
 
 export default FlashOverlay;

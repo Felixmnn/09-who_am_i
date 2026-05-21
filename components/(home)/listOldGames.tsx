@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { gameResult, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
@@ -19,17 +20,26 @@ const GameItem = ({ result, matchNumber, users }: GameItemProps) => {
   const winner = sortedResults[0];
 
   return (
-    <View className="mt-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-3">
+    <View
+      style={{
+        marginTop: 12,
+        borderRadius: 12,
+        borderWidth: 1,
+        backgroundColor: Colors.dark.optionBgSelected,
+        borderColor: Colors.dark.optionBorderSelected,
+        padding: 16,
+      }}
+    >
       <Text className="mt-1 text-xs text-slate-400">
         Spiel vom: {new Date(result.dateTime).toLocaleString()}
       </Text>
-      <Text className="mt-1 text-sm text-slate-300">
+      <Text className="mt-1 text-sm text-white">
         Sieger:{" "}
         {getUserFromId(winner?.participantId, users)?.name ?? "Unbekannt"} mit{" "}
         {winner?.pointsEarned ?? 0} Punkten
       </Text>
       {/* Grund: getUserFromId bekommt jetzt users als Parameter, damit die Funktion unabhängig vom globalen Kontext ist und immer die aktuelle User-Liste verwendet. */}
-      <Text className="mt-1 text-xs text-slate-500">Spiel #{matchNumber}</Text>
+      <Text className="mt-1 text-xs text-slate-300">Spiel #{matchNumber}</Text>
     </View>
   );
 };
@@ -56,7 +66,14 @@ const ListFooter = ({
   return (
     <TouchableOpacity
       onPress={onToggle}
-      className="mt-4 rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-3"
+      style={{
+        marginTop: 16,
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
     >
       <Text className="text-center text-sm font-semibold text-cyan-200">
         {expanded ? "Weniger anzeigen" : "Mehr anzeigen"}
@@ -92,8 +109,17 @@ const ListOldGames = ({ games }: ListOldGamesProps) => {
   const canExpand = sortedGames.length > INITIAL_VISIBLE_GAMES;
 
   return (
-    <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-      <Text className="text-lg font-semibold text-slate-100">
+    <View
+      style={{
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
+      <Text style={{ fontSize: 18, fontWeight: "600", color: "#fff" }}>
         Letzte Spiele
       </Text>
       <FlatList

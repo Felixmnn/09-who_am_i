@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { users as User } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import React from "react";
@@ -24,7 +25,16 @@ const UserRanking = () => {
   };
 
   const renderLevel = (label: string, value: string) => (
-    <View className="w-[48%] rounded-xl border border-slate-700/70 bg-slate-900/50 p-2">
+    <View
+      style={{
+        width: "48%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <Text className="text-[11px] uppercase tracking-wide text-slate-400">
         {label}
       </Text>
@@ -40,7 +50,17 @@ const UserRanking = () => {
 
   if (!sortedUsers.length) {
     return (
-      <View className="mt-3 w-full rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 p-4">
+      <View
+        style={{
+          marginTop: 12,
+          width: "100%",
+          borderRadius: 12,
+          borderWidth: 2,
+          borderColor: Colors.dark.componentBorder,
+          backgroundColor: Colors.dark.componentBackground,
+          padding: 16,
+        }}
+      >
         <Text className="text-center text-base font-semibold text-slate-100">
           No ranking data yet
         </Text>
@@ -60,7 +80,14 @@ const UserRanking = () => {
         return (
           <View
             key={user.id}
-            className="mb-3 rounded-2xl border border-slate-700/70 bg-slate-800/75 p-4"
+            style={{
+              marginBottom: 12,
+              borderRadius: 12,
+              borderWidth: 2,
+              borderColor: Colors.dark.componentBorder,
+              backgroundColor: Colors.dark.componentBackground,
+              padding: 16,
+            }}
           >
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center">

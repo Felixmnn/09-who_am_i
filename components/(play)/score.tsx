@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { gameResultPlayer } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserFromId } from "@/scripts/game";
@@ -12,13 +13,31 @@ const Score = ({ progress }: { progress: gameResultPlayer[] }) => {
   const { users } = useGlobalContext();
 
   return (
-    <View className=" rounded-2xl border border-slate-800 bg-slate-900/85 px-5 py-5">
+    <View
+      style={{
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <View className="h-[40px]">
         <ScrollView className="gap-3 flex-row" horizontal>
           {progress.map((p, index) => (
             <View
               key={index}
-              className=" mr-2 flex-row items-center justify-between rounded-2xl border border-slate-700 bg-slate-950 px-4 "
+              style={{
+                marginRight: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: 12,
+                borderWidth: 2,
+                borderColor: Colors.dark.componentBorder,
+                backgroundColor: Colors.dark.componentBackground,
+                padding: 16,
+              }}
             >
               <View className="flex-row items-center">
                 <View className="mr-3 h-9 w-9 items-center justify-center rounded-full bg-slate-800">

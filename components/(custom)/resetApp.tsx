@@ -1,15 +1,16 @@
+import { Colors } from "@/constants/theme";
 import {
-  ALREADY_GUESSED_NAMES_STORAGE_KEY,
-  BLACKLIST_STORAGE_KEY,
-  createDefaultCustomNames,
-  createDefaultUsers,
-  CURRENT_GAME_STORAGE_KEY,
-  CUSTOM_NAMES_STORAGE_KEY,
-  GAME_PAUSED_STORAGE_KEY,
-  LAST_GAME_RESULTS_STORAGE_KEY,
-  MUTED_STORAGE_KEY,
-  useGlobalContext,
-  USERS_STORAGE_KEY,
+    ALREADY_GUESSED_NAMES_STORAGE_KEY,
+    BLACKLIST_STORAGE_KEY,
+    createDefaultCustomNames,
+    createDefaultUsers,
+    CURRENT_GAME_STORAGE_KEY,
+    CUSTOM_NAMES_STORAGE_KEY,
+    GAME_PAUSED_STORAGE_KEY,
+    LAST_GAME_RESULTS_STORAGE_KEY,
+    MUTED_STORAGE_KEY,
+    useGlobalContext,
+    USERS_STORAGE_KEY,
 } from "@/context/GlobalProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
@@ -101,7 +102,17 @@ const ResetApp = () => {
   };
 
   return (
-    <View className="mt-4 w-full rounded-xl border border-rose-500/30 bg-slate-900/90 p-4">
+    <View
+      style={{
+        marginTop: 16,
+        width: "100%",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: Colors.dark.componentBorder,
+        backgroundColor: Colors.dark.componentBackground,
+        padding: 16,
+      }}
+    >
       <Text className="text-2xl font-extrabold text-slate-100">
         App zurücksetzen
       </Text>

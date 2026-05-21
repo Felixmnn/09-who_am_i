@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
@@ -10,7 +11,11 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GlobalProvider>
-        <Stack>
+        <Stack
+          screenOptions={{
+            contentStyle: { backgroundColor: Colors.dark.background },
+          }}
+        >
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(quiz)" options={{ headerShown: false }} />
           <Stack.Screen name="(game)" options={{ headerShown: false }} />
