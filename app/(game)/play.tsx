@@ -73,11 +73,11 @@ function getNamesForGame(
 
   const filteredNames = blackList?.length
     ? selectedNames.filter(
-      (currentName) =>
-        !blackList.some(
-          (blacklisted: name) => blacklisted.name === currentName.name,
-        ),
-    )
+        (currentName) =>
+          !blackList.some(
+            (blacklisted: name) => blacklisted.name === currentName.name,
+          ),
+      )
     : selectedNames;
 
   return shuffleNames(filteredNames);
@@ -166,7 +166,12 @@ const Play = () => {
     }
 
     setRemainingSeconds(currentGame.roundDuration);
-  }, [currentGame, selectedUser]);
+  }, [
+    selectedUser,
+    currentGame?.roundDuration,
+    currentGame?.participants.length,
+    currentGame?.dateTime,
+  ]);
 
   // Grund: currentName wird jetzt lokal verwaltet, damit die Anzeige stabil bleibt und nicht durch globale State-Änderungen springt.
 
@@ -200,6 +205,8 @@ const Play = () => {
     userId !== undefined
       ? users.find((candidate: users) => candidate.id === userId) || null
       : null;
+  const participantCount = currentGame?.participants.length ?? 0;
+  const roundDuration = currentGame?.roundDuration ?? 0;
   // Grund: Nutzer werden jetzt direkt aus dem aktuellen users-Array gesucht, nicht mehr über eine Hilfsfunktion mit globalem Kontext.
 
   useEffect(() => {
@@ -280,34 +287,32 @@ const Play = () => {
   //Dieser Use Effect zählt die verbleibende Zeit herunter, wenn das Spiel nicht pausiert ist
   //Wird 0 erreicht, wird der nächste Teilnehmer ausgewählt und die Zeit zurückgesetzt
   useEffect(() => {
-    if (!currentGame) return;
-    if (!gamePaused) {
-      const timer = setInterval(() => {
-        setRemainingSeconds((prev: any) => {
-          if (prev > 0) {
-            return prev - 1;
-          } else {
-            //Nächsten Teilnehmer auswählen
-            setSelectedUser((prevUser) => {
-              const nextUser = (prevUser + 1) % currentGame.participants.length;
-              return nextUser;
-            });
-            return currentGame.roundDuration; //Zeit zurücksetzen
-          }
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
+    if (gamePaused || participantCount === 0 || roundDuration <= 0) {
+      return;
     }
-  }, [gamePaused, currentGame]);
+
+    const timer = setInterval(() => {
+      setRemainingSeconds((prev: number) => {
+        if (prev > 0) {
+          return prev - 1;
+        }
+
+        //Nächsten Teilnehmer auswählen
+        setSelectedUser((prevUser) => (prevUser + 1) % participantCount);
+        return roundDuration; //Zeit zurücksetzen
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [gamePaused, participantCount, roundDuration]);
 
   const activePlayerName =
     currentGame?.participants[selectedUser] !== undefined
       ? users.find(
-        (candidate: users) =>
-          candidate.id === currentGame.participants[selectedUser],
-      )?.name
-      : "No user selected";
+          (candidate: users) =>
+            candidate.id === currentGame.participants[selectedUser],
+        )?.name
+      : "Kein Spieler ausgewählt";
   const hasNames = names.length > 0 && !!currentName;
 
   function stopGame() {
@@ -336,7 +341,7 @@ const Play = () => {
       );
       setLastGameResults((prev: any) => [...prev, gameResults]);
     } catch (error) {
-      console.error("Error saving game results:", error);
+      console.error("Fehler beim Speichern der Spielergebnisse:", error);
     }
     setCurrentGame(null);
     router.push("/home");
@@ -361,7 +366,7 @@ const Play = () => {
                     ?.filter((result: gameResultPlayer) =>
                       currentGame.participants?.[selectedUser]
                         ? result.participantId ===
-                        currentGame.participants[selectedUser]
+                          currentGame.participants[selectedUser]
                         : false,
                     )
                     .reduce(
@@ -373,7 +378,7 @@ const Play = () => {
               </View>
               <View>
                 <Text className="text-xs uppercase tracking-[2px] text-slate-400">
-                  Active Round
+                  Aktive Runde
                 </Text>
                 <Text className="mt-1 text-2xl font-bold text-slate-50">
                   {activePlayerName}
@@ -383,7 +388,9 @@ const Play = () => {
 
             {width > 400 && (
               <View className="rounded-2xl border border-slate-700 bg-slate-950 px-3 py-2">
-                <Text className="text-xs text-slate-400">Time Left</Text>
+                <Text className="text-xs text-slate-400">
+                  Verbleibende Zeit
+                </Text>
                 <Text className="text-lg font-bold text-emerald-300">
                   {remainingSeconds}s
                 </Text>

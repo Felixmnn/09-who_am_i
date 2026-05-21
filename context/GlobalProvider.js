@@ -15,7 +15,7 @@ export const PROTECTED_USER_IDS = [1, 2];
 const DEFAULT_USERS = [
   {
     id: 1,
-    name: "User1",
+    name: "Nutzer 1",
     points: 0,
     history: "LOW",
     politics: "HIGH",
@@ -25,7 +25,7 @@ const DEFAULT_USERS = [
   },
   {
     id: 2,
-    name: "User2",
+    name: "Nutzer 2",
     points: 0,
     history: "HIGH",
     politics: "MEDIUM",
@@ -35,7 +35,8 @@ const DEFAULT_USERS = [
   },
 ];
 
-export const createDefaultUsers = () => DEFAULT_USERS.map((user) => ({ ...user }));
+export const createDefaultUsers = () =>
+  DEFAULT_USERS.map((user) => ({ ...user }));
 
 const ensureProtectedDefaultUsers = (storedUsers) => {
   if (!Array.isArray(storedUsers)) {

@@ -5,35 +5,39 @@ import { Text, TouchableOpacity, View } from "react-native";
 const AGB_SECTIONS = [
   {
     title: "1. Geltungsbereich",
-    body: "Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für die Nutzung dieser mobilen Anwendung (nachfolgend „App“). Mit dem Download oder der Nutzung der App erklärt sich der Nutzer mit diesen AGB einverstanden. Abweichende Bedingungen des Nutzers finden keine Anwendung.",
+    body: "Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für die Nutzung dieser mobilen Anwendung Who Am I. Mit dem Download, der Installation oder der Nutzung der App erklärt sich der Nutzer mit diesen Bedingungen einverstanden. Abweichende Bedingungen des Nutzers finden keine Anwendung, sofern ihnen nicht ausdrücklich schriftlich zugestimmt wurde.",
   },
   {
     title: "2. Leistungsbeschreibung",
-    body: "Die App stellt Funktionen zur Verfügung, die ausschließlich lokal auf dem Endgerät des Nutzers ausgeführt werden. Es erfolgt keine serverseitige Verarbeitung oder Speicherung von Nutzerdaten. Der Anbieter behält sich vor, Funktionen jederzeit zu ändern, zu erweitern oder einzustellen.",
+    body: "Die App stellt Funktionen zur Verfügung, die ausschließlich lokal auf dem Endgerät des Nutzers ausgeführt werden. Sämtliche Datenverarbeitung erfolgt direkt auf dem Gerät des Nutzers. Der Anbieter speichert, verarbeitet oder übermittelt keine personenbezogenen Daten auf eigenen Servern. Der Anbieter behält sich vor, Funktionen der App jederzeit zu ändern, zu erweitern oder einzustellen.",
   },
   {
-    title: "3. Speicherung von Daten",
-    body: "Alle durch die App erzeugten oder eingegebenen Daten werden ausschließlich lokal auf dem Gerät des Nutzers gespeichert. Es erfolgt keine Übertragung an externe Server oder Dritte. Der Nutzer ist selbst für die Sicherung seiner Daten verantwortlich. Bei Deinstallation der App können sämtliche Daten unwiederbringlich gelöscht werden.",
+    title: "3. Datenspeicherung und Datenschutz",
+    body: "Alle innerhalb der App eingegebenen oder erzeugten Daten werden ausschließlich lokal auf dem Endgerät des Nutzers gespeichert. Der Anbieter hat keinen Zugriff auf diese Daten und kann diese weder einsehen noch wiederherstellen. Eine automatische Übertragung an externe Server oder Dritte erfolgt nicht. Der Nutzer ist selbst für die Sicherung seiner Daten verantwortlich. Bei einer Deinstallation der App oder einem Gerätewechsel können sämtliche Daten dauerhaft verloren gehen.",
   },
   {
-    title: "4. Nutzungsrechte",
-    body: "Die App wird dem Nutzer zur privaten Nutzung zur Verfügung gestellt. Eine kommerzielle Nutzung, Vervielfältigung, Bearbeitung oder Weitergabe der App oder einzelner Bestandteile ist ohne ausdrückliche Zustimmung des Anbieters nicht gestattet.",
+    title: "4. Pflichten des Nutzers",
+    body: "Der Nutzer verpflichtet sich, die App ausschließlich im Rahmen der geltenden gesetzlichen Vorschriften zu verwenden. Es ist untersagt, die App missbräuchlich zu nutzen, Sicherheitsmechanismen zu umgehen oder Funktionen der App zu manipulieren.",
   },
   {
-    title: "5. Haftung",
-    body: "Die Nutzung der App erfolgt auf eigene Gefahr. Der Anbieter haftet nur für Schäden, die auf vorsätzlichem oder grob fahrlässigem Verhalten beruhen. Für Datenverlust, insbesondere durch unsachgemäße Nutzung oder technische Probleme des Endgeräts, wird keine Haftung übernommen.",
+    title: "5. Nutzungsrechte",
+    body: "Die App wird dem Nutzer ausschließlich zur privaten, nicht übertragbaren Nutzung bereitgestellt. Ohne ausdrückliche Zustimmung des Anbieters ist es nicht gestattet, die App oder Teile hiervon zu vervielfältigen, zu verändern, zu verbreiten, öffentlich zugänglich zu machen oder kommerziell zu nutzen.",
   },
   {
-    title: "6. Verfügbarkeit",
-    body: "Der Anbieter übernimmt keine Gewähr für eine ununterbrochene oder fehlerfreie Verfügbarkeit der App. Wartungsarbeiten, Weiterentwicklungen oder technische Störungen können die Nutzung vorübergehend einschränken.",
+    title: "6. Haftung",
+    body: "Die Nutzung der App erfolgt auf eigene Verantwortung des Nutzers. Eine Haftung für Datenverlust, Gerätefehler, Softwarefehler oder sonstige Schäden, die durch die Nutzung der App entstehen, ist ausgeschlossen.",
   },
   {
-    title: "7. Änderungen der AGB",
-    body: "Der Anbieter behält sich vor, diese AGB jederzeit mit Wirkung für die Zukunft zu ändern. Änderungen werden innerhalb der App bekannt gegeben. Die weitere Nutzung der App gilt als Zustimmung zu den geänderten Bedingungen.",
+    title: "7. Verfügbarkeit und Änderungen",
+    body: "Der Anbieter übernimmt keine Gewähr für eine jederzeitige, ununterbrochene oder fehlerfreie Verfügbarkeit der App. Wartungsarbeiten, technische Probleme oder Weiterentwicklungen können die Nutzung vorübergehend einschränken. Der Anbieter ist berechtigt, die App jederzeit anzupassen, zu aktualisieren oder einzustellen.",
   },
   {
-    title: "8. Schlussbestimmungen",
-    body: "Es gilt das Recht der Bundesrepublik Deutschland. Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.",
+    title: "8. Änderungen der AGB",
+    body: "Der Anbieter behält sich das Recht vor, diese AGB mit Wirkung für die Zukunft zu ändern, sofern dies aus technischen, rechtlichen oder organisatorischen Gründen erforderlich ist. Änderungen werden innerhalb der App veröffentlicht. Die weitere Nutzung der App nach Inkrafttreten der Änderungen gilt als Zustimmung zu den geänderten Bedingungen.",
+  },
+  {
+    title: "9. Schlussbestimmungen",
+    body: "Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts. Sollten einzelne Bestimmungen dieser AGB ganz oder teilweise unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.",
   },
 ];
 
@@ -62,13 +66,6 @@ const AGB = () => {
 
       {expanded && (
         <View className="mt-4 gap-3">
-          <View className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-            <Text className="text-sm leading-6 text-slate-300">
-              Hinweis: Diese AGB stellen eine allgemeine Vorlage dar und
-              ersetzen keine rechtliche Beratung.
-            </Text>
-          </View>
-
           {AGB_SECTIONS.map((section) => (
             <View
               key={section.title}

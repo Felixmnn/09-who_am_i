@@ -1,4 +1,4 @@
-import { currentGame, users } from "@/constants/types";
+import { currentGame, gameResultPlayer, users } from "@/constants/types";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -11,32 +11,32 @@ const CATEGORY_META: Record<
 > = {
   history: {
     icon: "book",
-    label: "History",
+    label: "Geschichte",
     accent: "text-amber-200",
   },
   politics: {
     icon: "university",
-    label: "Politics",
+    label: "Politik",
     accent: "text-sky-200",
   },
   sports: {
     icon: "futbol-o",
-    label: "Sports",
+    label: "Sport",
     accent: "text-emerald-200",
   },
   media: {
     icon: "television",
-    label: "Media",
+    label: "Medien",
     accent: "text-fuchsia-200",
   },
   science: {
     icon: "flask",
-    label: "Science",
+    label: "Wissenschaft",
     accent: "text-cyan-200",
   },
   custom: {
     icon: "star",
-    label: "Custom",
+    label: "Eigene",
     accent: "text-rose-200",
   },
 };
@@ -54,8 +54,15 @@ const createInitialGameDraft = (
 });
 
 const StartGame = () => {
-  const { currentGame, users, customNames, setCurrentGame } =
-    useGlobalContext();
+  const {
+    currentGame,
+    users,
+    customNames,
+    setCurrentGame,
+    setGamePaused,
+    setUsers,
+    setLastGameResults,
+  } = useGlobalContext();
   const [expanded, setExpanded] = React.useState(false);
   const kategorys = customNames ? Object.keys(customNames) : [];
   const hasInitializedDefaults = React.useRef(false);
@@ -101,20 +108,67 @@ const StartGame = () => {
   const selectedParticipantsCount = tmpCurrentGame.participants.length;
   const selectedCategoriesCount = tmpCurrentGame.kategorys.length;
 
+  function stopGame() {
+    try {
+      const gameResults = {
+        dateTime: currentGame
+          ? currentGame.dateTime.toISOString()
+          : new Date().toISOString(),
+        participants: currentGame ? currentGame.participants : [],
+        answers: currentGame ? currentGame.answers : [],
+        gameResults: currentGame ? currentGame.gameResults : [],
+      };
+      setUsers((prevUsers: users[]) =>
+        prevUsers.map((user) => {
+          if (currentGame.participants.includes(user.id)) {
+            const participantResult = gameResults.gameResults.find(
+              (result: gameResultPlayer) => result.participantId === user.id,
+            );
+            return {
+              ...user,
+              points: user.points + (participantResult?.pointsEarned || 0),
+            };
+          }
+          return user;
+        }),
+      );
+      setLastGameResults((prev: any) => [...prev, gameResults]);
+    } catch (error) {
+      console.error("Fehler beim Speichern der Spielergebnisse:", error);
+    }
+    setCurrentGame(null);
+    setGamePaused(false);
+    router.push("/home");
+  }
+
   return (
     <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
       {currentGame !== null ? (
-        <TouchableOpacity
-          onPress={() => router.push("/(game)/play")}
-          className="rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-4 py-5"
-        >
-          <View className="flex-row items-center justify-center gap-2">
-            <FontAwesome name="play-circle" size={18} color="#34d399" />
-            <Text className="text-center text-base font-semibold text-emerald-200">
-              Go To Current Game
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <View className="gap-2">
+          <TouchableOpacity
+            onPress={() => router.push("/(game)/play")}
+            className="rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-4 py-5"
+          >
+            <View className="flex-row items-center justify-center gap-2">
+              <FontAwesome name="play-circle" size={18} color="#34d399" />
+              <Text className="text-center text-base font-semibold text-emerald-200">
+                Zum laufenden Spiel
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={stopGame}
+            className="rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-4"
+          >
+            <View className="flex-row items-center justify-center gap-2">
+              <FontAwesome name="stop-circle" size={18} color="#fda4af" />
+              <Text className="text-center text-base font-semibold text-rose-200">
+                Aktuelles Spiel beenden
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       ) : (
         <View className="w-full">
           <TouchableOpacity
@@ -124,7 +178,7 @@ const StartGame = () => {
             <View className="flex-row items-center justify-between">
               <View>
                 <Text className="text-lg font-semibold text-slate-100">
-                  Start A New Game
+                  Neues Spiel starten
                 </Text>
                 <Text className="mt-1 text-xs text-slate-400">
                   Wähle Spieler, Kategorien und Rundenzeit.
@@ -138,10 +192,10 @@ const StartGame = () => {
               <View className="">
                 <View className="mb-2 flex-row items-center justify-between">
                   <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
-                    Participants
+                    Spieler
                   </Text>
                   <Text className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-200">
-                    {selectedParticipantsCount} selected
+                    {selectedParticipantsCount} ausgewählt
                   </Text>
                 </View>
                 <View className="flex-row flex-wrap gap-2">
@@ -152,38 +206,42 @@ const StartGame = () => {
                     return (
                       <TouchableOpacity
                         key={user.id}
-                        className={`min-w-[140px] flex-1 rounded-xl border px-3 py-2.5 ${isSelected
+                        className={`min-w-[140px] flex-1 rounded-xl border px-3 py-2.5 ${
+                          isSelected
                             ? "border-cyan-400/40 bg-cyan-500/15"
                             : "border-slate-700 bg-slate-900"
-                          }`}
+                        }`}
                         onPress={() => toggleParticipant(user.id)}
                       >
                         <View className="flex-row items-center justify-between">
                           <View className="flex-row items-center">
                             <View
-                              className={`mr-2.5 h-8 w-8 items-center justify-center rounded-full ${isSelected ? "bg-cyan-500/20" : "bg-slate-800"
-                                }`}
+                              className={`mr-2.5 h-8 w-8 items-center justify-center rounded-full ${
+                                isSelected ? "bg-cyan-500/20" : "bg-slate-800"
+                              }`}
                             >
                               <Text
-                                className={`text-xs font-bold ${isSelected
+                                className={`text-xs font-bold ${
+                                  isSelected
                                     ? "text-cyan-200"
                                     : "text-slate-300"
-                                  }`}
+                                }`}
                               >
                                 {user.name.slice(0, 1).toUpperCase()}
                               </Text>
                             </View>
                             <View>
                               <Text
-                                className={`text-sm font-semibold ${isSelected
+                                className={`text-sm font-semibold ${
+                                  isSelected
                                     ? "text-slate-50"
                                     : "text-slate-200"
-                                  }`}
+                                }`}
                               >
                                 {user.name}
                               </Text>
                               <Text className="text-[11px] text-slate-500">
-                                {user.points} pts
+                                {user.points} Pkt
                               </Text>
                             </View>
                           </View>
@@ -203,10 +261,10 @@ const StartGame = () => {
               <View className="">
                 <View className="mb-2 flex-row items-center justify-between">
                   <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
-                    Categories
+                    Kategorien
                   </Text>
                   <Text className="rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-200">
-                    {selectedCategoriesCount} selected
+                    {selectedCategoriesCount} ausgewählt
                   </Text>
                 </View>
                 <View className="flex-row flex-wrap gap-2">
@@ -222,16 +280,18 @@ const StartGame = () => {
                     return (
                       <TouchableOpacity
                         key={kategory}
-                        className={`min-w-[125px] flex-1 rounded-xl border px-3 py-2.5 ${isSelected
+                        className={`min-w-[125px] flex-1 rounded-xl border px-3 py-2.5 ${
+                          isSelected
                             ? "border-cyan-400/40 bg-cyan-500/15"
                             : "border-slate-700 bg-slate-900"
-                          }`}
+                        }`}
                         onPress={() => toggleKategory(kategory)}
                       >
                         <View className="flex-row items-start justify-between">
                           <View
-                            className={`h-8 w-8 items-center justify-center rounded-lg ${isSelected ? "bg-cyan-500/20" : "bg-slate-800"
-                              }`}
+                            className={`h-8 w-8 items-center justify-center rounded-lg ${
+                              isSelected ? "bg-cyan-500/20" : "bg-slate-800"
+                            }`}
                           >
                             <FontAwesome
                               name={meta.icon}
@@ -247,8 +307,9 @@ const StartGame = () => {
                         </View>
 
                         <Text
-                          className={`mt-2 text-sm font-semibold ${isSelected ? "text-slate-50" : meta.accent
-                            }`}
+                          className={`mt-2 text-sm font-semibold ${
+                            isSelected ? "text-slate-50" : meta.accent
+                          }`}
                         >
                           {meta.label}
                         </Text>
@@ -263,14 +324,15 @@ const StartGame = () => {
 
               <View className="">
                 <Text className="text-sm font-semibold uppercase tracking-wider text-slate-400">
-                  Round Duration
+                  Rundendauer
                 </Text>
                 <View className="mt-2.5 flex-row items-center justify-between rounded-xl ">
                   <TouchableOpacity
-                    className={`h-10 w-10 items-center justify-center rounded-lg ${tmpCurrentGame.roundDuration <= 5
+                    className={`h-10 w-10 items-center justify-center rounded-lg ${
+                      tmpCurrentGame.roundDuration <= 5
                         ? "bg-slate-800"
                         : "border border-slate-700 bg-slate-800"
-                      }`}
+                    }`}
                     disabled={tmpCurrentGame.roundDuration <= 5}
                     onPress={() =>
                       setTmpCurrentGame({
@@ -309,11 +371,12 @@ const StartGame = () => {
                   tmpCurrentGame.kategorys.length < 1
                 }
                 className={`rounded-xl border py-2.5
-                    ${tmpCurrentGame.participants.length < 2 ||
-                    tmpCurrentGame.kategorys.length < 1
-                    ? "border-rose-400/30 bg-rose-500/10 cursor-not-allowed"
-                    : "border-emerald-400/30 bg-emerald-500/15"
-                  }
+                    ${
+                      tmpCurrentGame.participants.length < 2 ||
+                      tmpCurrentGame.kategorys.length < 1
+                        ? "border-rose-400/30 bg-rose-500/10 cursor-not-allowed"
+                        : "border-emerald-400/30 bg-emerald-500/15"
+                    }
                   `}
                 onPress={() => {
                   // Validate that there are at least 2 participants and 1 kategory
@@ -321,9 +384,7 @@ const StartGame = () => {
                     tmpCurrentGame.participants.length < 2 ||
                     tmpCurrentGame.kategorys.length < 1
                   ) {
-                    alert(
-                      "Please select at least 2 participants and 1 category.",
-                    );
+                    alert("Bitte wähle mindestens 2 Spieler und 1 Kategorie.");
                     return;
                   }
                   const gameResults = tmpCurrentGame.participants.map(
@@ -346,7 +407,7 @@ const StartGame = () => {
                 }}
               >
                 <Text className="text-center text-base font-semibold text-gray-200">
-                  Start Game
+                  Spiel starten
                 </Text>
               </TouchableOpacity>
             </View>

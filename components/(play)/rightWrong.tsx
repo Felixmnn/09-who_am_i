@@ -99,7 +99,7 @@ const RightWrong = ({
           className="flex-1 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-2.5"
         >
           <Text className="text-center text-sm font-semibold text-emerald-200">
-            Got it
+            Richtig
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -108,7 +108,7 @@ const RightWrong = ({
           className="flex-1 items-center justify-center rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-2.5"
         >
           <Text className="text-center text-sm font-semibold text-rose-200">
-            Skip
+            Überspringen
           </Text>
         </TouchableOpacity>
       </View>

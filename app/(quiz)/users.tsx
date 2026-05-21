@@ -10,7 +10,7 @@ const Users = () => {
   if (!isUsersHydrated) {
     return (
       <View className="flex-1 bg-slate-950 items-center justify-center">
-        <Text className="text-white text-xl">Loading users...</Text>
+        <Text className="text-white text-xl">Spieler werden geladen...</Text>
       </View>
     );
   }
@@ -22,7 +22,13 @@ const Users = () => {
       contentContainerStyle={{ paddingBottom: 24 }}
       keyboardShouldPersistTaps="handled"
     >
-      <View className="items-center justify-start">
+      <View
+        className="items-center justify-start"
+        style={{
+          maxWidth: 480,
+          alignSelf: "center",
+        }}
+      >
         <DisplayUsers users={users} setUsers={setUsers} />
       </View>
     </ScrollView>

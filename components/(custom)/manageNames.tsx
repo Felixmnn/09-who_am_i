@@ -20,7 +20,29 @@ const DEFAULT_CATEGORIES = [
   "custom",
 ];
 
-const DIFFICULTIES = ["LOW", "MEDIUM", "HIGH"];
+const DIFFICULTIES = ["LOW", "MEDIUM", "HIGH"] as const;
+type Difficulty = (typeof DIFFICULTIES)[number];
+
+const DIFFICULTY_LABELS: Record<Difficulty, string> = {
+  LOW: "leicht",
+  MEDIUM: "mittel",
+  HIGH: "schwer",
+};
+
+const DIFFICULTY_BUTTON_STYLES: Record<Difficulty, string> = {
+  LOW: "border-emerald-400/40 bg-emerald-500/15",
+  MEDIUM: "border-amber-400/40 bg-amber-500/15",
+  HIGH: "border-rose-400/40 bg-rose-500/15",
+};
+
+const CATEGORY_CYCLE_ORDER = [
+  "custom",
+  "history",
+  "politics",
+  "sports",
+  "media",
+  "science",
+] as const;
 
 const ManageNames = () => {
   const { customNames, setCustomNames, blackList, setBlackList } =
@@ -28,9 +50,27 @@ const ManageNames = () => {
 
   const [target, setTarget] = React.useState<ListTarget>("customNames");
   const [expanded, setExpanded] = React.useState(true);
-  const [selectedCategory, setSelectedCategory] = React.useState("history");
+  const [selectedCategory, setSelectedCategory] = React.useState("custom");
   const [nameValue, setNameValue] = React.useState("");
-  const [difficulty, setDifficulty] = React.useState("LOW");
+  const [difficulty, setDifficulty] = React.useState<Difficulty>("LOW");
+
+  const cycleDifficulty = () => {
+    const currentIndex = DIFFICULTIES.indexOf(difficulty);
+    const nextIndex =
+      currentIndex === -1 ? 0 : (currentIndex + 1) % DIFFICULTIES.length;
+    setDifficulty(DIFFICULTIES[nextIndex]);
+  };
+
+  const cycleCategory = () => {
+    const currentIndex = CATEGORY_CYCLE_ORDER.indexOf(
+      selectedCategory as (typeof CATEGORY_CYCLE_ORDER)[number],
+    );
+    const nextIndex =
+      currentIndex === -1
+        ? 0
+        : (currentIndex + 1) % CATEGORY_CYCLE_ORDER.length;
+    setSelectedCategory(CATEGORY_CYCLE_ORDER[nextIndex]);
+  };
 
   const categories = React.useMemo(() => {
     const keys = new Set<string>([
@@ -98,11 +138,7 @@ const ManageNames = () => {
     }
   };
 
-  const colorByLevel: Record<string, string> = {
-    HIGH: "bg-rose-500/20 text-rose-200 border-rose-500/40",
-    MEDIUM: "bg-amber-500/20 text-amber-200 border-amber-500/40",
-    LOW: "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
-  };
+  const canAddName = nameValue.trim().length > 0;
 
   return (
     <View className="mb-4  rounded-xl border border-slate-800 bg-slate-900/90 p-4 ">
@@ -112,111 +148,87 @@ const ManageNames = () => {
       >
         <View>
           <Text className="text-2xl font-extrabold text-slate-100">
-            Manage Names
+            Namen verwalten
           </Text>
           <Text className="mt-1 text-sm text-slate-400">
-            Füge Namen hinzu oder entferne sie aus Custom Names und Blacklist.
+            Füge Namen hinzu oder entferne sie aus eigenen Namen und Sperrliste.
           </Text>
         </View>
       </TouchableOpacity>
+      <View className="mt-4 flex-row gap-2">
+        <TouchableOpacity
+          className={`flex-1 rounded-xl border px-3 py-2 ${
+            target === "customNames"
+              ? "border-cyan-400/40 bg-cyan-500/15"
+              : "border-slate-700 bg-slate-800"
+          }`}
+          onPress={() => setTarget("customNames")}
+        >
+          <Text className="text-center font-semibold text-slate-100">
+            Eigene Namen
+          </Text>
+        </TouchableOpacity>
 
-      {expanded && (
-        <>
-          <View className="mt-4 flex-row gap-2">
+        <TouchableOpacity
+          className={`flex-1 rounded-xl border px-3 py-2 ${
+            target === "blackList"
+              ? "border-rose-400/40 bg-rose-500/15"
+              : "border-slate-700 bg-slate-800"
+          }`}
+          onPress={() => setTarget("blackList")}
+        >
+          <Text className="text-center font-semibold text-slate-100">
+            Sperrliste
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {target !== "blackList" && (
+        <View>
+          <Text className="mt-4 text-sm font-semibold text-slate-300">
+            Namen hinzufügen
+          </Text>
+          <View className="mt-2 flex-row gap-2 items-center">
+            <TextInput
+              value={nameValue}
+              onChangeText={setNameValue}
+              placeholder="Neuen Namen eingeben"
+              placeholderTextColor="#64748b"
+              className="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-slate-100"
+            />
             <TouchableOpacity
-              className={`flex-1 rounded-xl border px-3 py-2 ${
-                target === "customNames"
-                  ? "border-cyan-400/40 bg-cyan-500/15"
-                  : "border-slate-700 bg-slate-800"
-              }`}
-              onPress={() => setTarget("customNames")}
+              className={`w-24 items-center rounded-xl border px-3 py-3 ${DIFFICULTY_BUTTON_STYLES[difficulty]}`}
+              onPress={cycleDifficulty}
             >
-              <Text className="text-center font-semibold text-slate-100">
-                Custom Names
+              <Text className="text-xs font-semibold uppercase text-slate-100">
+                {DIFFICULTY_LABELS[difficulty]}
               </Text>
             </TouchableOpacity>
-
             <TouchableOpacity
-              className={`flex-1 rounded-xl border px-3 py-2 ${
-                target === "blackList"
-                  ? "border-rose-400/40 bg-rose-500/15"
-                  : "border-slate-700 bg-slate-800"
-              }`}
-              onPress={() => setTarget("blackList")}
+              className="w-28 items-center rounded-xl border border-cyan-400/40 bg-cyan-500/15 px-3 py-3"
+              onPress={cycleCategory}
             >
-              <Text className="text-center font-semibold text-slate-100">
-                Blacklist
+              <Text className="text-xs font-semibold uppercase text-slate-100">
+                {selectedCategory}
               </Text>
             </TouchableOpacity>
           </View>
-          {target !== "blackList" && (
-            <View>
-              <Text className="mt-4 text-sm font-semibold text-slate-300">
-                Category
-              </Text>
-              <View className="mt-2 flex-row flex-wrap">
-                {categories.map((category) => (
-                  <TouchableOpacity
-                    key={category}
-                    className={`mr-2 mt-2 rounded-lg border px-3 py-1.5 ${
-                      selectedCategory === category
-                        ? "border-cyan-400/40 bg-cyan-500/15"
-                        : "border-slate-700 bg-slate-800"
-                    }`}
-                    onPress={() => setSelectedCategory(category)}
-                  >
-                    <Text className="text-xs font-semibold uppercase text-slate-200">
-                      {category}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
 
-              <Text className="mt-4 text-sm font-semibold text-slate-300">
-                Name
+          {canAddName && (
+            <TouchableOpacity
+              className="mt-4 rounded-xl border border-cyan-400/40 bg-cyan-500/15 px-4 py-2"
+              onPress={addName}
+            >
+              <Text className="text-center font-bold text-slate-100">
+                Namen hinzufügen
               </Text>
-              <TextInput
-                value={nameValue}
-                onChangeText={setNameValue}
-                placeholder="Neuen Namen eingeben"
-                placeholderTextColor="#64748b"
-                className="mt-2 rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-slate-100"
-              />
-
-              <Text className="mt-4 text-sm font-semibold text-slate-300">
-                Difficulty
-              </Text>
-              <View className="mt-2 flex-row gap-2">
-                {DIFFICULTIES.map((level) => (
-                  <TouchableOpacity
-                    key={level}
-                    className={`flex-1 rounded-lg border px-3 py-2 ${
-                      difficulty === level
-                        ? `${colorByLevel[level]} border-${colorByLevel[level].split(" ")[2]}`
-                        : "border-slate-700 bg-slate-800"
-                    }`}
-                    onPress={() => setDifficulty(level)}
-                  >
-                    <Text className="text-center text-xs font-semibold text-slate-200">
-                      {level}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
-              <TouchableOpacity
-                disabled={!nameValue.trim()}
-                className="mt-4 rounded-xl border border-cyan-400/40 bg-cyan-500/15 px-4 py-3"
-                onPress={addName}
-              >
-                <Text className="text-center font-bold text-slate-100">
-                  Add Name
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           )}
-          <Text className="mt-5 text-sm font-semibold text-slate-300">
-            Current Entries
+        </View>
+      )}
+      {expanded && (
+        <>
+          <Text className="mt-3 text-sm font-semibold text-slate-300">
+            Aktuelle Einträge
           </Text>
           <View className="rounded-2xl  ">
             {entries.length === 0 ? (
@@ -233,7 +245,10 @@ const ManageNames = () => {
                     <Text className="text-l font-bold text-slate-100 mr-2 mb-[2px]">
                       {entry.name}
                     </Text>
-                    <RenderLevel label="Difficulty" value={entry.difficulty} />
+                    <RenderLevel
+                      label="Schwierigkeit"
+                      value={entry.difficulty}
+                    />
                   </View>
 
                   <TouchableOpacity
@@ -241,7 +256,7 @@ const ManageNames = () => {
                     onPress={() => removeName(entry.id)}
                   >
                     <Text className="text-xs font-bold text-rose-200">
-                      Remove
+                      Entfernen
                     </Text>
                   </TouchableOpacity>
                 </View>

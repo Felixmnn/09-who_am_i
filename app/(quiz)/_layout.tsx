@@ -33,7 +33,7 @@ export default function _layout() {
         <Tabs.Screen
           name="home"
           options={{
-            title: "Home",
+            title: "Start",
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="home" size={size} color={color} />
             ),
@@ -53,7 +53,7 @@ export default function _layout() {
         <Tabs.Screen
           name="users"
           options={{
-            title: "Users",
+            title: "Spieler",
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="users" size={size} color={color} />
             ),
@@ -62,7 +62,7 @@ export default function _layout() {
         <Tabs.Screen
           name="settings"
           options={{
-            title: "Settings",
+            title: "Einstellungen",
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="cogs" size={size} color={color} />
             ),

@@ -14,7 +14,7 @@ const BlackList = () => {
         className="flex-row items-center justify-between"
         onPress={() => setExpanded((prev) => !prev)}
       >
-        <Text className="text-2xl font-bold text-slate-100">Blacklist</Text>
+        <Text className="text-2xl font-bold text-slate-100">Sperrliste</Text>
         <FontAwesome
           name={expanded ? "chevron-up" : "chevron-down"}
           size={16}

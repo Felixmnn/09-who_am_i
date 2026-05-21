@@ -21,20 +21,23 @@ const GameItem = ({ result, matchNumber, users }: GameItemProps) => {
   return (
     <View className="mt-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-3">
       <Text className="mt-1 text-xs text-slate-400">
-        Game from: {new Date(result.dateTime).toLocaleString()}
+        Spiel vom: {new Date(result.dateTime).toLocaleString()}
       </Text>
       <Text className="mt-1 text-sm text-slate-300">
-        Winner - {getUserFromId(winner?.participantId, users)?.name ?? "Unknown"} with{" "}
-        {winner?.pointsEarned ?? 0} points
+        Sieger:{" "}
+        {getUserFromId(winner?.participantId, users)?.name ?? "Unbekannt"} mit{" "}
+        {winner?.pointsEarned ?? 0} Punkten
       </Text>
       {/* Grund: getUserFromId bekommt jetzt users als Parameter, damit die Funktion unabhängig vom globalen Kontext ist und immer die aktuelle User-Liste verwendet. */}
-      <Text className="mt-1 text-xs text-slate-500">Match #{matchNumber}</Text>
+      <Text className="mt-1 text-xs text-slate-500">Spiel #{matchNumber}</Text>
     </View>
   );
 };
 
 const EmptyState = () => {
-  return <Text className="mt-2 text-slate-400">No games played yet.</Text>;
+  return (
+    <Text className="mt-2 text-slate-400">Noch keine Spiele gespielt.</Text>
+  );
 };
 
 const ListFooter = ({
@@ -90,7 +93,9 @@ const ListOldGames = ({ games }: ListOldGamesProps) => {
 
   return (
     <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-      <Text className="text-lg font-semibold text-slate-100">Last Games</Text>
+      <Text className="text-lg font-semibold text-slate-100">
+        Letzte Spiele
+      </Text>
       <FlatList
         data={visibleGames}
         keyExtractor={(item, index) => `${item.dateTime}-${index}`}

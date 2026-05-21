@@ -1,9 +1,7 @@
 import {
   ALREADY_GUESSED_NAMES_STORAGE_KEY,
   BLACKLIST_STORAGE_KEY,
-  createDefaultBlackList,
   createDefaultCustomNames,
-  createDefaultLastGameResults,
   createDefaultUsers,
   CURRENT_GAME_STORAGE_KEY,
   CUSTOM_NAMES_STORAGE_KEY,
@@ -15,7 +13,7 @@ import {
 } from "@/context/GlobalProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Platform, Text, TouchableOpacity, View } from "react-native";
 
 const ResetApp = () => {
   const {
@@ -51,12 +49,14 @@ const ResetApp = () => {
 
       setUsers(createDefaultUsers());
       setMuted(false);
-      setBlackList(createDefaultBlackList());
-      setLastGameResults(createDefaultLastGameResults());
+      setBlackList([]);
+      setLastGameResults([]);
       setCustomNames(createDefaultCustomNames());
       setCurrentGame(null);
       setGamePaused(false);
       setAlreadyGuessedNames([]);
+
+      Alert.alert("Reset erfolgreich", "Alle App-Daten wurden zurückgesetzt.");
     } catch (error) {
       console.warn("Could not reset app data", error);
     } finally {
@@ -66,6 +66,20 @@ const ResetApp = () => {
 
   const confirmReset = () => {
     if (isResetting) {
+      return;
+    }
+
+    if (Platform.OS === "web") {
+      const confirmed =
+        typeof globalThis.confirm === "function"
+          ? globalThis.confirm(
+              "Alle gespeicherten Daten werden gelöscht. Dieser Schritt kann nicht rückgängig gemacht werden.",
+            )
+          : true;
+
+      if (confirmed) {
+        void resetAppData();
+      }
       return;
     }
 
@@ -88,7 +102,9 @@ const ResetApp = () => {
 
   return (
     <View className="mt-4 w-full rounded-xl border border-rose-500/30 bg-slate-900/90 p-4">
-      <Text className="text-2xl font-extrabold text-slate-100">Reset App</Text>
+      <Text className="text-2xl font-extrabold text-slate-100">
+        App zurücksetzen
+      </Text>
       <Text className="mt-2 text-sm text-slate-400">
         Löscht alle gespeicherten App-Daten!
       </Text>

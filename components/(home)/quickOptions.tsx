@@ -11,13 +11,17 @@ type QuickOption = {
 
 const QuickOptions = () => {
   const quickOptions: QuickOption[] = [
-    { label: "View stats", route: "/(quiz)/users", icon: "trophy" },
-    { label: "Add users", route: "/(quiz)/settings", icon: "user-plus" },
+    { label: "Spieler ansehen", route: "/(quiz)/users", icon: "trophy" },
+    {
+      label: "Einstellungen öffnen",
+      route: "/(quiz)/settings",
+      icon: "user-plus",
+    },
   ];
   return (
     <View className="w-full rounded-xl border border-slate-800 bg-slate-900/80 p-4">
       <Text className="text-lg font-semibold text-slate-100">
-        Quick Options
+        Schnellzugriff
       </Text>
       <View className="flex-row mt-2">
         {quickOptions.map((option) => (

@@ -46,8 +46,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "b57c9391-46e5-41ea-8500-aa48ad876239"
+        "projectId": "48aa46c1-2a7a-4de7-8f94-dcee5bc0e78f"
       }
-    }
+    },
+    "owner": "felix08"
   }
 }
